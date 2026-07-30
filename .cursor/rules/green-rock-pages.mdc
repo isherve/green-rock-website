@@ -1,0 +1,50 @@
+---
+description: Green Rock — every page must have full features (API + admin CRUD + public UI)
+globs: green-rock-website/**/*
+alwaysApply: true
+---
+
+# Green Rock — Features on Every Page
+
+When building or modifying this project, **every page must include its complete feature set**. Do not ship placeholder-only pages.
+
+## Public pages
+Each public page must:
+- Fetch live data from the backend API (`/api/...`)
+- Fall back to mock data only if the API is unavailable
+- Support search, filters, or detail views where applicable
+- Wire forms (contact, inquiry, quote, newsletter, careers apply) to the API
+
+## Admin pages (`/admin/*`)
+Each admin section must use `AdminCRUD` with:
+- **Create** (Add New button + form dialog)
+- **Edit** (pencil icon + pre-filled form)
+- **Delete** (trash icon with confirm)
+- **Image upload** (`ImageUpload` / `SingleImageUpload`) where relevant
+- Auth guard via `AdminShell` (admin/manager only)
+
+## Page checklist
+
+| Public | Admin |
+|--------|-------|
+| `/` home sections | `/admin/dashboard` |
+| `/properties` | `/admin/properties` |
+| `/projects` | `/admin/projects` |
+| `/materials` | `/admin/products` |
+| `/services`, `/services/[slug]` | `/admin/services` |
+| `/blog`, `/blog/[slug]` | `/admin/blog` |
+| `/careers`, `/careers/[slug]` | `/admin/careers` |
+| `/gallery` | `/admin/gallery` |
+| `/testimonials` | `/admin/testimonials` |
+| `/contact` | `/admin/messages` |
+| `/about` | `/admin/users`, `/admin/categories`, `/admin/partners`, `/admin/settings` |
+| `/properties/[slug]` | — |
+| `/projects/[slug]` | — |
+| `/materials/[slug]` | — |
+
+## Patterns
+- Public data: `fetchPublic()` from `@/lib/server-api` (server) or React Query (client)
+- Admin CRUD: `@/components/admin/AdminCRUD` + fields from `@/lib/admin-resources`
+- Uploads: `@/lib/upload` → `POST /api/upload` (Cloudinary or local `/uploads`)
+
+Never add a new content type without both a **public page** and an **admin CRUD page**.

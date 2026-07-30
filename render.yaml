@@ -1,0 +1,43 @@
+# Render.com — backend API + PostgreSQL (free tier available)
+# Connect repo at https://dashboard.render.com → New Blueprint
+
+services:
+  - type: web
+    name: green-rock-api
+    runtime: node
+    region: frankfurt
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci && npx prisma generate && npm run build
+    startCommand: npx prisma db push --accept-data-loss && node dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: green-rock-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false
+      - key: API_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        value: ishimwehervin10@gmail.com
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+
+databases:
+  - name: green-rock-db
+    plan: free
+    region: frankfurt
+    databaseName: greenrock
+    user: greenrock

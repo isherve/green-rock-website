@@ -1,0 +1,752 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  MANAGER
+  MANAGING_DIRECTOR
+  FINANCE_MANAGER
+  HR_MANAGER
+  PROJECT_MANAGER
+  SALES_MANAGER
+  REAL_ESTATE_OFFICER
+  PROCUREMENT_OFFICER
+  INVENTORY_MANAGER
+  WAREHOUSE_OFFICER
+  DELIVERY_OFFICER
+  CUSTOMER_SUPPORT
+  MARKETING_OFFICER
+  AGENT
+  EMPLOYEE
+  USER
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  LAND
+  COMMERCIAL
+  OFFICE
+  WAREHOUSE
+}
+
+enum PropertyPurpose {
+  SALE
+  RENT
+  BOTH
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  SOLD
+  RENTED
+  PENDING
+  FEATURED
+}
+
+enum ProjectStatus {
+  COMPLETED
+  ONGOING
+  UPCOMING
+}
+
+enum InquiryType {
+  QUOTE
+  PROPERTY
+  MATERIAL
+  CONSTRUCTION
+  GENERAL
+  APPOINTMENT
+}
+
+enum InquiryStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  REJECTED
+  HIRED
+}
+
+enum GalleryType {
+  IMAGE
+  VIDEO
+}
+
+enum GalleryCategory {
+  PROJECT
+  PROPERTY
+  CONSTRUCTION
+  INTERIOR
+  GENERAL
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  DELIVERED
+  CANCELLED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  REMOTE
+}
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  password         String?
+  name             String
+  phone            String?
+  avatar           String?
+  role             Role              @default(USER)
+  googleId         String?           @unique
+  isActive         Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  properties       Property[]
+  blogPosts        Blog[]
+  comments         Comment[]
+  favorites        Favorite[]
+  applications     Application[]     @relation("ReviewedBy")
+  employeeProfile  EmployeeProfile?
+  inquiries        Inquiry[]         @relation("CustomerInquiries")
+  appointments     Appointment[]     @relation("CustomerAppointments")
+  supportTickets   SupportTicket[]
+  invoices         Invoice[]
+  payments         Payment[]
+  documents        Document[]
+  notifications    Notification[]
+  sentMessages     DirectMessage[]   @relation("SentMessages")
+  receivedMessages DirectMessage[]   @relation("ReceivedMessages")
+  assignedTasks    Task[]            @relation("AssignedTasks")
+  createdTasks     Task[]            @relation("CreatedTasks")
+  attendance       Attendance[]
+  leaveRequests    LeaveRequest[]
+  salarySlips      SalarySlip[]
+  materialOrders   MaterialOrder[]
+  auditLogs        AuditLog[]
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  title       String
+  titleFr     String?
+  titleRw     String?
+  description String   @db.Text
+  descriptionFr String? @db.Text
+  descriptionRw String? @db.Text
+  icon        String?
+  image       String?
+  parentId    String?
+  parent      Service? @relation("ServiceHierarchy", fields: [parentId], references: [id])
+  children    Service[] @relation("ServiceHierarchy")
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Property {
+  id            String          @id @default(uuid())
+  title         String
+  titleFr       String?
+  titleRw       String?
+  slug          String          @unique
+  description   String          @db.Text
+  descriptionFr String?         @db.Text
+  descriptionRw String?         @db.Text
+  price         Float
+  currency      String          @default("RWF")
+  location      String
+  address       String?
+  latitude      Float?
+  longitude     Float?
+  bedrooms      Int?
+  bathrooms     Int?
+  area          Float?
+  areaUnit      String          @default("sqm")
+  propertyType  PropertyType
+  purpose       PropertyPurpose
+  status        PropertyStatus  @default(AVAILABLE)
+  featured      Boolean         @default(false)
+  amenities     String[]
+  agentId       String?
+  agent         User?           @relation(fields: [agentId], references: [id])
+  images        PropertyImage[]
+  videos        PropertyVideo[]
+  favorites     Favorite[]
+  inquiries     Inquiry[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([propertyType, purpose, status])
+  @@index([location])
+  @@index([price])
+}
+
+model PropertyImage {
+  id         String   @id @default(uuid())
+  url        String
+  alt        String?
+  order      Int      @default(0)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}
+
+model PropertyVideo {
+  id         String   @id @default(uuid())
+  url        String
+  title      String?
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}
+
+model Project {
+  id              String         @id @default(uuid())
+  title           String
+  titleFr         String?
+  titleRw         String?
+  slug            String         @unique
+  description     String         @db.Text
+  descriptionFr   String?        @db.Text
+  descriptionRw   String?        @db.Text
+  location        String
+  latitude        Float?
+  longitude       Float?
+  client          String?
+  completionDate  DateTime?
+  status          ProjectStatus  @default(ONGOING)
+  servicesUsed    String[]
+  featured        Boolean        @default(false)
+  images          ProjectImage[]
+  tasks           Task[]
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model ProjectImage {
+  id        String   @id @default(uuid())
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  nameFr      String?
+  nameRw      String?
+  slug        String    @unique
+  description String?
+  image       String?
+  parentId    String?
+  parent      Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  products    Product[]
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id              String    @id @default(uuid())
+  name            String
+  nameFr          String?
+  nameRw          String?
+  slug            String    @unique
+  description     String    @db.Text
+  descriptionFr   String?   @db.Text
+  descriptionRw   String?   @db.Text
+  price           Float
+  currency        String    @default("RWF")
+  stock           Int       @default(0)
+  availability    Boolean   @default(true)
+  deliveryOption  Boolean   @default(true)
+  deliveryCharge  Float?
+  featured        Boolean   @default(false)
+  images          String[]
+  categoryId      String
+  category        Category  @relation(fields: [categoryId], references: [id])
+  inquiries       Inquiry[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Inquiry {
+  id          String        @id @default(uuid())
+  type        InquiryType
+  status      InquiryStatus @default(NEW)
+  name        String
+  email       String
+  phone       String?
+  message     String        @db.Text
+  userId      String?
+  user        User?         @relation("CustomerInquiries", fields: [userId], references: [id])
+  propertyId  String?
+  property    Property?     @relation(fields: [propertyId], references: [id])
+  productId   String?
+  product     Product?      @relation(fields: [productId], references: [id])
+  metadata    Json?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([email])
+}
+
+model Appointment {
+  id          String   @id @default(uuid())
+  name        String
+  email       String
+  phone       String
+  date        DateTime
+  time        String
+  service     String?
+  message     String?  @db.Text
+  propertyId  String?
+  userId      String?
+  user        User?    @relation("CustomerAppointments", fields: [userId], references: [id])
+  isConfirmed Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+  @@index([email])
+}
+
+model Career {
+  id           String        @id @default(uuid())
+  title        String
+  titleFr      String?
+  titleRw      String?
+  slug         String        @unique
+  department   String
+  location     String
+  type         String        @default("Full-time")
+  description  String        @db.Text
+  requirements String        @db.Text
+  salary       String?
+  deadline     DateTime?
+  isActive     Boolean       @default(true)
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  careerId    String
+  career      Career            @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  name        String
+  email       String
+  phone       String
+  resumeUrl   String
+  coverLetter String?           @db.Text
+  status      ApplicationStatus @default(PENDING)
+  reviewedById String?
+  reviewedBy  User?             @relation("ReviewedBy", fields: [reviewedById], references: [id])
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Blog {
+  id            String    @id @default(uuid())
+  title         String
+  titleFr       String?
+  titleRw       String?
+  slug          String    @unique
+  excerpt       String    @db.Text
+  content       String    @db.Text
+  contentFr     String?   @db.Text
+  contentRw     String?   @db.Text
+  coverImage    String?
+  category      String
+  tags          String[]
+  authorId      String
+  author        User      @relation(fields: [authorId], references: [id])
+  published     Boolean   @default(false)
+  publishedAt   DateTime?
+  views         Int       @default(0)
+  metaTitle     String?
+  metaDescription String? @db.Text
+  comments      Comment[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
+  name      String
+  email     String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Gallery {
+  id          String          @id @default(uuid())
+  title       String
+  titleFr     String?
+  titleRw     String?
+  type        GalleryType     @default(IMAGE)
+  category    GalleryCategory @default(GENERAL)
+  url         String
+  thumbnail   String?
+  description String?
+  featured    Boolean         @default(false)
+  order       Int             @default(0)
+  createdAt   DateTime        @default(now())
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String
+  role      String?
+  company   String?
+  content   String   @db.Text
+  contentFr String?  @db.Text
+  contentRw String?  @db.Text
+  avatar    String?
+  rating    Int      @default(5)
+  featured  Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Favorite {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, propertyId])
+}
+
+model Partner {
+  id        String   @id @default(uuid())
+  name      String
+  logo      String
+  website   String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model EmployeeProfile {
+  id           String    @id @default(uuid())
+  userId       String    @unique
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  employeeCode String    @unique
+  department   String?
+  jobTitle     String?
+  hireDate     DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Task {
+  id           String       @id @default(uuid())
+  title        String
+  description  String?      @db.Text
+  status       TaskStatus   @default(TODO)
+  priority     TaskPriority @default(MEDIUM)
+  dueDate      DateTime?
+  projectId    String?
+  project      Project?     @relation(fields: [projectId], references: [id])
+  assigneeId   String?
+  assignee     User?        @relation("AssignedTasks", fields: [assigneeId], references: [id])
+  createdById  String?
+  createdBy    User?        @relation("CreatedTasks", fields: [createdById], references: [id])
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([assigneeId])
+  @@index([status])
+}
+
+model Attendance {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime         @db.Date
+  checkIn   DateTime?
+  checkOut  DateTime?
+  status    AttendanceStatus @default(PRESENT)
+  notes     String?
+  createdAt DateTime         @default(now())
+
+  @@unique([userId, date])
+}
+
+model LeaveRequest {
+  id         String      @id @default(uuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startDate  DateTime    @db.Date
+  endDate    DateTime    @db.Date
+  reason     String      @db.Text
+  status     LeaveStatus @default(PENDING)
+  reviewedAt DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([userId])
+}
+
+model SalarySlip {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  period      String
+  grossPay    Float
+  deductions  Float    @default(0)
+  netPay      Float
+  currency    String   @default("RWF")
+  documentUrl String?
+  issuedAt    DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+}
+
+model SupportTicket {
+  id          String         @id @default(uuid())
+  ticketNumber String        @unique
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subject     String
+  message     String         @db.Text
+  status      TicketStatus   @default(OPEN)
+  priority    TicketPriority @default(MEDIUM)
+  replies     TicketReply[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model TicketReply {
+  id        String        @id @default(uuid())
+  ticketId  String
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  message   String        @db.Text
+  isStaff   Boolean       @default(false)
+  authorName String
+  createdAt DateTime      @default(now())
+}
+
+model Invoice {
+  id            String        @id @default(uuid())
+  invoiceNumber String        @unique
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title         String
+  amount        Float
+  currency      String        @default("RWF")
+  status        InvoiceStatus @default(DRAFT)
+  dueDate       DateTime?
+  items         Json?
+  payments      Payment[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoiceId String?
+  invoice   Invoice?      @relation(fields: [invoiceId], references: [id])
+  amount    Float
+  currency  String        @default("RWF")
+  method    String?
+  status    PaymentStatus @default(PENDING)
+  reference String?
+  paidAt    DateTime?
+  createdAt DateTime      @default(now())
+
+  @@index([userId])
+}
+
+model MaterialOrder {
+  id          String      @id @default(uuid())
+  orderNumber String      @unique
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      OrderStatus @default(PENDING)
+  totalAmount Float       @default(0)
+  currency    String      @default("RWF")
+  deliveryAddress String? @db.Text
+  notes       String?     @db.Text
+  items       Json
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Document {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  fileUrl    String
+  fileType   String?
+  category   String   @default("general")
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String   @db.Text
+  type      String   @default("info")
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+model DirectMessage {
+  id         String   @id @default(uuid())
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  subject    String?
+  body       String   @db.Text
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([receiverId, isRead])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}

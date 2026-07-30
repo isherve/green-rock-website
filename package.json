@@ -1,0 +1,16 @@
+{
+  "name": "green-rock-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Green Rock General Supply Ltd - Corporate Website",
+  "scripts": {
+    "dev": "powershell -ExecutionPolicy Bypass -File ./scripts/start-dev.ps1",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
