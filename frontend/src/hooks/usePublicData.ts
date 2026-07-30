@@ -1,17 +1,21 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import api from "@/lib/api";
 
-export function usePublicList<T>(endpoint: string, params?: Record<string, string>, fallback: T[] = []) {
-  return useQuery({
+export function usePublicList<T>(
+  endpoint: string,
+  params?: Record<string, string>,
+  fallback: T[] = []
+): UseQueryResult<T[], Error> {
+  return useQuery<T[], Error>({
     queryKey: ["public", endpoint, params],
-    queryFn: async () => {
+    queryFn: async (): Promise<T[]> => {
       try {
         const res = await api.get(endpoint, { params: { limit: "12", ...params } });
         const data = res.data.data;
         const items = Array.isArray(data) ? data : data?.items ?? [];
-        return items.length > 0 ? items : fallback;
+        return items.length > 0 ? (items as T[]) : fallback;
       } catch {
         return fallback;
       }

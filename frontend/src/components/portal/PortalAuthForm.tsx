@@ -38,16 +38,18 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
   const [error, setError] = useState("");
   const isRegister = mode === "register";
 
-  const schema = isRegister ? registerSchema : loginSchema;
-  const { register, handleSubmit, formState: { isSubmitting } } = useForm<RegisterForm>({
-    resolver: zodResolver(schema),
+  const loginForm = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: RegisterForm) => {
+  const registerForm = useForm<RegisterForm>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onLogin = async (data: LoginForm) => {
     setError("");
     try {
-      const endpoint = isRegister ? "/auth/register" : "/auth/login";
-      const res = await api.post(endpoint, data);
+      const res = await api.post("/auth/login", data);
       const { accessToken, refreshToken, user } = res.data.data;
       localStorage.setItem("accessToken", accessToken);
       if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
@@ -64,6 +66,26 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
             ? "This account is not a customer account. Use the employee or admin login."
             : "Employee access required. Contact HR if you need portal access."
         );
+        return;
+      }
+
+      router.push(redirectPath);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Authentication failed");
+    }
+  };
+
+  const onRegister = async (data: RegisterForm) => {
+    setError("");
+    try {
+      const res = await api.post("/auth/register", data);
+      const { accessToken, refreshToken, user } = res.data.data;
+      localStorage.setItem("accessToken", accessToken);
+      if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
+
+      if (!isCustomerRole(user.role)) {
+        localStorage.clear();
+        setError("Registration succeeded but account role is invalid for the customer portal.");
         return;
       }
 
@@ -91,20 +113,27 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {isRegister && (
-            <>
-              <Input placeholder="Full name" {...register("name")} />
-              <Input placeholder="Phone (optional)" {...register("phone")} />
-            </>
-          )}
-          <Input type="email" placeholder="Email address" {...register("email")} />
-          <Input type="password" placeholder="Password" {...register("password")} />
-          {error && <p className="text-destructive text-sm">{error}</p>}
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : isRegister ? "Register" : "Sign In"}
-          </Button>
-        </form>
+        {isRegister ? (
+          <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
+            <Input placeholder="Full name" {...registerForm.register("name")} />
+            <Input placeholder="Phone (optional)" {...registerForm.register("phone")} />
+            <Input type="email" placeholder="Email address" {...registerForm.register("email")} />
+            <Input type="password" placeholder="Password" {...registerForm.register("password")} />
+            {error && <p className="text-destructive text-sm">{error}</p>}
+            <Button type="submit" className="w-full" disabled={registerForm.formState.isSubmitting}>
+              {registerForm.formState.isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Register"}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
+            <Input type="email" placeholder="Email address" {...loginForm.register("email")} />
+            <Input type="password" placeholder="Password" {...loginForm.register("password")} />
+            {error && <p className="text-destructive text-sm">{error}</p>}
+            <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
+              {loginForm.formState.isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
+            </Button>
+          </form>
+        )}
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           {isRegister ? (

@@ -31,7 +31,7 @@ export default function PropertiesContent() {
     MOCK_PROPERTIES
   );
 
-  const filtered = properties.filter((p) => {
+  const filtered: Property[] = properties.filter((p: Property) => {
     if (featured && !p.featured) return false;
     if (purpose !== "ALL" && p.purpose !== purpose) return false;
     if (type !== "ALL" && p.propertyType !== type) return false;
@@ -93,7 +93,7 @@ export default function PropertiesContent() {
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filtered.map((p, i) => (
+            {filtered.map((p, i: number) => (
               <PropertyCard key={p.id} property={p} index={i} />
             ))}
           </div>

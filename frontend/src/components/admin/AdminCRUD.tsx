@@ -29,13 +29,15 @@ export type FieldDef = {
   defaultValue?: unknown;
 };
 
+type AdminRow = { id: string; [key: string]: any };
+
 type Column<T> = {
   key: string;
   label: string;
   render?: (item: T) => React.ReactNode;
 };
 
-interface AdminCRUDProps<T extends { id: string }> {
+interface AdminCRUDProps<T extends AdminRow = AdminRow> {
   title: string;
   endpoint: string;
   columns: Column<T>[];
@@ -52,7 +54,7 @@ function getDefaults(fields: FieldDef[]) {
   );
 }
 
-export function AdminCRUD<T extends { id: string }>({
+export function AdminCRUD<T extends AdminRow = AdminRow>({
   title,
   endpoint,
   columns,

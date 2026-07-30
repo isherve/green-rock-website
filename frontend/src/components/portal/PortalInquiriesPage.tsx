@@ -15,7 +15,7 @@ type Inquiry = {
   createdAt: string;
 };
 
-export default function PortalInquiriesPage({ type, title, contactType }: { type?: string; title: string; contactType: string }) {
+export function PortalInquiriesPage({ type, title, contactType }: { type?: string; title: string; contactType: string }) {
   const endpoint = type ? `/portal/inquiries?type=${type}` : "/portal/inquiries";
   const { data, loading } = usePortalData<Inquiry>(endpoint);
 

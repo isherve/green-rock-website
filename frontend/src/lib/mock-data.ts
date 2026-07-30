@@ -1,4 +1,4 @@
-import type { Property, Project, Product, Service, Testimonial, Blog, Career, Partner } from "@/types";
+import type { Property, Project, Product, Service, Testimonial, Blog, Career, Partner, Category, User } from "@/types";
 
 export const MOCK_PROPERTIES: Property[] = [
   { id: "1", slug: "luxury-villa-kigali", title: "Luxury Villa in Kigali", description: "Stunning modern villa with panoramic city views.", price: 850000000, currency: "RWF", location: "Kigali, Kimihurura", bedrooms: 5, bathrooms: 4, area: 450, areaUnit: "sqm", propertyType: "HOUSE", purpose: "SALE", status: "AVAILABLE", featured: true, amenities: ["Pool", "Garden"], images: [{ id: "1", url: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80", order: 0, propertyId: "1", createdAt: "" }], createdAt: "", updatedAt: "" },
@@ -12,10 +12,10 @@ export const MOCK_PROJECTS: Project[] = [
   { id: "3", slug: "timber-processing-facility", title: "Timber Processing Facility", description: "State-of-the-art timber processing center.", location: "Musanze", status: "UPCOMING", client: "Green Rock Ltd", featured: false, servicesUsed: ["Construction", "Timber"], images: [{ id: "3", url: "https://images.unsplash.com/photo-1513828583688-c52645db1e51?w=800&q=80", order: 0, projectId: "3", createdAt: "" }], createdAt: "", updatedAt: "" },
 ];
 
-export const MOCK_PRODUCTS: (Product & { category?: { name: string } })[] = [
-  { id: "1", slug: "portland-cement-50kg", name: "Portland Cement 50kg", description: "Premium quality cement for all construction needs.", price: 12000, currency: "RWF", stock: 500, availability: true, deliveryOption: true, deliveryCharge: 5000, featured: false, images: ["https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"], categoryId: "1", category: { name: "Cement" }, createdAt: "", updatedAt: "" },
-  { id: "2", slug: "steel-rebar-12mm", name: "Steel Rebar 12mm", description: "High-grade steel reinforcement bars.", price: 8500, currency: "RWF", stock: 200, availability: true, deliveryOption: true, featured: false, images: ["https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&q=80"], categoryId: "2", category: { name: "Steel" }, createdAt: "", updatedAt: "" },
-  { id: "3", slug: "ceramic-floor-tiles", name: "Ceramic Floor Tiles", description: "Premium ceramic tiles in various designs.", price: 15000, currency: "RWF", stock: 1000, availability: true, deliveryOption: true, featured: false, images: ["https://images.unsplash.com/photo-1615971677496-40a0a834d2a4?w=400&q=80"], categoryId: "3", category: { name: "Tiles" }, createdAt: "", updatedAt: "" },
+export const MOCK_PRODUCTS: Product[] = [
+  { id: "1", slug: "portland-cement-50kg", name: "Portland Cement 50kg", description: "Premium quality cement for all construction needs.", price: 12000, currency: "RWF", stock: 500, availability: true, deliveryOption: true, deliveryCharge: 5000, featured: false, images: ["https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=80"], categoryId: "1", category: { id: "1", name: "Cement", slug: "cement", order: 1, isActive: true, createdAt: "", updatedAt: "" } satisfies Category, createdAt: "", updatedAt: "" },
+  { id: "2", slug: "steel-rebar-12mm", name: "Steel Rebar 12mm", description: "High-grade steel reinforcement bars.", price: 8500, currency: "RWF", stock: 200, availability: true, deliveryOption: true, featured: false, images: ["https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&q=80"], categoryId: "2", category: { id: "2", name: "Steel", slug: "steel", order: 2, isActive: true, createdAt: "", updatedAt: "" } satisfies Category, createdAt: "", updatedAt: "" },
+  { id: "3", slug: "ceramic-floor-tiles", name: "Ceramic Floor Tiles", description: "Premium ceramic tiles in various designs.", price: 15000, currency: "RWF", stock: 1000, availability: true, deliveryOption: true, featured: false, images: ["https://images.unsplash.com/photo-1615971677496-40a0a834d2a4?w=400&q=80"], categoryId: "3", category: { id: "3", name: "Tiles", slug: "tiles", order: 3, isActive: true, createdAt: "", updatedAt: "" } satisfies Category, createdAt: "", updatedAt: "" },
 ];
 
 export const MOCK_SERVICES: Service[] = [
@@ -34,9 +34,9 @@ export const MOCK_TESTIMONIALS: Testimonial[] = [
   { id: "3", name: "Patrick M.", role: "Developer", content: "Professional team, excellent project management. Highly recommended.", rating: 5, featured: true, isActive: true, createdAt: "" },
 ];
 
-export const MOCK_BLOG: (Blog & { author?: { name: string } })[] = [
-  { id: "1", slug: "choosing-building-materials", title: "How to Choose Quality Building Materials", excerpt: "Essential guide for selecting the right materials for your construction project.", content: "", category: "Construction Tips", tags: [], authorId: "1", author: { name: "Admin" }, published: true, publishedAt: "2026-03-15", views: 0, coverImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80", createdAt: "", updatedAt: "" },
-  { id: "2", slug: "kigali-real-estate-2026", title: "Kigali Real Estate Market Trends 2026", excerpt: "Analysis of the latest trends in Rwanda's growing property market.", content: "", category: "Real Estate News", tags: [], authorId: "1", author: { name: "Admin" }, published: true, publishedAt: "2026-03-01", views: 0, coverImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80", createdAt: "", updatedAt: "" },
+export const MOCK_BLOG: Blog[] = [
+  { id: "1", slug: "choosing-building-materials", title: "How to Choose Quality Building Materials", excerpt: "Essential guide for selecting the right materials for your construction project.", content: "", category: "Construction Tips", tags: [], authorId: "1", author: { id: "1", name: "Admin", email: "admin@greenrock.com", role: "ADMIN", isActive: true, createdAt: "", updatedAt: "" } satisfies User, published: true, publishedAt: "2026-03-15", views: 0, coverImage: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80", createdAt: "", updatedAt: "" },
+  { id: "2", slug: "kigali-real-estate-2026", title: "Kigali Real Estate Market Trends 2026", excerpt: "Analysis of the latest trends in Rwanda's growing property market.", content: "", category: "Real Estate News", tags: [], authorId: "1", author: { id: "1", name: "Admin", email: "admin@greenrock.com", role: "ADMIN", isActive: true, createdAt: "", updatedAt: "" } satisfies User, published: true, publishedAt: "2026-03-01", views: 0, coverImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80", createdAt: "", updatedAt: "" },
 ];
 
 export const MOCK_CAREERS: Career[] = [

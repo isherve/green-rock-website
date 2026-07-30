@@ -16,7 +16,7 @@ export default async function ServicesPage() {
     <>
       <PageHero title="Our Services" subtitle="Professional solutions for every need" image="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1920&q=80" />
       <section className="py-20 container mx-auto px-4">
-        <SectionHeading title="What We Offer" subtitle="Full-Service Solutions" centered />
+        <SectionHeading title="What We Offer" subtitle="Full-Service Solutions" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           {services.map((s) => (
             <Link key={s.id} href={`/services/${s.slug}`}>

@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
 import { ADMIN_NAV_GROUPS, PAGE_TITLES } from "@/lib/admin-nav";
 import { canAccessAdmin } from "@/lib/roles";
+import api from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 type AdminUser = { name: string; role: string };
 
