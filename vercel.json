@@ -7,7 +7,7 @@
     },
     "backend": {
       "root": "backend",
-      "entrypoint": "src/app.ts"
+      "entrypoint": "dist/app.js"
     }
   },
   "rewrites": [
@@ -21,6 +21,10 @@
     },
     {
       "source": "/api/docs.json",
+      "destination": { "type": "service", "service": "backend" }
+    },
+    {
+      "source": "/api/setup/(.*)",
       "destination": { "type": "service", "service": "backend" }
     },
     {

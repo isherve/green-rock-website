@@ -6,7 +6,7 @@ const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET |
 const accessExpires = process.env.JWT_EXPIRES_IN || '7d';
 const refreshExpires = process.env.JWT_REFRESH_EXPIRES_IN || '30d';
 
-const signOptions = (expiresIn: string): SignOptions => ({ expiresIn });
+const signOptions = (expiresIn: string): SignOptions => ({ expiresIn: expiresIn as SignOptions['expiresIn'] });
 
 export interface TokenPayload {
   userId: string;
