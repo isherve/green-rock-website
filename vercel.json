@@ -6,14 +6,14 @@
   "outputDirectory": "frontend/.next",
   "devCommand": "npm run dev --prefix frontend",
   "rewrites": [
-    { "source": "/health", "destination": "/frontend/api/server" },
-    { "source": "/api/docs", "destination": "/frontend/api/server" },
-    { "source": "/api/docs.json", "destination": "/frontend/api/server" },
-    { "source": "/api/setup/(.*)", "destination": "/frontend/api/server" },
-    { "source": "/api/(.*)", "destination": "/frontend/api/server" }
+    { "source": "/health", "destination": "/api/server" },
+    { "source": "/api/docs", "destination": "/api/server" },
+    { "source": "/api/docs.json", "destination": "/api/server" },
+    { "source": "/api/setup/(.*)", "destination": "/api/server" },
+    { "source": "/api/(.*)", "destination": "/api/server" }
   ],
   "functions": {
-    "frontend/api/server.ts": {
+    "api/server.ts": {
       "maxDuration": 60,
       "memory": 1024,
       "includeFiles": "backend/src/**, backend/node_modules/.prisma/**, backend/node_modules/@prisma/**"

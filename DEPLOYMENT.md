@@ -131,7 +131,7 @@ npm run dev
 ## How it works
 
 - `backend/src/app.ts` — Express app (shared)
-- `frontend/api/server.ts` — Vercel serverless entry
+- `api/server.ts` — Vercel serverless entry (repo root)
 - `frontend/vercel.json` — rewrites `/api/*` → serverless function
 - Build: compiles backend, runs `prisma db push`, then `next build`
 
