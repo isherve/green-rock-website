@@ -1,82 +1,105 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertySearchBar } from "@/components/shared/PropertySearchBar";
+import { FloatingOrbs } from "@/components/motion/FloatingOrbs";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useRef } from "react";
+
+const HeroScene3D = dynamic(
+  () => import("@/components/3d/HeroScene3D").then((m) => m.HeroScene3D),
+  { ssr: false, loading: () => null }
+);
 
 export function HeroSection() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+
   return (
-    <section className="relative min-h-[88vh] flex items-end pb-12 lg:pb-16 overflow-hidden">
-      <div className="absolute inset-0">
+    <section ref={ref} className="relative min-h-[92vh] flex items-end pb-12 lg:pb-16 overflow-hidden bg-dark perspective-[1200px]">
+      <div className="absolute inset-0 md:hidden">
         <Image
           src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80"
-          alt="Premium real estate in Rwanda"
+          alt=""
           fill
           priority
-          className="object-cover"
+          className="object-cover opacity-40"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-dark/70 via-dark/50 to-dark/85" />
       </div>
 
-      <div className="container relative mx-auto px-4 w-full pt-32">
-        <div className="max-w-4xl mb-10 lg:mb-14">
+      <div className="hidden md:block absolute inset-0">
+        <HeroScene3D />
+      </div>
+
+      <FloatingOrbs />
+      <div className="absolute inset-0 bg-gradient-to-b from-dark/40 via-dark/55 to-dark/90 pointer-events-none" />
+
+      <motion.div style={{ y, opacity }} className="container relative z-10 mx-auto px-4 w-full pt-32">
+        <div className="max-w-4xl mb-10 lg:mb-14 motion-3d">
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, z: -40, rotateX: 20 }}
+            animate={{ opacity: 1, z: 0, rotateX: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="text-secondary font-semibold text-sm uppercase tracking-[0.25em] mb-4"
+            style={{ transformStyle: "preserve-3d" }}
           >
             Rwanda · Real Estate · Construction · Supply
           </motion.p>
           <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-5 font-display"
+            initial={{ opacity: 0, y: 40, rotateX: 25 }}
+            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            transition={{ delay: 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] mb-5 font-display"
+            style={{ transformStyle: "preserve-3d", textShadow: "0 8px 32px rgba(0,0,0,0.35)" }}
           >
             Buy, Build & Supply with{" "}
-            <span className="text-secondary">{SITE_CONFIG.shortName}</span>
+            <span className="text-gradient-3d">{SITE_CONFIG.shortName}</span>
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.22, duration: 0.65 }}
             className="text-lg text-white/85 max-w-2xl leading-relaxed mb-6"
           >
             {SITE_CONFIG.description} {SITE_CONFIG.architectureNote}
           </motion.p>
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
+            transition={{ delay: 0.32 }}
             className="flex flex-wrap gap-3"
           >
-            <Button asChild size="lg" className="rounded-lg">
+            <Button asChild size="lg" className="rounded-lg shadow-lg shadow-primary/30 hover:scale-105 transition-transform">
               <Link href="/properties">
                 Browse Properties
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="rounded-lg border-white/40 text-white bg-white/10 hover:bg-white hover:text-dark">
+            <Button asChild variant="outline" size="lg" className="rounded-lg border-white/40 text-white bg-white/10 hover:bg-white hover:text-dark backdrop-blur-sm">
               <Link href="/contact">List Your Property</Link>
             </Button>
           </motion.div>
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
-          className="max-w-5xl"
+          initial={{ opacity: 0, y: 48, rotateX: 12 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{ delay: 0.42, duration: 0.7 }}
+          className="max-w-5xl glass-3d rounded-2xl p-1"
+          style={{ transformStyle: "preserve-3d" }}
         >
-          <p className="text-white/90 font-medium mb-3 text-sm uppercase tracking-wider">Search Property</p>
+          <p className="text-white/90 font-medium mb-3 text-sm uppercase tracking-wider px-2">Search Property</p>
           <PropertySearchBar variant="hero" />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

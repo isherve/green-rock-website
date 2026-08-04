@@ -10,6 +10,7 @@ import {
   PenTool,
 } from "lucide-react";
 import { SectionHeading } from "@/components/shared/SectionHeading";
+import { TiltCard3D } from "@/components/motion/TiltCard3D";
 
 const REASONS = [
   {
@@ -64,12 +65,13 @@ export function WhyChooseUs() {
           {REASONS.map((reason, index) => (
             <motion.div
               key={reason.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, rotateX: 10 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-              className="pro-card p-6 lg:p-8 group hover:-translate-y-1 transition-transform"
+              transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              className="motion-3d"
             >
+              <TiltCard3D className="pro-card p-6 lg:p-8 group h-full">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary mb-5 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                 <reason.icon className="h-7 w-7" />
               </div>
@@ -77,6 +79,7 @@ export function WhyChooseUs() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {reason.description}
               </p>
+              </TiltCard3D>
             </motion.div>
           ))}
         </div>

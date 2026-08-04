@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import { AnimatedPageShell } from "@/components/motion/AnimatedPageShell";
 import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
@@ -18,7 +19,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <main className="flex-1">{children}</main>
+      <AnimatedPageShell>{children}</AnimatedPageShell>
       <Footer />
       <CookieConsent />
       <WhatsAppButton />

@@ -31,7 +31,7 @@ export function SectionHeading({
       )}
     >
       {subtitle && <span className="section-label">{subtitle}</span>}
-      <h2 className="text-3xl lg:text-[2.25rem] font-bold text-foreground mb-3 leading-tight font-display">
+      <h2 className="text-3xl lg:text-[2.25rem] font-bold text-foreground mb-3 leading-tight font-display motion-3d">
         {title}
       </h2>
       {description && (

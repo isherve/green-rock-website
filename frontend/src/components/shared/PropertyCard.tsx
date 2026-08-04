@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Bed, Bath, Maximize, MapPin } from "lucide-react";
+import { TiltCard3D } from "@/components/motion/TiltCard3D";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
 import type { Property } from "@/types";
@@ -20,12 +21,13 @@ export function PropertyCard({ property, index = 0 }: PropertyCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 24, rotateX: 6 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.45, delay: index * 0.08 }}
-      className="group pro-card overflow-hidden hover:-translate-y-1"
+      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      className="motion-3d"
     >
+      <TiltCard3D className="group pro-card overflow-hidden h-full">
       <Link href={`/properties/${property.slug}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
@@ -78,6 +80,7 @@ export function PropertyCard({ property, index = 0 }: PropertyCardProps) {
           </div>
         </div>
       </Link>
+      </TiltCard3D>
     </motion.article>
   );
 }

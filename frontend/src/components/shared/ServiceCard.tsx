@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { TiltCard3D } from "@/components/motion/TiltCard3D";
 import type { Service } from "@/types";
 
 interface ServiceCardProps {
@@ -18,12 +19,13 @@ export function ServiceCard({ service, index = 0 }: ServiceCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 30, rotateX: 8 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group pro-card overflow-hidden hover:-translate-y-1 transition-transform"
+      transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      className="motion-3d"
     >
+      <TiltCard3D className="group pro-card overflow-hidden h-full">
       <Link href={`/services/${service.slug}`} className="block">
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
@@ -53,6 +55,7 @@ export function ServiceCard({ service, index = 0 }: ServiceCardProps) {
           </span>
         </div>
       </Link>
+      </TiltCard3D>
     </motion.article>
   );
 }
