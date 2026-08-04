@@ -13,7 +13,7 @@ import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function seedDatabase() {
   console.log('Seeding Green Rock General Supply Ltd database...');
 
   await prisma.comment.deleteMany();
@@ -901,11 +901,19 @@ async function main() {
   console.log('  employee@greenrock.com / Employee@123  (Employee Portal)');
 }
 
-main()
-  .catch((error) => {
-    console.error('Seed failed:', error);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+export { seedDatabase };
+
+const runningDirectly =
+  typeof require !== 'undefined' &&
+  require.main === module;
+
+if (runningDirectly) {
+  seedDatabase()
+    .catch((error) => {
+      console.error('Seed failed:', error);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}

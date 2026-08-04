@@ -22,7 +22,7 @@ API routes are served at **`/api/*`** on the same domain as the site — no sepa
 ## 1. Create Vercel project
 
 1. Go to [vercel.com/new](https://vercel.com/new) → Import **green-rock-website**
-2. **Root Directory:** `frontend`
+2. **Root Directory:** `frontend` ← **required** (without this, Vercel deploys the wrong app)
 3. Framework: Next.js (auto-detected from `vercel.json`)
 4. Deploy once (will fail or use mocks until `DATABASE_URL` is set)
 
@@ -62,6 +62,7 @@ Set in **Vercel → Project → Settings → Environment Variables**:
 | `CLOUDINARY_API_SECRET` | For uploads | Cloudinary dashboard |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | `https://your-app.vercel.app` |
 | `FRONTEND_URL` | Recommended | Same as site URL (CORS) |
+| `SETUP_SECRET` | Recommended | One-time seed via `POST /api/setup/seed` |
 
 **Optional:** `NEXT_PUBLIC_API_URL` — leave unset to auto-use `https://<your-domain>/api` on Vercel.
 
@@ -69,24 +70,27 @@ Set in **Vercel → Project → Settings → Environment Variables**:
 
 ## 4. Seed the database (once)
 
-After first successful deploy with `DATABASE_URL`:
+**Option A — HTTP (easiest on Vercel)**
+
+After deploy, with `SETUP_SECRET` set in env vars:
 
 ```bash
-# From your machine, with DATABASE_URL from Vercel dashboard
+curl -X POST https://YOUR-PROJECT.vercel.app/api/setup/seed \
+  -H "x-setup-secret: YOUR_SETUP_SECRET"
+```
+
+Check status: `GET https://YOUR-PROJECT.vercel.app/api/setup/status`
+
+**Option B — Local CLI**
+
+```bash
 cd backend
 npm ci
 npx prisma db push
 npm run db:seed
 ```
 
-Or use Vercel CLI:
-
-```bash
-npm i -g vercel
-vercel link
-vercel env pull .env.local
-cd backend && npm run db:seed
-```
+Generate env secrets locally: `npm run env:generate` (in `backend/`).
 
 ---
 

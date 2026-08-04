@@ -15,6 +15,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "vercel:build": "prisma generate",
     "vercel:deploy": "tsx scripts/vercel-deploy.ts",
+    "env:generate": "tsx scripts/generate-vercel-env.ts",
     "test:email": "tsx scripts/test-email.ts",
     "test": "jest --passWithNoTests",
     "lint": "eslint src --ext .ts"

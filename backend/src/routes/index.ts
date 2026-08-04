@@ -21,6 +21,7 @@ import uploadRoutes from './upload.routes';
 import partnersRoutes from './partners.routes';
 import portalRoutes from './portal.routes';
 import employeeRoutes from './employee.routes';
+import setupRoutes from './setup.routes';
 
 const router = Router();
 
@@ -46,5 +47,6 @@ router.use('/upload', uploadRoutes);
 router.use('/partners', partnersRoutes);
 router.use('/portal', portalRoutes);
 router.use('/employee', employeeRoutes);
+router.use('/setup', setupRoutes);
 
 export default router;

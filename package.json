@@ -8,7 +8,8 @@
     "dev:frontend": "npm run dev --prefix frontend",
     "dev:backend": "npm run dev --prefix backend",
     "build:frontend": "npm run build --prefix frontend",
-    "build:backend": "npm run build --prefix backend"
+    "build:backend": "npm run build --prefix backend",
+    "setup:vercel": "powershell -ExecutionPolicy Bypass -File ./scripts/setup-vercel.ps1"
   },
   "engines": {
     "node": ">=20.0.0"

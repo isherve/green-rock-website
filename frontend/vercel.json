@@ -8,6 +8,7 @@
     { "source": "/health", "destination": "/api/server" },
     { "source": "/api/docs", "destination": "/api/server" },
     { "source": "/api/docs.json", "destination": "/api/server" },
+    { "source": "/api/setup/(.*)", "destination": "/api/server" },
     { "source": "/api/(.*)", "destination": "/api/server" }
   ],
   "functions": {
