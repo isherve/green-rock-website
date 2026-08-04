@@ -1,56 +1,103 @@
-# Deployment Guide — Green Rock Platform
+# Deployment Guide — Vercel (All-in-One)
+
+Everything runs on **one Vercel project**: Next.js frontend, Express API (serverless), and PostgreSQL (Vercel Postgres or Neon).
+
+Repository: https://github.com/isherve/green-rock-website
+
+---
 
 ## Architecture
 
-| Layer | Host | Notes |
-|-------|------|-------|
-| **Frontend** (Next.js) | **Vercel** or **Netlify** | Customer site + portals |
-| **Backend** (Express API) | **Render** (recommended) | Needs PostgreSQL |
-| **Database** | Render PostgreSQL / Neon / Supabase | Required for live data |
-| **Code** | **GitHub** | Source of truth |
+| Component | Where it runs |
+|-----------|----------------|
+| Website + portals (Next.js) | Vercel |
+| REST API (Express) | Vercel serverless (`frontend/api/server.ts`) |
+| PostgreSQL | Vercel Postgres **or** Neon (linked in Vercel) |
+| File uploads | Cloudinary (required on Vercel) |
 
-Vercel and Netlify host the **frontend only**. The Express API must run on a Node host (Render, Railway, Fly.io).
-
----
-
-## 1. GitHub
-
-Repository: push to `main` on GitHub. CI runs on every push (`.github/workflows/ci.yml`).
+API routes are served at **`/api/*`** on the same domain as the site — no separate backend host.
 
 ---
 
-## 2. Vercel (Frontend — recommended)
+## 1. Create Vercel project
 
-1. [vercel.com/new](https://vercel.com/new) → Import GitHub repo
+1. Go to [vercel.com/new](https://vercel.com/new) → Import **green-rock-website**
 2. **Root Directory:** `frontend`
-3. Environment variables:
-
-| Variable | Value |
-|----------|--------|
-| `NEXT_PUBLIC_API_URL` | `https://YOUR-API.onrender.com/api` |
-| `NEXT_PUBLIC_SITE_URL` | `https://YOUR-APP.vercel.app` |
-
-4. Deploy
+3. Framework: Next.js (auto-detected from `vercel.json`)
+4. Deploy once (will fail or use mocks until `DATABASE_URL` is set)
 
 ---
 
-## 3. Netlify (Frontend — alternative)
+## 2. Add PostgreSQL
 
-1. [app.netlify.com/start](https://app.netlify.com/start) → Import repo
-2. **Base directory:** `frontend`
-3. Build: `npm ci && npm run build` (see `netlify.toml`)
-4. Same env vars as Vercel
+**Option A — Vercel Postgres (recommended)**
+
+1. Vercel project → **Storage** → **Create Database** → Postgres
+2. Connect to project — Vercel sets `DATABASE_URL` automatically
+
+**Option B — Neon**
+
+1. [neon.tech](https://neon.tech) → create project
+2. Vercel → **Integrations** → Neon → link repo
+3. `DATABASE_URL` is injected into the project
+
+After the database exists, redeploy so the build runs `prisma db push`.
 
 ---
 
-## 4. Render (Backend API + Database)
+## 3. Environment variables
 
-1. [dashboard.render.com](https://dashboard.render.com) → **New Blueprint**
-2. Connect repo — uses `render.yaml`
-3. Set `FRONTEND_URL`, `SMTP_PASS`, and other secrets in dashboard
-4. API health: `https://YOUR-SERVICE.onrender.com/health`
+Set in **Vercel → Project → Settings → Environment Variables**:
 
-Then update frontend `NEXT_PUBLIC_API_URL` to your Render API URL.
+| Variable | Required | Example / notes |
+|----------|----------|-------------------|
+| `DATABASE_URL` | Yes | Auto from Vercel Postgres / Neon |
+| `JWT_SECRET` | Yes | Random 32+ char string |
+| `JWT_REFRESH_SECRET` | Yes | Random 32+ char string |
+| `ADMIN_EMAIL` | Yes | `ishimwehervin10@gmail.com` |
+| `SMTP_USER` | For email | Gmail address |
+| `SMTP_PASS` | For email | Gmail App Password |
+| `CLOUDINARY_CLOUD_NAME` | For uploads | Cloudinary dashboard |
+| `CLOUDINARY_API_KEY` | For uploads | Cloudinary dashboard |
+| `CLOUDINARY_API_SECRET` | For uploads | Cloudinary dashboard |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | `https://your-app.vercel.app` |
+| `FRONTEND_URL` | Recommended | Same as site URL (CORS) |
+
+**Optional:** `NEXT_PUBLIC_API_URL` — leave unset to auto-use `https://<your-domain>/api` on Vercel.
+
+---
+
+## 4. Seed the database (once)
+
+After first successful deploy with `DATABASE_URL`:
+
+```bash
+# From your machine, with DATABASE_URL from Vercel dashboard
+cd backend
+npm ci
+npx prisma db push
+npm run db:seed
+```
+
+Or use Vercel CLI:
+
+```bash
+npm i -g vercel
+vercel link
+vercel env pull .env.local
+cd backend && npm run db:seed
+```
+
+---
+
+## 5. Verify deployment
+
+| Check | URL |
+|-------|-----|
+| Website | `https://YOUR-APP.vercel.app` |
+| API health | `https://YOUR-APP.vercel.app/health` |
+| API docs | `https://YOUR-APP.vercel.app/api/docs` |
+| Admin | `https://YOUR-APP.vercel.app/admin/login` |
 
 ---
 
@@ -61,3 +108,27 @@ Then update frontend `NEXT_PUBLIC_API_URL` to your Render API URL.
 | Admin | admin@greenrock.com | Admin@123456 |
 | Customer | customer@greenrock.com | Customer@123 |
 | Employee | employee@greenrock.com | Employee@123 |
+
+---
+
+## Local development
+
+Still uses separate processes (unchanged):
+
+```powershell
+npm run dev
+```
+
+- Frontend: http://localhost:3000  
+- Backend API: http://localhost:5000/api  
+
+---
+
+## How it works
+
+- `backend/src/app.ts` — Express app (shared)
+- `frontend/api/server.ts` — Vercel serverless entry
+- `frontend/vercel.json` — rewrites `/api/*` → serverless function
+- Build: compiles backend, runs `prisma db push`, then `next build`
+
+Pushes to `main` auto-deploy on Vercel when the GitHub integration is connected.

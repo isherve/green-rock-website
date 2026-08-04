@@ -1,4 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+import { getApiBaseUrl } from "@/lib/api-url";
+
+const API_URL = getApiBaseUrl();
 
 type Paginated<T> = { items: T[] };
 

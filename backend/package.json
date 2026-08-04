@@ -13,6 +13,8 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
+    "vercel:build": "prisma generate",
+    "vercel:deploy": "tsx scripts/vercel-deploy.ts",
     "test:email": "tsx scripts/test-email.ts",
     "test": "jest --passWithNoTests",
     "lint": "eslint src --ext .ts"

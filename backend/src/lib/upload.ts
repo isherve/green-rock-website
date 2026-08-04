@@ -35,6 +35,13 @@ export async function uploadFile(file: Express.Multer.File, folder = 'green-rock
     };
   }
 
+  if (process.env.VERCEL && !isCloudinaryConfigured()) {
+    throw new AppError(
+      'File uploads on Vercel require Cloudinary. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET.',
+      503
+    );
+  }
+
   const url = await saveLocalUpload(file);
   return { url, publicId: null, format: path.extname(file.originalname).slice(1), resourceType: 'image' };
 }
