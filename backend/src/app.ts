@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import { getEmailConfigStatus } from './lib/email-config';
+import prisma from './lib/prisma';
 import apiRoutes from './routes';
 import { swaggerSpec } from './config/swagger';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
@@ -38,6 +39,10 @@ app.use(
       }
       const allowed = getAllowedOrigins();
       if (allowed.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      if (process.env.VERCEL && /\.vercel\.app$/i.test(new URL(origin).hostname)) {
         callback(null, true);
         return;
       }
@@ -81,7 +86,26 @@ if (!process.env.VERCEL) {
   app.use('/uploads', express.static(uploadsDir));
 }
 
-app.get('/health', (_req, res) => {
+app.get('/health', async (_req, res) => {
+  let database: { status: string; hint?: string } = { status: 'unknown' };
+
+  if (!process.env.DATABASE_URL) {
+    database = {
+      status: 'missing',
+      hint: 'Add Vercel Postgres (Storage → Create Database) and redeploy.',
+    };
+  } else {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      database = { status: 'connected' };
+    } catch (error) {
+      database = {
+        status: 'error',
+        hint: error instanceof Error ? error.message : 'Database connection failed',
+      };
+    }
+  }
+
   res.json({
     success: true,
     message: 'Green Rock API is running',
@@ -89,6 +113,7 @@ app.get('/health', (_req, res) => {
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV || 'development',
       platform: process.env.VERCEL ? 'vercel' : 'node',
+      database,
       email: getEmailConfigStatus(),
     },
   });

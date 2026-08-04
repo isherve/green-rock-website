@@ -3,6 +3,14 @@ import { build } from 'esbuild';
 
 execSync('npx prisma generate', { stdio: 'inherit' });
 
+if (process.env.DATABASE_URL) {
+  try {
+    execSync('npx prisma db push --skip-generate', { stdio: 'inherit' });
+  } catch (error) {
+    console.warn('prisma db push skipped or failed:', error instanceof Error ? error.message : error);
+  }
+}
+
 await build({
   entryPoints: ['src/app.ts'],
   bundle: true,

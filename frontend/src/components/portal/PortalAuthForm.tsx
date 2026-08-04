@@ -71,7 +71,14 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
 
       router.push(redirectPath);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Authentication failed");
+      let msg = err instanceof Error ? err.message : "Authentication failed";
+      if (msg === "Network Error") {
+        msg = "Cannot reach the server. If this persists, the site database may not be configured on Vercel yet.";
+      }
+      if (msg.includes("DATABASE_URL") || msg.includes("Environment variable not found")) {
+        msg = "Database not connected. In Vercel: Storage → Create Postgres → Redeploy → run seed.";
+      }
+      setError(msg);
     }
   };
 
@@ -91,7 +98,14 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
 
       router.push(redirectPath);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Authentication failed");
+      let msg = err instanceof Error ? err.message : "Authentication failed";
+      if (msg === "Network Error") {
+        msg = "Cannot reach the server. If this persists, the site database may not be configured on Vercel yet.";
+      }
+      if (msg.includes("DATABASE_URL") || msg.includes("Environment variable not found")) {
+        msg = "Database not connected. In Vercel: Storage → Create Postgres → Redeploy → run seed.";
+      }
+      setError(msg);
     }
   };
 

@@ -45,8 +45,11 @@ https://green-rock-website.vercel.app/admin/login
 | URL | Expected |
 |-----|----------|
 | `/` | Green Rock homepage |
-| `/health` | JSON "API is running" |
+| `/health` | JSON with `"database": { "status": "connected" }` |
 | `/admin/login` | Green Rock admin login |
+
+## "Network Error" on login?
+Usually means **no database**. Check https://green-rock-website.vercel.app/health — if `"database": { "status": "missing" }`, complete **Step 2** (Postgres) and **Step 3** (env vars), redeploy, then seed.
 
 ## Still stuck?
 Reply with a screenshot of **Deployments** (latest build log) and I will fix the next error.

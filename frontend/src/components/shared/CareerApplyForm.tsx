@@ -7,7 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, CheckCircle } from "lucide-react";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api";
+import { getApiBaseUrl } from "@/lib/api-url";
+
+const API_URL = getApiBaseUrl();
 
 interface CareerApplyFormProps {
   careerId: string;

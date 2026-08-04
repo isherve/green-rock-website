@@ -8,6 +8,13 @@ const nextConfig = {
       { protocol: "http", hostname: "localhost", port: "5000", pathname: "/uploads/**" },
     ],
   },
+  async rewrites() {
+    if (process.env.VERCEL) return [];
+    return [
+      { source: "/api/:path*", destination: "http://localhost:5000/api/:path*" },
+      { source: "/health", destination: "http://localhost:5000/health" },
+    ];
+  },
 };
 
 export default nextConfig;
