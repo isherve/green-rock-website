@@ -22,8 +22,8 @@ API routes are served at **`/api/*`** on the same domain as the site — no sepa
 ## 1. Create Vercel project
 
 1. Go to [vercel.com/new](https://vercel.com/new) → Import **green-rock-website**
-2. **Root Directory:** `frontend` ← **required** (without this, Vercel deploys the wrong app)
-3. Framework: Next.js (auto-detected from `vercel.json`)
+2. **Root Directory:** leave **empty** (repo root — required so `backend/` is included in the build)
+3. Framework: Next.js (uses root `vercel.json`)
 4. Deploy once (will fail or use mocks until `DATABASE_URL` is set)
 
 ---
