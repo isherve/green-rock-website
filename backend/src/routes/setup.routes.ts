@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import prisma from '../lib/prisma';
-import { seedDatabase } from '../../prisma/seed';
 
 const router = Router();
+
+async function runSeed() {
+  const { seedDatabase } = await import('../../prisma/seed');
+  await seedDatabase();
+}
 
 router.get('/status', async (_req, res) => {
   try {
@@ -53,7 +57,7 @@ router.post('/seed', async (req, res, next) => {
       return;
     }
 
-    await seedDatabase();
+    await runSeed();
 
     res.json({
       success: true,
