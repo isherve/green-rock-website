@@ -1,13 +1,11 @@
 import { Router } from 'express';
-import { execSync } from 'node:child_process';
-import path from 'node:path';
 import prisma from '../lib/prisma';
+import { seedDatabase } from '../../prisma/seed';
 
 const router = Router();
 
-function runSeed() {
-  const backendRoot = path.join(__dirname, '../..');
-  execSync('npx tsx prisma/seed.ts', { cwd: backendRoot, stdio: 'pipe' });
+async function runSeed() {
+  await seedDatabase();
 }
 
 router.get('/status', async (_req, res) => {
@@ -59,7 +57,7 @@ router.post('/seed', async (req, res, next) => {
       return;
     }
 
-    runSeed();
+    await runSeed();
 
     res.json({
       success: true,
