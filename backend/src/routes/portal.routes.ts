@@ -42,6 +42,14 @@ const materialOrderSchema = z.object({
   notes: z.string().optional(),
 });
 
+const appointmentSchema = z.object({
+  date: z.string().datetime(),
+  time: z.string().min(1),
+  service: z.string().optional(),
+  message: z.string().optional(),
+  propertyId: z.string().uuid().optional(),
+});
+
 router.use(authenticate, requireCustomer);
 
 /** Dashboard summary */
@@ -174,6 +182,48 @@ router.get(
       orderBy: { date: 'desc' },
     });
     res.json({ success: true, data: appointments });
+  })
+);
+
+router.post(
+  '/appointments',
+  validateBody(appointmentSchema),
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const user = await prisma.user.findUnique({ where: { id: req.user!.userId } });
+    if (!user) throw new AppError('User not found', 404);
+
+    const { date, time, service, message, propertyId } = req.body;
+    const appointment = await prisma.appointment.create({
+      data: {
+        name: user.name,
+        email: user.email,
+        phone: user.phone ?? '',
+        date: new Date(date),
+        time,
+        service,
+        message,
+        propertyId,
+        userId: req.user!.userId,
+      },
+    });
+    res.status(201).json({ success: true, data: appointment });
+  })
+);
+
+/** Staff contacts for messaging */
+router.get(
+  '/contacts',
+  asyncHandler(async (_req: AuthRequest, res: Response) => {
+    const contacts = await prisma.user.findMany({
+      where: {
+        isActive: true,
+        role: { in: ['ADMIN', 'MANAGER', 'CUSTOMER_SUPPORT', 'AGENT', 'SALES_MANAGER'] },
+      },
+      select: { id: true, name: true, role: true, email: true },
+      orderBy: { name: 'asc' },
+      take: 20,
+    });
+    res.json({ success: true, data: contacts });
   })
 );
 

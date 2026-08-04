@@ -226,3 +226,25 @@ export const PARTNER_FIELDS: FieldDef[] = [
   { name: "order", label: "Sort Order", type: "number", defaultValue: 0 },
   { name: "isActive", label: "Active", type: "boolean", defaultValue: true },
 ];
+
+export const APPOINTMENT_FIELDS: FieldDef[] = [
+  { name: "isConfirmed", label: "Confirmed", type: "boolean", defaultValue: false },
+  { name: "date", label: "Date (ISO)", type: "text" },
+  { name: "time", label: "Time", type: "text" },
+  { name: "service", label: "Service", type: "text" },
+  { name: "message", label: "Notes", type: "textarea", rows: 2 },
+];
+
+export const INQUIRY_ADMIN_FIELDS: FieldDef[] = [
+  { name: "status", label: "Status", type: "select", options: [
+    { value: "NEW", label: "New" }, { value: "IN_PROGRESS", label: "In Progress" },
+    { value: "RESOLVED", label: "Resolved" }, { value: "CLOSED", label: "Closed" },
+  ], defaultValue: "NEW" },
+];
+
+export const INVOICE_ADMIN_FIELDS: FieldDef[] = [
+  { name: "status", label: "Status", type: "select", options: [
+    { value: "DRAFT", label: "Draft" }, { value: "SENT", label: "Sent" },
+    { value: "PAID", label: "Paid" }, { value: "OVERDUE", label: "Overdue" }, { value: "CANCELLED", label: "Cancelled" },
+  ] },
+];

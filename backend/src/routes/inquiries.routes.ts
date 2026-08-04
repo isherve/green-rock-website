@@ -5,7 +5,7 @@ import prisma from '../lib/prisma';
 import { sendInquiryNotification } from '../lib/email';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
-import { authenticate, requireAdmin } from '../middleware/auth';
+import { authenticate, requireAdmin, optionalAuth, AuthRequest } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 
@@ -38,8 +38,9 @@ const listQuerySchema = z.object({
 
 router.post(
   '/',
+  optionalAuth,
   validateBody(createInquirySchema),
-  asyncHandler(async (req: Request, res: Response) => {
+  asyncHandler(async (req: AuthRequest, res: Response) => {
     const { propertyId, productId, ...data } = req.body;
 
     if (propertyId) {
@@ -53,7 +54,12 @@ router.post(
     }
 
     const inquiry = await prisma.inquiry.create({
-      data: { ...data, propertyId, productId },
+      data: {
+        ...data,
+        propertyId,
+        productId,
+        ...(req.user?.userId ? { userId: req.user.userId } : {}),
+      },
       include: {
         property: { select: { id: true, title: true, slug: true } },
         product: { select: { id: true, name: true, slug: true } },

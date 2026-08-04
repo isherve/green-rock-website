@@ -9,6 +9,7 @@ import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { PartnersSection } from "@/components/home/PartnersSection";
 import { ContactCTA } from "@/components/home/ContactCTA";
+import { PortalsSection } from "@/components/home/PortalsSection";
 
 export default function HomePage() {
   return (
@@ -23,6 +24,7 @@ export default function HomePage() {
       <WhyChooseUs />
       <TestimonialsSection />
       <PartnersSection />
+      <PortalsSection />
       <ContactCTA />
     </>
   );

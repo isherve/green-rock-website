@@ -46,6 +46,8 @@ interface AdminCRUDProps<T extends AdminRow = AdminRow> {
   toForm?: (item: T) => Record<string, unknown>;
   toPayload?: (form: Record<string, unknown>, isEdit: boolean) => Record<string, unknown>;
   createLabel?: string;
+  hideCreate?: boolean;
+  updateMethod?: "put" | "patch";
 }
 
 function getDefaults(fields: FieldDef[]) {
@@ -63,6 +65,8 @@ export function AdminCRUD<T extends AdminRow = AdminRow>({
   toForm,
   toPayload,
   createLabel = "Add New",
+  hideCreate = false,
+  updateMethod = "put",
 }: AdminCRUDProps<T>) {
   const [items, setItems] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
@@ -134,7 +138,11 @@ export function AdminCRUD<T extends AdminRow = AdminRow>({
     try {
       const payload = toPayload ? toPayload(form, !!editing) : form;
       if (editing) {
-        await api.put(`${endpoint}/${editing.id}`, payload);
+        if (updateMethod === "patch") {
+          await api.patch(`${endpoint}/${editing.id}`, payload);
+        } else {
+          await api.put(`${endpoint}/${editing.id}`, payload);
+        }
       } else {
         await api.post(endpoint, payload);
       }
@@ -241,9 +249,11 @@ export function AdminCRUD<T extends AdminRow = AdminRow>({
           <Button variant="outline" size="sm" onClick={() => fetchItems()} disabled={loading}>
             <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
           </Button>
-          <Button size="sm" onClick={openCreate}>
-            <Plus className="w-4 h-4 mr-1" /> {createLabel}
-          </Button>
+          {!hideCreate && (
+            <Button size="sm" onClick={openCreate}>
+              <Plus className="w-4 h-4 mr-1" /> {createLabel}
+            </Button>
+          )}
         </div>
       </div>
 

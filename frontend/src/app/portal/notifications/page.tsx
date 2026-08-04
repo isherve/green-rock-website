@@ -10,11 +10,16 @@ import api from "@/lib/api";
 type Notification = { id: string; title: string; message: string; isRead: boolean; createdAt: string };
 
 export default function NotificationsPage() {
-  const { data, loading } = usePortalData<Notification>("/portal/notifications");
+  const { data, loading, refetch } = usePortalData<Notification>("/portal/notifications");
 
   async function markAllRead() {
     await api.patch("/portal/notifications/read-all");
-    window.location.reload();
+    refetch();
+  }
+
+  async function markRead(id: string) {
+    await api.patch(`/portal/notifications/${id}/read`);
+    refetch();
   }
 
   if (loading) return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
@@ -30,7 +35,11 @@ export default function NotificationsPage() {
           <div key={n.id} className={`p-4 ${!n.isRead ? "bg-primary/5" : ""}`}>
             <div className="flex items-start justify-between gap-2">
               <p className="font-medium text-sm">{n.title}</p>
-              {!n.isRead && <span className="text-[10px] font-bold uppercase text-primary">New</span>}
+              {!n.isRead && (
+                <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => markRead(n.id)}>
+                  Mark read
+                </Button>
+              )}
             </div>
             <p className="text-sm text-muted-foreground mt-1">{n.message}</p>
             <p className="text-xs text-muted-foreground mt-2">{formatDate(n.createdAt)}</p>

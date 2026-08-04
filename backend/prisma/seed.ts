@@ -8,6 +8,15 @@ import {
   InquiryType,
   GalleryType,
   GalleryCategory,
+  InquiryStatus,
+  OrderStatus,
+  TaskStatus,
+  TaskPriority,
+  TicketStatus,
+  TicketPriority,
+  InvoiceStatus,
+  LeaveStatus,
+  AttendanceStatus,
 } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
@@ -827,6 +836,212 @@ async function seedDatabase() {
   });
 
   console.log('Created inquiries, appointments, contacts, and subscribers');
+
+  const villa = await prisma.property.findUnique({ where: { slug: 'modern-villa-kacyiru' } });
+  const apartment = await prisma.property.findUnique({ where: { slug: 'luxury-apartment-nyarutarama' } });
+  const mallProject = await prisma.project.findUnique({ where: { slug: 'green-valley-shopping-mall' } });
+
+  if (villa && apartment) {
+    await prisma.favorite.createMany({
+      data: [
+        { userId: customer.id, propertyId: villa.id },
+        { userId: customer.id, propertyId: apartment.id },
+      ],
+    });
+
+    await prisma.inquiry.createMany({
+      data: [
+        {
+          type: InquiryType.QUOTE,
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone ?? '+250788111222',
+          message: 'Quote for cement and steel for a 3-bedroom house in Kigali.',
+          userId: customer.id,
+          status: InquiryStatus.IN_PROGRESS,
+        },
+        {
+          type: InquiryType.PROPERTY,
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone ?? '+250788111222',
+          message: 'Interested in scheduling a second viewing for the Kacyiru villa.',
+          userId: customer.id,
+          propertyId: villa.id,
+          status: InquiryStatus.NEW,
+        },
+      ],
+    });
+
+    await prisma.appointment.create({
+      data: {
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone ?? '+250788111222',
+        date: new Date('2026-09-10'),
+        time: '11:00',
+        service: 'Property Viewing',
+        message: 'Viewing the Modern Villa in Kacyiru',
+        isConfirmed: true,
+        userId: customer.id,
+        propertyId: villa.id,
+      },
+    });
+
+    await prisma.materialOrder.create({
+      data: {
+        orderNumber: 'GR-ORD-1001',
+        userId: customer.id,
+        status: OrderStatus.PROCESSING,
+        totalAmount: 425000,
+        currency: 'RWF',
+        deliveryAddress: 'KG 12 Ave, Kigali',
+        notes: 'Deliver before 9 AM',
+        items: [
+          { name: 'Portland Cement 50kg', quantity: 20, unitPrice: 12500 },
+          { name: 'Steel Reinforcement Bar 12mm', quantity: 10, unitPrice: 18500 },
+        ],
+      },
+    });
+
+    await prisma.supportTicket.create({
+      data: {
+        ticketNumber: 'GR-TKT-2001',
+        userId: customer.id,
+        subject: 'Delivery status for material order',
+        message: 'Can you confirm when my cement order will arrive?',
+        status: TicketStatus.OPEN,
+        priority: TicketPriority.MEDIUM,
+        replies: {
+          create: [
+            {
+              message: 'We are preparing your order for dispatch tomorrow morning.',
+              isStaff: true,
+              authorName: 'Green Rock Support',
+            },
+          ],
+        },
+      },
+    });
+
+    await prisma.invoice.create({
+      data: {
+        invoiceNumber: 'GR-INV-3001',
+        userId: customer.id,
+        title: 'Building Materials — September',
+        amount: 425000,
+        currency: 'RWF',
+        status: InvoiceStatus.SENT,
+        dueDate: new Date('2026-09-30'),
+        items: [{ description: 'Cement & steel order GR-ORD-1001', amount: 425000 }],
+      },
+    });
+
+    await prisma.notification.createMany({
+      data: [
+        {
+          userId: customer.id,
+          title: 'Appointment confirmed',
+          message: 'Your property viewing on Sep 10 at 11:00 has been confirmed.',
+          type: 'success',
+          link: '/portal/appointments',
+        },
+        {
+          userId: customer.id,
+          title: 'Quote in progress',
+          message: 'Our team is preparing your materials quotation.',
+          type: 'info',
+          link: '/portal/quotes',
+          isRead: false,
+        },
+      ],
+    });
+
+    await prisma.directMessage.create({
+      data: {
+        senderId: customer.id,
+        receiverId: agent.id,
+        body: 'Hello, I would like an update on my quote request.',
+      },
+    });
+  }
+
+  if (mallProject) {
+    await prisma.task.createMany({
+      data: [
+        {
+          title: 'Review mall construction progress report',
+          description: 'Prepare weekly status update for Green Valley Shopping Mall.',
+          status: TaskStatus.IN_PROGRESS,
+          priority: TaskPriority.HIGH,
+          dueDate: new Date('2026-08-15'),
+          assigneeId: employee.id,
+          createdById: manager.id,
+          projectId: mallProject.id,
+        },
+        {
+          title: 'Coordinate cement delivery to Remera site',
+          description: 'Confirm delivery schedule with logistics team.',
+          status: TaskStatus.TODO,
+          priority: TaskPriority.MEDIUM,
+          dueDate: new Date('2026-08-20'),
+          assigneeId: employee.id,
+          createdById: admin.id,
+          projectId: mallProject.id,
+        },
+      ],
+    });
+  }
+
+  await prisma.attendance.create({
+    data: {
+      userId: employee.id,
+      date: new Date(),
+      checkIn: new Date(new Date().setHours(8, 5, 0, 0)),
+      status: AttendanceStatus.PRESENT,
+    },
+  });
+
+  await prisma.leaveRequest.create({
+    data: {
+      userId: employee.id,
+      startDate: new Date('2026-09-01'),
+      endDate: new Date('2026-09-03'),
+      reason: 'Family event — annual leave',
+      status: LeaveStatus.PENDING,
+    },
+  });
+
+  await prisma.salarySlip.create({
+    data: {
+      userId: employee.id,
+      period: 'July 2026',
+      grossPay: 850000,
+      deductions: 85000,
+      netPay: 765000,
+      currency: 'RWF',
+    },
+  });
+
+  await prisma.document.create({
+    data: {
+      userId: employee.id,
+      title: 'Employee Handbook 2026',
+      fileUrl: 'https://res.cloudinary.com/demo/image/upload/sample.pdf',
+      fileType: 'pdf',
+      category: 'hr',
+    },
+  });
+
+  await prisma.auditLog.createMany({
+    data: [
+      { userId: admin.id, action: 'LOGIN', entity: 'User', entityId: admin.id, ipAddress: '127.0.0.1' },
+      { userId: admin.id, action: 'UPDATE', entity: 'Appointment', ipAddress: '127.0.0.1' },
+      { userId: manager.id, action: 'CREATE', entity: 'Task', ipAddress: '127.0.0.1' },
+    ],
+  });
+
+  console.log('Created portal demo data (favorites, orders, tickets, tasks, HR records)');
 
   await prisma.settings.createMany({
     data: [

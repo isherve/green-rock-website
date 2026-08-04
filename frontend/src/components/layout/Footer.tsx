@@ -47,7 +47,7 @@ export function Footer() {
 
       {/* Main footer */}
       <div className="container mx-auto px-4 py-12 lg:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-6">
@@ -130,6 +130,22 @@ export function Footer() {
             <h4 className="font-semibold text-secondary mb-4">Resources</h4>
             <ul className="space-y-3">
               {FOOTER_LINKS.resources.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-white/70 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-secondary mb-4">Portals</h4>
+            <ul className="space-y-3">
+              {FOOTER_LINKS.portals.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}

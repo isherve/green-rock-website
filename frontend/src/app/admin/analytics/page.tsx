@@ -1,5 +1,5 @@
-﻿import { AdminModule } from "@/components/admin/AdminModulePages";
+﻿import { redirect } from "next/navigation";
 
-export default function Page() {
-  return <AdminModule module="analytics" />;
+export default function AdminAnalyticsPage() {
+  redirect("/admin/dashboard");
 }

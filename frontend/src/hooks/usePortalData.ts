@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "@/lib/api";
 
 export function usePortalData<T>(endpoint: string) {
@@ -8,24 +8,47 @@ export function usePortalData<T>(endpoint: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    let cancelled = false;
+  const refetch = useCallback(async () => {
     setLoading(true);
-    api
-      .get(endpoint)
-      .then((res) => {
-        if (!cancelled) setData(res.data.data ?? []);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load");
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
+    setError("");
+    try {
+      const res = await api.get(endpoint);
+      setData(res.data.data ?? []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load");
+    } finally {
+      setLoading(false);
+    }
   }, [endpoint]);
 
-  return { data, loading, error, refetch: () => {} };
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch, setData };
+}
+
+export function usePortalObject<T>(endpoint: string) {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await api.get(endpoint);
+      setData(res.data.data ?? null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load");
+    } finally {
+      setLoading(false);
+    }
+  }, [endpoint]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { data, loading, error, refetch };
 }

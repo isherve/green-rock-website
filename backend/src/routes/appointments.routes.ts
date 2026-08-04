@@ -9,7 +9,7 @@ import {
 import { buildCustomerEmail } from '../lib/email-templates';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
-import { authenticate, requireAdmin } from '../middleware/auth';
+import { authenticate, requireAdmin, optionalAuth, AuthRequest } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 
@@ -46,14 +46,16 @@ const listQuerySchema = z.object({
 
 router.post(
   '/',
+  optionalAuth,
   validateBody(createAppointmentSchema),
-  asyncHandler(async (req: Request, res: Response) => {
+  asyncHandler(async (req: AuthRequest, res: Response) => {
     const { date, ...rest } = req.body;
 
     const appointment = await prisma.appointment.create({
       data: {
         ...rest,
         date: new Date(date),
+        ...(req.user?.userId ? { userId: req.user.userId } : {}),
       },
     });
 

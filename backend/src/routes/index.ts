@@ -22,6 +22,8 @@ import partnersRoutes from './partners.routes';
 import portalRoutes from './portal.routes';
 import employeeRoutes from './employee.routes';
 import setupRoutes from './setup.routes';
+import invoicesRoutes from './invoices.routes';
+import auditLogsRoutes from './audit-logs.routes';
 
 const router = Router();
 
@@ -48,5 +50,7 @@ router.use('/partners', partnersRoutes);
 router.use('/portal', portalRoutes);
 router.use('/employee', employeeRoutes);
 router.use('/setup', setupRoutes);
+router.use('/invoices', invoicesRoutes);
+router.use('/audit-logs', auditLogsRoutes);
 
 export default router;

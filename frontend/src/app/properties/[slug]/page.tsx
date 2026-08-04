@@ -22,6 +22,8 @@ import { formatPrice } from "@/lib/utils";
 
 import { ArrowLeft, Bed, Bath, Maximize, MapPin } from "lucide-react";
 
+import { PropertyFavoriteButton } from "@/components/portal/PropertyFavoriteButton";
+
 import type { Property } from "@/types";
 
 
@@ -125,6 +127,8 @@ export default async function PropertyDetailPage({ params }: Props) {
                 {property.purpose === "RENT" && <span className="text-base font-normal text-muted-foreground">/mo</span>}
 
               </h2>
+
+              <PropertyFavoriteButton propertyId={property.id} className="mb-6" />
 
               <p className="text-muted-foreground leading-relaxed mb-6">{property.description}</p>
 
