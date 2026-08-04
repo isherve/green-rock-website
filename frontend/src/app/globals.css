@@ -133,6 +133,56 @@ h1, h2, .font-display {
   animation: shimmer-3d 4s linear infinite;
 }
 
+/* CSS 3D fallback when WebGL unavailable */
+.hero-3d-fallback {
+  background: radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.15), transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(201, 162, 39, 0.12), transparent 45%),
+    #0c1829;
+  overflow: hidden;
+}
+
+.hero-grid-floor {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(500px) rotateX(62deg) scale(2.2);
+  transform-origin: center 80%;
+  animation: grid-drift 20s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes grid-drift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 48px, 48px 0; }
+}
+
+.hero-glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: float-y 8s ease-in-out infinite;
+}
+
+.hero-glow-orb-1 {
+  width: 280px;
+  height: 280px;
+  background: rgba(16, 185, 129, 0.25);
+  top: 15%;
+  left: 10%;
+}
+
+.hero-glow-orb-2 {
+  width: 220px;
+  height: 220px;
+  background: rgba(201, 162, 39, 0.2);
+  bottom: 20%;
+  right: 15%;
+  animation-delay: 2s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-3d,
   .animate-float-y,

@@ -35,19 +35,21 @@ export function TiltCard3D({ children, className, intensity = 14 }: TiltCard3DPr
   }
 
   return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMove}
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={handleLeave}
-      style={{
-        rotateX: springX,
-        rotateY: springY,
-        transformStyle: "preserve-3d",
-      }}
-      className={cn("motion-3d transition-shadow duration-300", hovering && "shadow-2xl shadow-primary/10", className)}
-    >
-      <div style={{ transform: "translateZ(24px)" }}>{children}</div>
-    </motion.div>
+    <div className="[perspective:1000px] h-full" style={{ transformStyle: "preserve-3d" }}>
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMove}
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={handleLeave}
+        style={{
+          rotateX: springX,
+          rotateY: springY,
+          transformStyle: "preserve-3d",
+        }}
+        className={cn("transition-shadow duration-300 h-full", hovering && "shadow-2xl shadow-primary/10", className)}
+      >
+        <div style={{ transform: "translateZ(24px)" }}>{children}</div>
+      </motion.div>
+    </div>
   );
 }

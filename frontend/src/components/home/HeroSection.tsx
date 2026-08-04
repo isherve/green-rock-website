@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,23 +23,12 @@ export function HeroSection() {
 
   return (
     <section ref={ref} className="relative min-h-[92vh] flex items-end pb-12 lg:pb-16 overflow-hidden bg-dark perspective-[1200px]">
-      <div className="absolute inset-0 md:hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80"
-          alt=""
-          fill
-          priority
-          className="object-cover opacity-40"
-          sizes="100vw"
-        />
-      </div>
-
-      <div className="hidden md:block absolute inset-0">
+      <div className="absolute inset-0">
         <HeroScene3D />
       </div>
 
       <FloatingOrbs />
-      <div className="absolute inset-0 bg-gradient-to-b from-dark/40 via-dark/55 to-dark/90 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-dark/25 via-dark/45 to-dark/80 pointer-events-none" />
 
       <motion.div style={{ y, opacity }} className="container relative z-10 mx-auto px-4 w-full pt-32">
         <div className="max-w-4xl mb-10 lg:mb-14 motion-3d">
