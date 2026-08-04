@@ -1,21 +1,35 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm ci --prefix backend && npm ci --prefix frontend",
-  "buildCommand": "npm run vercel:deploy --prefix backend && npm run build --prefix frontend",
-  "outputDirectory": "frontend/.next",
-  "devCommand": "npm run dev --prefix frontend",
-  "rewrites": [
-    { "source": "/health", "destination": "/api/server" },
-    { "source": "/api/docs", "destination": "/api/server" },
-    { "source": "/api/docs.json", "destination": "/api/server" },
-    { "source": "/api/setup/(.*)", "destination": "/api/server" },
-    { "source": "/api/(.*)", "destination": "/api/server" }
-  ],
-  "functions": {
-    "api/server.ts": {
-      "maxDuration": 60,
-      "memory": 1024,
-      "includeFiles": "backend/src/**, backend/node_modules/.prisma/**, backend/node_modules/@prisma/**"
+  "services": {
+    "frontend": {
+      "root": "frontend",
+      "framework": "nextjs"
+    },
+    "backend": {
+      "root": "backend",
+      "entrypoint": "src/app.ts"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/health",
+      "destination": { "type": "service", "service": "backend" }
+    },
+    {
+      "source": "/api/docs",
+      "destination": { "type": "service", "service": "backend" }
+    },
+    {
+      "source": "/api/docs.json",
+      "destination": { "type": "service", "service": "backend" }
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": { "type": "service", "service": "backend" }
+    },
+    {
+      "source": "/(.*)",
+      "destination": { "type": "service", "service": "frontend" }
+    }
+  ]
 }

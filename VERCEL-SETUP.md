@@ -7,10 +7,9 @@ Your site is **not live yet** because the Vercel project was pointing at the wro
 ### Step 1 — Use the right Vercel project
 Open: https://vercel.com/isherves-projects/green-rock-website/settings
 
-- **Root Directory:** leave **blank** (delete `frontend` if it is set)
+- **Root Directory:** leave **blank**
+- **Framework Preset:** Other (or Services if shown)
 - **Save**
-
-*(Ignore the old `frontend` project — it shows "Timeless Recipes" from a previous app.)*
 
 ### Step 2 — Add database
 Project → **Storage** → **Create Database** → **Postgres** → Connect
