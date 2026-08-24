@@ -8,9 +8,9 @@
     "backend": {
       "root": "backend",
       "framework": "express",
-      "entrypoint": "vercel-entry.js",
+      "entrypoint": "src/app.ts",
       "installCommand": "npm install",
-      "buildCommand": "npm run build"
+      "buildCommand": "npx prisma generate && npx prisma db push --skip-generate"
     }
   },
   "rewrites": [

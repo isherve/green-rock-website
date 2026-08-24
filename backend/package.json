@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "npm run vercel:build",
+    "postinstall": "prisma generate",
     "build:tsc": "tsc",
     "start": "node dist/index.js",
     "db:generate": "prisma generate",
