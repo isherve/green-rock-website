@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Building2, HardHat, Shield, ArrowRight, UserCircle, Briefcase } from "lucide-react";
+import { Building2, HardHat, Shield, ArrowRight, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { TiltCard3D } from "@/components/motion/TiltCard3D";
@@ -16,23 +16,15 @@ const PORTALS = [
     registerHref: "/portal/register",
     icon: UserCircle,
     color: "bg-primary/10 text-primary",
-    features: ["Saved properties", "Material orders", "Support & messages"],
-  },
-  {
-    title: "Employee Portal",
-    description: "Tasks, attendance, leave requests, payslips, projects, and internal documents.",
-    href: "/employee/login",
-    icon: Briefcase,
-    color: "bg-secondary/20 text-secondary-foreground",
-    features: ["Check-in/out", "Leave requests", "Task updates"],
+    features: ["Saved properties", "Material orders", "Download invoices"],
   },
   {
     title: "Admin ERP",
-    description: "Full business management — CRM, properties, inventory, finance, HR, and CMS.",
+    description: "Full business management — CRM, properties, inventory, finance, and CMS.",
     href: "/admin/login",
     icon: Shield,
     color: "bg-dark/10 text-dark",
-    features: ["Dashboard & analytics", "CRUD modules", "Role-based access"],
+    features: ["Generate invoices", "Dashboard & analytics", "Role-based access"],
   },
 ] as const;
 
@@ -44,10 +36,10 @@ export function PortalsSection() {
         <SectionHeading
           subtitle="Enterprise Platform"
           title="Access Your Portal"
-          description="Green Rock runs on a unified platform — customers, staff, and administrators each have a dedicated portal."
+          description="Green Rock runs on a unified platform — customers and administrators each have a dedicated portal."
           align="center"
         />
-        <div className="grid md:grid-cols-3 gap-8 mt-12">
+        <div className="grid md:grid-cols-2 gap-8 mt-12 max-w-4xl mx-auto">
           {PORTALS.map((portal, index) => (
             <motion.div
               key={portal.title}

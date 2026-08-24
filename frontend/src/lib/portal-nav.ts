@@ -30,15 +30,3 @@ export const CUSTOMER_NAV: { label: string; href: string; icon: LucideIcon }[] =
   { label: "Messages", href: "/portal/messages", icon: MessageSquare },
   { label: "Profile", href: "/portal/profile", icon: User },
 ];
-
-export const EMPLOYEE_NAV: { label: string; href: string; icon: LucideIcon }[] = [
-  { label: "Dashboard", href: "/employee/dashboard", icon: LayoutDashboard },
-  { label: "Assigned Projects", href: "/employee/projects", icon: HardHat },
-  { label: "Tasks", href: "/employee/tasks", icon: FileText },
-  { label: "Attendance", href: "/employee/attendance", icon: Calendar },
-  { label: "Leave Requests", href: "/employee/leave", icon: Calendar },
-  { label: "Salary Slips", href: "/employee/payslips", icon: Receipt },
-  { label: "Internal Messaging", href: "/employee/messages", icon: MessageSquare },
-  { label: "Reports", href: "/employee/reports", icon: FileText },
-  { label: "Documents", href: "/employee/documents", icon: FolderOpen },
-];

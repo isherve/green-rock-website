@@ -40,7 +40,6 @@ export const FOOTER_LINKS = {
   ],
   portals: [
     { label: "Customer Portal", href: "/portal/login" },
-    { label: "Employee Portal", href: "/employee/login" },
     { label: "Admin ERP", href: "/admin/login" },
   ],
 } as const;

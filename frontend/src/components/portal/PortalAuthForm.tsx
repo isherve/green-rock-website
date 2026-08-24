@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { SITE_CONFIG } from "@/lib/constants";
-import { isCustomerRole, canAccessEmployeePortal } from "@/lib/roles";
+import { isCustomerRole } from "@/lib/roles";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -29,11 +29,10 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 interface AuthFormProps {
   mode: "login" | "register";
-  portal: "customer" | "employee";
   redirectPath: string;
 }
 
-export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
+export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
   const router = useRouter();
   const [error, setError] = useState("");
   const isRegister = mode === "register";
@@ -54,18 +53,9 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
       localStorage.setItem("accessToken", accessToken);
       if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
 
-      const ok =
-        portal === "customer"
-          ? isCustomerRole(user.role)
-          : canAccessEmployeePortal(user.role);
-
-      if (!ok) {
+      if (!isCustomerRole(user.role)) {
         localStorage.clear();
-        setError(
-          portal === "customer"
-            ? "This account is not a customer account. Use the employee or admin login."
-            : "Employee access required. Contact HR if you need portal access."
-        );
+        setError("This account is not a customer account. Use the admin login for staff access.");
         return;
       }
 
@@ -123,7 +113,7 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
             {isRegister ? "Create Account" : "Sign In"}
           </h1>
           <p className="text-muted-foreground text-sm mt-2">
-            {portal === "customer" ? "Customer Portal" : "Employee Portal"} · {SITE_CONFIG.shortName}
+            Customer Portal · {SITE_CONFIG.shortName}
           </p>
         </div>
 
@@ -153,7 +143,7 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
           {isRegister ? (
             <>
               Already have an account?{" "}
-              <Link href={portal === "customer" ? "/portal/login" : "/employee/login"} className="text-primary font-medium">
+              <Link href="/portal/login" className="text-primary font-medium">
                 Sign in
               </Link>
             </>

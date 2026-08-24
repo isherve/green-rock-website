@@ -66,7 +66,6 @@ export function Header() {
           </div>
           <div className="flex items-center gap-4 text-white/70">
             <Link href="/portal/login" className="hover:text-secondary transition-colors">Customer Portal</Link>
-            <Link href="/employee/login" className="hover:text-secondary transition-colors">Employee Portal</Link>
             <Link href="/admin/login" className="hover:text-secondary transition-colors">Admin ERP</Link>
             <span className="text-white/40">|</span>
             <span>{SITE_CONFIG.address}</span>
@@ -200,9 +199,6 @@ export function Header() {
                   <div className="grid grid-cols-1 gap-2">
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/portal/login" onClick={() => setMobileOpen(false)}>Customer Portal</Link>
-                    </Button>
-                    <Button asChild variant="outline" className="w-full rounded-lg justify-start">
-                      <Link href="/employee/login" onClick={() => setMobileOpen(false)}>Employee Portal</Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/admin/login" onClick={() => setMobileOpen(false)}>Admin ERP</Link>

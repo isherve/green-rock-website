@@ -6,8 +6,9 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import { authenticate, AuthRequest } from '../middleware/auth';
 import { requireCustomer } from '../middleware/portalAuth';
-import { validateBody } from '../middleware/validate';
+import { validateBody, validateParams } from '../middleware/validate';
 import { generateNumber } from '../lib/roles';
+import { buildInvoicePdf, parseInvoiceItems } from '../lib/invoice-pdf';
 
 const router = Router();
 
@@ -272,6 +273,39 @@ router.get(
       orderBy: { createdAt: 'desc' },
     });
     res.json({ success: true, data: invoices });
+  })
+);
+
+router.get(
+  '/invoices/:id/pdf',
+  validateParams(z.object({ id: z.string().uuid() })),
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const invoice = await prisma.invoice.findFirst({
+      where: { id: req.params.id, userId: req.user!.userId },
+      include: { user: { select: { name: true, email: true, phone: true } } },
+    });
+    if (!invoice) throw new AppError('Invoice not found', 404);
+
+    const items = parseInvoiceItems(invoice.items);
+    const pdf = await buildInvoicePdf({
+      invoiceNumber: invoice.invoiceNumber,
+      title: invoice.title,
+      amount: invoice.amount,
+      currency: invoice.currency,
+      status: invoice.status,
+      dueDate: invoice.dueDate,
+      createdAt: invoice.createdAt,
+      items,
+      customer: {
+        name: invoice.user.name,
+        email: invoice.user.email,
+        phone: invoice.user.phone,
+      },
+    });
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${invoice.invoiceNumber}.pdf"`);
+    res.send(pdf);
   })
 );
 

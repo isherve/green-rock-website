@@ -28,8 +28,8 @@ const FAQ_ITEMS = [
     a: "A secure area to manage saved properties, quotes, construction requests, material orders, appointments, invoices, payments, and support tickets.",
   },
   {
-    q: "What is the Employee Portal?",
-    a: "Internal workspace for Green Rock staff — tasks, projects, attendance, leave, payslips, messaging, and documents.",
+    q: "How do I download my invoice?",
+    a: "Sign in to the Customer Portal, open Invoices, and click Download PDF on any invoice issued by Green Rock.",
   },
   {
     q: "How do I apply for a job at Green Rock?",
