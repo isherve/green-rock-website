@@ -15,13 +15,15 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { isCustomerRole } from "@/lib/roles";
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email("Enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-const registerSchema = loginSchema.extend({
-  name: z.string().min(2),
+const registerSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
   phone: z.string().optional(),
+  email: z.string().email("Enter a valid email (e.g. name@gmail.com)"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -75,7 +77,12 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
   const onRegister = async (data: RegisterForm) => {
     setError("");
     try {
-      const res = await api.post("/auth/register", data);
+      const payload = {
+        ...data,
+        email: data.email.trim().toLowerCase(),
+        phone: data.phone?.trim() || undefined,
+      };
+      const res = await api.post("/auth/register", payload);
       const { accessToken, refreshToken, user } = res.data.data;
       localStorage.setItem("accessToken", accessToken);
       if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
@@ -119,10 +126,27 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
 
         {isRegister ? (
           <form onSubmit={registerForm.handleSubmit(onRegister)} className="space-y-4">
-            <Input placeholder="Full name" {...registerForm.register("name")} />
-            <Input placeholder="Phone (optional)" {...registerForm.register("phone")} />
-            <Input type="email" placeholder="Email address" {...registerForm.register("email")} />
-            <Input type="password" placeholder="Password" {...registerForm.register("password")} />
+            <div>
+              <Input placeholder="Full name" {...registerForm.register("name")} />
+              {registerForm.formState.errors.name && (
+                <p className="text-destructive text-xs mt-1">{registerForm.formState.errors.name.message}</p>
+              )}
+            </div>
+            <div>
+              <Input placeholder="Phone (optional)" {...registerForm.register("phone")} />
+            </div>
+            <div>
+              <Input type="email" placeholder="Email address" {...registerForm.register("email")} />
+              {registerForm.formState.errors.email && (
+                <p className="text-destructive text-xs mt-1">{registerForm.formState.errors.email.message}</p>
+              )}
+            </div>
+            <div>
+              <Input type="password" placeholder="Password (min. 8 characters)" {...registerForm.register("password")} />
+              {registerForm.formState.errors.password && (
+                <p className="text-destructive text-xs mt-1">{registerForm.formState.errors.password.message}</p>
+              )}
+            </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
             <Button type="submit" className="w-full" disabled={registerForm.formState.isSubmitting}>
               {registerForm.formState.isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Register"}

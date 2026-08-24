@@ -50,7 +50,10 @@ router.post(
   '/register',
   validateBody(registerSchema),
   asyncHandler(async (req: Request, res: Response) => {
-    const { email, password, name, phone } = req.body;
+    const email = String(req.body.email).trim().toLowerCase();
+    const password = req.body.password;
+    const name = String(req.body.name).trim();
+    const phone = req.body.phone ? String(req.body.phone).trim() : undefined;
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {

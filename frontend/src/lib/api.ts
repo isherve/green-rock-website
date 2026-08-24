@@ -26,10 +26,15 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  async (error: AxiosError<{ message?: string }>) => {
+  async (error: AxiosError<{ message?: string; errors?: Record<string, string[]> }>) => {
     const status = error.response?.status;
-    const message =
-      error.response?.data?.message ?? error.message ?? "An error occurred";
+    const data = error.response?.data;
+    let message = data?.message ?? error.message ?? "An error occurred";
+
+    if (data?.errors) {
+      const details = Object.values(data.errors).flat().filter(Boolean);
+      if (details.length > 0) message = details.join(" ");
+    }
 
     if (status === 401 && typeof window !== "undefined") {
       localStorage.removeItem("accessToken");
