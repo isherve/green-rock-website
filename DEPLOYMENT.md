@@ -63,6 +63,14 @@ Set in **Vercel → Project → Settings → Environment Variables**:
 | `NEXT_PUBLIC_SITE_URL` | Recommended | `https://your-app.vercel.app` |
 | `FRONTEND_URL` | Recommended | Same as site URL (CORS) |
 | `SETUP_SECRET` | Recommended | One-time seed via `POST /api/setup/seed` |
+| `SMTP_HOST` | For email | `smtp.gmail.com` |
+| `SMTP_PORT` | For email | `587` |
+| `SMTP_USER` | For email | Gmail address |
+| `SMTP_PASS` | For email | Gmail App Password ([create here](https://myaccount.google.com/apppasswords)) |
+| `EMAIL_FROM` | For email | Same as `SMTP_USER` |
+| `MOMO_MERCHANT_CODE` | For MoMo pay | e.g. `785652011` (manual payment instructions) |
+| `FLUTTERWAVE_PUBLIC_KEY` | Optional | Card payments via Flutterwave |
+| `FLUTTERWAVE_SECRET_KEY` | Optional | Card payments webhook |
 
 **Optional:** `NEXT_PUBLIC_API_URL` — leave unset to auto-use `https://<your-domain>/api` on Vercel.
 
