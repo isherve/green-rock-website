@@ -55,19 +55,20 @@ Set in **Vercel → Project → Settings → Environment Variables**:
 | `JWT_SECRET` | Yes | Random 32+ char string |
 | `JWT_REFRESH_SECRET` | Yes | Random 32+ char string |
 | `ADMIN_EMAIL` | Yes | `ishimwehervin10@gmail.com` |
-| `SMTP_USER` | For email | Gmail address |
-| `SMTP_PASS` | For email | Gmail App Password |
+| `RESEND_API_KEY` | For email (recommended) | From [resend.com/api-keys](https://resend.com/api-keys) |
+| `SMTP_USER` | For email (fallback) | Gmail address |
+| `SMTP_PASS` | For email (fallback) | Gmail App Password |
 | `CLOUDINARY_CLOUD_NAME` | For uploads | Cloudinary dashboard |
 | `CLOUDINARY_API_KEY` | For uploads | Cloudinary dashboard |
 | `CLOUDINARY_API_SECRET` | For uploads | Cloudinary dashboard |
 | `NEXT_PUBLIC_SITE_URL` | Recommended | `https://your-app.vercel.app` |
 | `FRONTEND_URL` | Recommended | Same as site URL (CORS) |
 | `SETUP_SECRET` | Recommended | One-time seed via `POST /api/setup/seed` |
-| `SMTP_HOST` | For email | `smtp.gmail.com` |
-| `SMTP_PORT` | For email | `587` |
-| `SMTP_USER` | For email | Gmail address |
-| `SMTP_PASS` | For email | Gmail App Password ([create here](https://myaccount.google.com/apppasswords)) |
-| `EMAIL_FROM` | For email | Same as `SMTP_USER` |
+| `EMAIL_FROM` | For email | Custom from address after verifying domain on Resend |
+| `SMTP_HOST` | For email (fallback) | `smtp.gmail.com` |
+| `SMTP_PORT` | For email (fallback) | `587` |
+| `SMTP_USER` | For email (fallback) | Gmail address |
+| `SMTP_PASS` | For email (fallback) | Gmail App Password ([create here](https://myaccount.google.com/apppasswords)) |
 | `MOMO_MERCHANT_CODE` | For MoMo pay | e.g. `785652011` (manual payment instructions) |
 | `FLUTTERWAVE_PUBLIC_KEY` | Optional | Card payments via Flutterwave |
 | `FLUTTERWAVE_SECRET_KEY` | Optional | Card payments webhook |

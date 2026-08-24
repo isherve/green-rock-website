@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import { AppError } from '../utils/AppError';
 import {
   buildAdminEmail,
@@ -7,7 +8,7 @@ import {
   INQUIRY_TYPE_LABELS,
   inquiryBadgeColor,
 } from './email-templates';
-import { isEmailConfigured } from './email-config';
+import { getEmailFrom, getEmailProvider, isEmailConfigured } from './email-config';
 
 function createTransporter() {
   return nodemailer.createTransport({
@@ -29,9 +30,36 @@ export interface EmailOptions {
   replyTo?: string;
 }
 
+async function sendViaResend(options: EmailOptions): Promise<void> {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const to = Array.isArray(options.to) ? options.to : [options.to];
+  const { error } = await resend.emails.send({
+    from: getEmailFrom(),
+    to,
+    subject: options.subject,
+    html: options.html,
+    text: options.text,
+    replyTo: options.replyTo,
+  });
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+async function sendViaSmtp(options: EmailOptions): Promise<void> {
+  await createTransporter().sendMail({
+    from: getEmailFrom(),
+    to: options.to,
+    subject: options.subject,
+    html: options.html,
+    text: options.text,
+    replyTo: options.replyTo,
+  });
+}
+
 export async function sendEmail(options: EmailOptions): Promise<void> {
   if (!isEmailConfigured()) {
-    const msg = `[Email] NOT SENT — SMTP_USER/SMTP_PASS missing in backend/.env. Would send "${options.subject}" → ${options.to}`;
+    const msg = `[Email] NOT SENT — set RESEND_API_KEY or SMTP_USER/SMTP_PASS. Would send "${options.subject}" → ${options.to}`;
     console.error(msg);
     if (process.env.NODE_ENV === 'production') {
       throw new AppError('Email service is not configured', 503);
@@ -39,18 +67,17 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
     return;
   }
 
+  const provider = getEmailProvider();
+
   try {
-    await createTransporter().sendMail({
-      from: `"Green Rock" <${process.env.EMAIL_FROM || process.env.SMTP_USER}>`,
-      to: options.to,
-      subject: options.subject,
-      html: options.html,
-      text: options.text,
-      replyTo: options.replyTo,
-    });
-    console.log(`[Email] Sent: "${options.subject}" → ${options.to}`);
+    if (provider === 'resend') {
+      await sendViaResend(options);
+    } else {
+      await sendViaSmtp(options);
+    }
+    console.log(`[Email] Sent via ${provider}: "${options.subject}" → ${options.to}`);
   } catch (err) {
-    console.error('[Email] Failed to send:', options.subject, err);
+    console.error(`[Email] Failed to send via ${provider}:`, options.subject, err);
     throw err;
   }
 }
@@ -465,6 +492,7 @@ export async function sendPaymentAdminNotification(data: {
 
 export async function sendTestEmail(): Promise<void> {
   const adminEmail = getAdminEmail();
+  const provider = getEmailProvider();
   await sendEmail({
     to: adminEmail,
     subject: '[Green Rock] Test Email — Notifications Working',
@@ -473,11 +501,12 @@ export async function sendTestEmail(): Promise<void> {
       badge: 'Test',
       badgeColor: '#0b6e4f',
       title: 'Email Setup Successful',
-      intro: 'This is a test email from your Green Rock website. If you received this, SMTP is configured correctly.',
+      intro: `This is a test email from your Green Rock website. Email is sent via ${provider === 'resend' ? 'Resend' : 'Gmail SMTP'}.`,
       rows: [
         { label: 'Sent to', value: adminEmail, highlight: true },
+        { label: 'Provider', value: provider === 'resend' ? 'Resend' : 'Gmail SMTP', highlight: true },
+        { label: 'From', value: getEmailFrom() },
         { label: 'Time', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
-        { label: 'SMTP Host', value: process.env.SMTP_HOST || 'smtp.gmail.com' },
       ],
       message: 'You will now receive emails when visitors submit contact forms, book appointments, place orders, open support tickets, subscribe to the newsletter, or apply for jobs.',
     }),

@@ -1,5 +1,5 @@
 /**
- * Test email delivery. Run after setting SMTP_USER + SMTP_PASS in .env:
+ * Test email delivery. Run after setting RESEND_API_KEY or SMTP credentials in .env:
  *   npm run test:email
  */
 import 'dotenv/config';
@@ -12,11 +12,13 @@ async function main() {
   console.log('Email config:', status);
 
   if (!status.configured) {
-    console.error('\n❌ SMTP is not configured.');
-    console.error('Edit backend/.env and set:');
+    console.error('\n❌ Email is not configured.');
+    console.error('Option A — Resend (recommended):');
+    console.error('  RESEND_API_KEY=re_xxxxxxxx');
+    console.error('  Sign up: https://resend.com/api-keys');
+    console.error('\nOption B — Gmail SMTP:');
     console.error('  SMTP_USER=ishimwehervin10@gmail.com');
     console.error('  SMTP_PASS=your-16-char-gmail-app-password');
-    console.error('\nCreate App Password: https://myaccount.google.com/apppasswords');
     process.exit(1);
   }
 
@@ -28,9 +30,10 @@ async function main() {
         preheader: 'Your email notifications are working',
         badge: 'Test',
         title: 'Email Setup Successful',
-        intro: 'If you received this, Green Rock will notify you for every message, order, and booking.',
+        intro: `If you received this, Green Rock will notify you for every message, order, and booking (via ${status.provider}).`,
         rows: [
-          { label: 'SMTP User', value: status.smtpUser || '' },
+          { label: 'Provider', value: status.provider || 'unknown', highlight: true },
+          { label: 'From', value: status.from || '' },
           { label: 'Admin inbox', value: status.adminEmail, highlight: true },
           { label: 'Sent at', value: new Date().toLocaleString() },
         ],
@@ -41,10 +44,15 @@ async function main() {
     console.log('Check your inbox (and spam folder).');
   } catch (err) {
     console.error('\n❌ Failed to send test email:', err);
-    console.error('\nCommon fixes for Gmail:');
-    console.error('  1. Use an App Password, NOT your normal Gmail password');
-    console.error('  2. Enable 2-Step Verification on your Google account first');
-    console.error('  3. SMTP_USER must be ishimwehervin10@gmail.com');
+    if (status.provider === 'resend') {
+      console.error('\nResend tips:');
+      console.error('  1. Verify API key at https://resend.com/api-keys');
+      console.error('  2. Without a verified domain, use onboarding@resend.dev and send only to your Resend account email');
+    } else {
+      console.error('\nGmail SMTP tips:');
+      console.error('  1. Use an App Password, NOT your normal Gmail password');
+      console.error('  2. Enable 2-Step Verification first');
+    }
     process.exit(1);
   }
 }

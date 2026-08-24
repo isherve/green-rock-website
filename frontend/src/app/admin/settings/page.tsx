@@ -11,10 +11,12 @@ import { Loader2, CheckCircle, Mail, AlertCircle, Send } from "lucide-react";
 
 type EmailStatus = {
   configured: boolean;
+  provider?: "resend" | "smtp" | null;
   adminEmail: string;
   smtpHost: string;
   smtpPort: string;
   smtpUser: string | null;
+  hasResendKey?: boolean;
   hasSmtpPass?: boolean;
   missing?: string[];
   from: string | null;
@@ -143,25 +145,31 @@ export default function AdminSettingsPage() {
                   {emailStatus.configured ? "Email is active" : "Email not configured"}
                 </p>
                 <p className="mt-1 opacity-90">{emailStatus.hint}</p>
+                {emailStatus.configured && emailStatus.provider && (
+                  <p className="mt-1 text-xs opacity-80">
+                    Provider: <strong>{emailStatus.provider === "resend" ? "Resend" : "Gmail SMTP"}</strong>
+                    {emailStatus.from && <> · From: <strong>{emailStatus.from}</strong></>}
+                  </p>
+                )}
                 <p className="mt-2 text-xs opacity-80">
                   Notifications go to: <strong>{emailStatus.adminEmail}</strong>
                 </p>
                 {!emailStatus.configured && (
                   <ul className="mt-3 space-y-1 text-xs">
                     <li>
-                      SMTP_USER:{" "}
-                      {emailStatus.smtpUser ? (
-                        <span className="text-green-700 dark:text-green-400">✓ {emailStatus.smtpUser}</span>
+                      RESEND_API_KEY:{" "}
+                      {emailStatus.hasResendKey ? (
+                        <span className="text-green-700 dark:text-green-400">✓ set</span>
                       ) : (
-                        <span className="text-red-600 dark:text-red-400">✗ not set</span>
+                        <span className="text-red-600 dark:text-red-400">✗ missing — recommended</span>
                       )}
                     </li>
                     <li>
-                      SMTP_PASS:{" "}
-                      {emailStatus.hasSmtpPass ? (
-                        <span className="text-green-700 dark:text-green-400">✓ set</span>
+                      SMTP (fallback):{" "}
+                      {emailStatus.smtpUser && emailStatus.hasSmtpPass ? (
+                        <span className="text-green-700 dark:text-green-400">✓ configured</span>
                       ) : (
-                        <span className="text-red-600 dark:text-red-400">✗ missing — add Gmail App Password in Vercel</span>
+                        <span className="text-muted-foreground">optional Gmail App Password</span>
                       )}
                     </li>
                   </ul>
@@ -169,14 +177,25 @@ export default function AdminSettingsPage() {
               </div>
 
               {!emailStatus.configured && (
-                <div className="text-sm text-muted-foreground space-y-2 rounded-lg border p-4 bg-muted/30">
-                  <p className="font-medium text-foreground">Setup Gmail (one-time):</p>
-                  <ol className="list-decimal list-inside space-y-1">
-                    <li>Enable 2-Step Verification on your Google account</li>
-                    <li>Create an App Password at <a href="https://myaccount.google.com/apppasswords" className="text-primary underline" target="_blank" rel="noreferrer">myaccount.google.com/apppasswords</a></li>
-                    <li>In Vercel → Settings → Environment Variables, add <code className="text-xs bg-muted px-1 rounded">SMTP_PASS</code> with the 16-character password</li>
-                    <li>Redeploy, then click &quot;Send Test Email&quot; below</li>
-                  </ol>
+                <div className="text-sm text-muted-foreground space-y-4 rounded-lg border p-4 bg-muted/30">
+                  <div>
+                    <p className="font-medium text-foreground">Setup Resend (recommended, ~2 min):</p>
+                    <ol className="list-decimal list-inside space-y-1 mt-2">
+                      <li>Sign up free at <a href="https://resend.com/signup" className="text-primary underline" target="_blank" rel="noreferrer">resend.com</a> with <strong>{emailStatus.adminEmail}</strong></li>
+                      <li>Create an API key at <a href="https://resend.com/api-keys" className="text-primary underline" target="_blank" rel="noreferrer">resend.com/api-keys</a></li>
+                      <li>In Vercel → Settings → Environment Variables, add <code className="text-xs bg-muted px-1 rounded">RESEND_API_KEY</code> = your key (starts with <code className="text-xs bg-muted px-1 rounded">re_</code>)</li>
+                      <li>Redeploy, then click &quot;Send Test Email&quot; below</li>
+                    </ol>
+                    <p className="text-xs mt-2 opacity-80">Without a custom domain, emails send from <code className="bg-muted px-1 rounded">onboarding@resend.dev</code>. Later you can verify your domain at resend.com/domains for branded emails.</p>
+                  </div>
+                  <details className="text-xs">
+                    <summary className="cursor-pointer font-medium text-foreground">Alternative: Gmail SMTP</summary>
+                    <ol className="list-decimal list-inside space-y-1 mt-2">
+                      <li>Enable 2-Step Verification on Google</li>
+                      <li>Create App Password at <a href="https://myaccount.google.com/apppasswords" className="text-primary underline" target="_blank" rel="noreferrer">myaccount.google.com/apppasswords</a></li>
+                      <li>Add <code className="bg-muted px-1 rounded">SMTP_PASS</code> in Vercel</li>
+                    </ol>
+                  </details>
                 </div>
               )}
 

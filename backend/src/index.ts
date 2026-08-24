@@ -12,11 +12,11 @@ async function startServer() {
 
     const emailStatus = getEmailConfigStatus();
     if (emailStatus.configured) {
-      console.log(`Email configured → notifications to ${emailStatus.adminEmail}`);
+      console.log(`Email configured (${emailStatus.provider}) → notifications to ${emailStatus.adminEmail}`);
     } else {
       console.error('\n⚠️  EMAIL NOT CONFIGURED');
       console.error('   Messages/bookings save in admin, but NO emails are sent.');
-      console.error('   Set SMTP_USER and SMTP_PASS in backend/.env (Gmail App Password).');
+      console.error('   Set RESEND_API_KEY (recommended) or SMTP_USER + SMTP_PASS in backend/.env.');
       console.error(`   Notifications will go to: ${emailStatus.adminEmail}\n`);
     }
 
