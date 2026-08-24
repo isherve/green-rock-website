@@ -55,10 +55,7 @@ router.post(
   asyncHandler(async (_req: Request, res: Response) => {
     const status = getEmailConfigStatus();
     if (!status.configured) {
-      throw new AppError(
-        'Email is not configured. Set SMTP_USER and SMTP_PASS in Vercel environment variables (Gmail App Password).',
-        503
-      );
+      throw new AppError(status.hint, 503);
     }
     await sendTestEmail();
     res.json({

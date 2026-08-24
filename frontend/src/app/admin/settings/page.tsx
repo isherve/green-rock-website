@@ -15,6 +15,8 @@ type EmailStatus = {
   smtpHost: string;
   smtpPort: string;
   smtpUser: string | null;
+  hasSmtpPass?: boolean;
+  missing?: string[];
   from: string | null;
   hint: string;
   events?: { event: string; recipient: string; customerCopy: boolean }[];
@@ -144,6 +146,26 @@ export default function AdminSettingsPage() {
                 <p className="mt-2 text-xs opacity-80">
                   Notifications go to: <strong>{emailStatus.adminEmail}</strong>
                 </p>
+                {!emailStatus.configured && (
+                  <ul className="mt-3 space-y-1 text-xs">
+                    <li>
+                      SMTP_USER:{" "}
+                      {emailStatus.smtpUser ? (
+                        <span className="text-green-700 dark:text-green-400">✓ {emailStatus.smtpUser}</span>
+                      ) : (
+                        <span className="text-red-600 dark:text-red-400">✗ not set</span>
+                      )}
+                    </li>
+                    <li>
+                      SMTP_PASS:{" "}
+                      {emailStatus.hasSmtpPass ? (
+                        <span className="text-green-700 dark:text-green-400">✓ set</span>
+                      ) : (
+                        <span className="text-red-600 dark:text-red-400">✗ missing — add Gmail App Password in Vercel</span>
+                      )}
+                    </li>
+                  </ul>
+                )}
               </div>
 
               {!emailStatus.configured && (
