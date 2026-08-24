@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
   Facebook,
   Instagram,
@@ -11,6 +10,7 @@ import {
   Mail,
 } from "lucide-react";
 import { FOOTER_LINKS, SITE_CONFIG, SOCIAL_LINKS } from "@/lib/constants";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 import { NewsletterForm } from "@/components/shared/NewsletterForm";
 
 const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -50,21 +50,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-6">
-              <Image
-                src={SITE_CONFIG.logo}
-                alt={`${SITE_CONFIG.name} logo`}
-                width={56}
-                height={56}
-                className="h-14 w-14 rounded-full object-cover"
-              />
-              <div>
-                <span className="font-bold text-xl block font-display">Green Rock</span>
-                <span className="text-sm text-white/60">
-                  General Supply Ltd
-                </span>
-              </div>
-            </Link>
+            <BrandLogo size="lg" variant="onDark" className="mb-6" />
             <p className="text-white/70 mb-4 max-w-sm leading-relaxed">
               {SITE_CONFIG.description}
             </p>

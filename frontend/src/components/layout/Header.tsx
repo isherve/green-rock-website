@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 import {
   Menu,
   X,
@@ -78,30 +78,13 @@ export function Header() {
         className={cn(
           "sticky top-0 z-50 w-full transition-all duration-300 border-b",
           isScrolled
-            ? "bg-white shadow-sm border-border"
-            : "bg-white/95 backdrop-blur-sm border-transparent"
+            ? "bg-background/98 shadow-md border-border backdrop-blur-md"
+            : "bg-background/95 backdrop-blur-sm border-border/60"
         )}
         onMouseLeave={() => setActiveMega(null)}
       >
         <div className="container mx-auto flex h-18 items-center justify-between px-4 lg:px-6 relative">
-          <Link href="/" className="flex items-center gap-3 group shrink-0">
-            <Image
-              src={SITE_CONFIG.logo}
-              alt={`${SITE_CONFIG.name} logo`}
-              width={48}
-              height={48}
-              className="h-11 w-11 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all"
-              priority
-            />
-            <div className="hidden sm:block">
-              <span className="font-bold text-lg text-foreground leading-tight block font-display">
-                Green Rock
-              </span>
-              <span className="text-xs text-muted-foreground tracking-wide">
-                General Supply Ltd
-              </span>
-            </div>
-          </Link>
+          <BrandLogo />
 
           <nav className="hidden lg:flex items-center gap-0.5 relative">
             {NAV_LINKS.map((item) => {
@@ -112,7 +95,7 @@ export function Header() {
                     href={item.href}
                     onMouseEnter={() => hasMega && setActiveMega(item.label)}
                     className={cn(
-                      "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-primary whitespace-nowrap",
+                      "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-foreground/90 transition-colors hover:text-primary whitespace-nowrap",
                       activeMega === item.label && "text-primary"
                     )}
                   >

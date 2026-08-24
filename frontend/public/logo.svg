@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Green Rock General Supply Ltd">
+  <defs>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#c9a227"/>
+    </linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="248" fill="#0a5c45"/>
+  <circle cx="256" cy="256" r="228" fill="none" stroke="url(#ring)" stroke-width="10"/>
+  <circle cx="256" cy="256" r="200" fill="#0d6b50" opacity="0.35"/>
+  <text x="256" y="290" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="168" font-weight="700" fill="#c9a227">GR</text>
+  <text x="256" y="360" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600" letter-spacing="6" fill="#ffffff">GREEN ROCK</text>
+  <text x="256" y="395" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" letter-spacing="3" fill="#d4e8df">GENERAL SUPPLY LTD</text>
+</svg>

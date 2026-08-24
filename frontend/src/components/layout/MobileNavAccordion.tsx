@@ -34,7 +34,7 @@ function MobileNavItem({
       <Link
         href={item.href}
         onClick={onNavigate}
-        className="block px-4 py-3 rounded-lg font-medium hover:bg-primary/10 hover:text-primary transition-colors"
+        className="block px-4 py-3 rounded-lg font-medium text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
       >
         {item.label}
       </Link>
@@ -43,7 +43,7 @@ function MobileNavItem({
 
   return (
     <details className="group rounded-lg overflow-hidden">
-      <summary className="flex items-center justify-between px-4 py-3 font-medium cursor-pointer list-none hover:bg-primary/10 hover:text-primary transition-colors [&::-webkit-details-marker]:hidden">
+      <summary className="flex items-center justify-between px-4 py-3 font-medium text-foreground cursor-pointer list-none hover:bg-primary/10 hover:text-primary transition-colors [&::-webkit-details-marker]:hidden">
         <span>{item.label}</span>
         <ChevronDown className="h-4 w-4 opacity-60 group-open:rotate-180 transition-transform" />
       </summary>
