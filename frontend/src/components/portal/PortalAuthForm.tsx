@@ -113,7 +113,7 @@ export function PortalAuthForm({ mode, portal, redirectPath }: AuthFormProps) {
     <div className="min-h-screen flex items-center justify-center bg-dark px-4 py-12">
       <div className="w-full max-w-md pro-card p-8 shadow-2xl">
         <div className="text-center mb-8">
-          <Image src={SITE_CONFIG.logo} alt="Logo" width={56} height={56} className="rounded-full mx-auto mb-4" />
+          <Image src={SITE_CONFIG.logo} alt="Logo" width={864} height={864} className="h-14 w-auto max-w-[160px] object-contain mx-auto mb-4" />
           {isRegister ? (
             <UserPlus className="w-7 h-7 text-primary mx-auto mb-2" />
           ) : (

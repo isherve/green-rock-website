@@ -94,7 +94,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       >
         <div className="p-6 border-b border-white/10 shrink-0">
           <Link href="/admin/dashboard" className="flex items-center gap-3">
-            <Image src={SITE_CONFIG.logo} alt="Logo" width={40} height={40} className="rounded-full" />
+            <Image src={SITE_CONFIG.logo} alt="Logo" width={864} height={864} className="h-9 w-auto max-w-[120px] object-contain" />
             <div>
               <p className="font-bold text-sm">Green Rock</p>
               <p className="text-xs text-white/60">ERP Admin</p>

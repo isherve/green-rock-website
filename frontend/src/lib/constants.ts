@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
   address: "Kigali, Rwanda",
   coordinates: { lat: -1.9403, lng: 29.8739 },
   founded: 2010,
-  logo: "/logo.svg",
+  logo: "/logo.png",
 } as const;
 
 export type { NavItem } from "@/lib/nav-data";

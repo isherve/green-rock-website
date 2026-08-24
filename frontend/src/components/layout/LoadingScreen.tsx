@@ -36,15 +36,10 @@ export function LoadingScreen({ duration = 2000 }: LoadingScreenProps) {
               <Image
                 src={SITE_CONFIG.logo}
                 alt={`${SITE_CONFIG.name} logo`}
-                width={80}
-                height={80}
-                className="h-20 w-20 rounded-full object-cover shadow-xl"
+                width={864}
+                height={864}
+                className="h-24 w-auto max-w-[220px] object-contain"
                 priority
-              />
-              <motion.div
-                className="absolute inset-0 rounded-full border-2 border-secondary"
-                animate={{ scale: [1, 1.2, 1], opacity: [1, 0, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
               />
             </div>
             <div className="text-center">
