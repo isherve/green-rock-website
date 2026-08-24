@@ -5,6 +5,7 @@ import {
   sendAppointmentAdminNotification,
   sendAppointmentCustomerConfirmation,
   sendEmail,
+  notifyAll,
 } from '../lib/email';
 import { buildCustomerEmail } from '../lib/email-templates';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -61,23 +62,32 @@ router.post(
 
     const appointmentDate = new Date(date);
 
-    sendAppointmentAdminNotification({
-      name: rest.name,
-      email: rest.email,
-      phone: rest.phone,
-      date: appointmentDate,
-      time: rest.time,
-      service: rest.service,
-      message: rest.message,
-    }).catch(() => {});
-
-    sendAppointmentCustomerConfirmation({
-      name: rest.name,
-      email: rest.email,
-      date: appointmentDate,
-      time: rest.time,
-      service: rest.service,
-    }).catch(() => {});
+    await notifyAll([
+      {
+        label: 'appointment-admin',
+        fn: () =>
+          sendAppointmentAdminNotification({
+            name: rest.name,
+            email: rest.email,
+            phone: rest.phone,
+            date: appointmentDate,
+            time: rest.time,
+            service: rest.service,
+            message: rest.message,
+          }),
+      },
+      {
+        label: 'appointment-customer',
+        fn: () =>
+          sendAppointmentCustomerConfirmation({
+            name: rest.name,
+            email: rest.email,
+            date: appointmentDate,
+            time: rest.time,
+            service: rest.service,
+          }),
+      },
+    ]);
 
     res.status(201).json({
       success: true,

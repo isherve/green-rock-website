@@ -516,7 +516,17 @@ export async function sendTestEmail(): Promise<void> {
   });
 }
 
-/** Fire-and-forget with error logging (use instead of .catch(() => {})) */
+/** Await email sends before responding (required on Vercel serverless). */
+export async function notifyAll(tasks: { label: string; fn: () => Promise<void> }[]): Promise<void> {
+  const results = await Promise.allSettled(tasks.map((t) => t.fn()));
+  results.forEach((result, i) => {
+    if (result.status === 'rejected') {
+      console.error(`[Email] ${tasks[i].label} failed:`, result.reason);
+    }
+  });
+}
+
+/** @deprecated Use notifyAll — fire-and-forget emails are dropped on Vercel serverless */
 export function notifyAsync(label: string, fn: () => Promise<void>): void {
   fn().catch((err) => console.error(`[Email] ${label} failed:`, err));
 }

@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
 import prisma from '../lib/prisma';
-import { sendContactNotification, sendContactCustomerConfirmation, notifyAsync } from '../lib/email';
+import { sendContactNotification, sendContactCustomerConfirmation, notifyAll } from '../lib/email';
 import { asyncHandler } from '../utils/asyncHandler';
 import { authenticate, requireAdmin } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
@@ -32,10 +32,13 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const message = await prisma.contactMessage.create({ data: req.body });
 
-    notifyAsync('contact-admin', () => sendContactNotification(req.body));
-    notifyAsync('contact-customer', () =>
-      sendContactCustomerConfirmation({ name: req.body.name, email: req.body.email })
-    );
+    await notifyAll([
+      { label: 'contact-admin', fn: () => sendContactNotification(req.body) },
+      {
+        label: 'contact-customer',
+        fn: () => sendContactCustomerConfirmation({ name: req.body.name, email: req.body.email }),
+      },
+    ]);
 
     res.status(201).json({
       success: true,

@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { z } from 'zod';
 import prisma from '../lib/prisma';
-import { sendInquiryNotification, sendInquiryCustomerConfirmation, sendInvoiceCustomerNotification, notifyAsync } from '../lib/email';
+import { sendInquiryNotification, sendInquiryCustomerConfirmation, sendInvoiceCustomerNotification, notifyAll } from '../lib/email';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import { authenticate, requireAdmin, optionalAuth, AuthRequest } from '../middleware/auth';
@@ -86,20 +86,25 @@ router.post(
       },
     });
 
-    notifyAsync('inquiry-admin', () =>
-      sendInquiryNotification({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        type: data.type,
-        message: data.message,
-        propertyTitle: inquiry.property?.title,
-        productName: inquiry.product?.name,
-      })
-    );
-    notifyAsync('inquiry-customer', () =>
-      sendInquiryCustomerConfirmation({ name: data.name, email: data.email, type: data.type })
-    );
+    await notifyAll([
+      {
+        label: 'inquiry-admin',
+        fn: () =>
+          sendInquiryNotification({
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            type: data.type,
+            message: data.message,
+            propertyTitle: inquiry.property?.title,
+            productName: inquiry.product?.name,
+          }),
+      },
+      {
+        label: 'inquiry-customer',
+        fn: () => sendInquiryCustomerConfirmation({ name: data.name, email: data.email, type: data.type }),
+      },
+    ]);
 
     res.status(201).json({ success: true, message: 'Inquiry submitted', data: inquiry });
   })
