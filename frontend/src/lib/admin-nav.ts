@@ -42,6 +42,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
       { label: "Support Tickets", href: "/admin/tickets", icon: LifeBuoy },
       { label: "Appointments", href: "/admin/appointments", icon: Calendar },
       { label: "Invoices", href: "/admin/invoices", icon: Receipt },
+      { label: "Documents", href: "/admin/documents", icon: ClipboardList },
     ],
   },
   {

@@ -81,8 +81,8 @@ export async function sendContactNotification(data: {
         { label: 'Received', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
       ],
       message: data.message,
-      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/messages`,
-      actionLabel: 'Open Messages',
+      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/leads`,
+      actionLabel: 'Open Leads Hub',
     }),
   });
 }
@@ -121,7 +121,7 @@ export async function sendInquiryNotification(data: {
         { label: 'Received', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
       ],
       message: data.message,
-      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/messages`,
+      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/leads`,
       actionLabel: 'View in Admin',
     }),
   });
@@ -156,8 +156,8 @@ export async function sendAppointmentAdminNotification(data: {
         { label: 'Booked', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
       ],
       message: data.message,
-      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/messages`,
-      actionLabel: 'Manage Bookings',
+      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/appointments`,
+      actionLabel: 'Manage Appointments',
     }),
   });
 }
@@ -233,8 +233,8 @@ export async function sendCareerApplicationAdminNotification(data: {
         { label: 'Submitted', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
       ],
       message: data.coverLetter,
-      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/careers`,
-      actionLabel: 'View Careers',
+      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/applications`,
+      actionLabel: 'View Applications',
     }),
   });
 }
@@ -251,6 +251,149 @@ export async function sendCareerApplicationConfirmation(data: {
       title: 'Application Received',
       greeting: `Dear ${data.name},`,
       body: `<p style="margin:0;">Thank you for applying for the position of <strong>${data.jobTitle}</strong>. Our HR team will review your application and contact you if you are shortlisted.</p>`,
+    }),
+  });
+}
+
+export async function sendMaterialOrderAdminNotification(data: {
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  totalAmount: number;
+  currency: string;
+  itemCount: number;
+}): Promise<void> {
+  await sendEmail({
+    to: getAdminEmail(),
+    subject: `[Green Rock] Material Order ${data.orderNumber} from ${data.customerName}`,
+    replyTo: data.customerEmail,
+    html: buildAdminEmail({
+      preheader: `Order ${data.orderNumber}`,
+      badge: 'Material Order',
+      badgeColor: '#0b6e4f',
+      title: 'New Material Order',
+      intro: 'A customer placed a material order through the portal.',
+      rows: [
+        { label: 'Order #', value: data.orderNumber, highlight: true },
+        { label: 'Customer', value: data.customerName },
+        { label: 'Email', value: data.customerEmail },
+        { label: 'Items', value: String(data.itemCount) },
+        { label: 'Total', value: `${data.totalAmount.toLocaleString()} ${data.currency}`, highlight: true },
+      ],
+      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/orders`,
+      actionLabel: 'Manage Orders',
+    }),
+  });
+}
+
+export async function sendMaterialOrderCustomerConfirmation(data: {
+  name: string;
+  email: string;
+  orderNumber: string;
+  totalAmount: number;
+  currency: string;
+}): Promise<void> {
+  await sendEmail({
+    to: data.email,
+    subject: `Green Rock — Order ${data.orderNumber} Received`,
+    html: buildCustomerEmail({
+      title: 'Order Received',
+      greeting: `Dear ${data.name},`,
+      body: `<p style="margin:0 0 12px;">We received your material order <strong>${data.orderNumber}</strong> for <strong>${data.totalAmount.toLocaleString()} ${data.currency}</strong>. Our team will confirm availability and delivery details shortly.</p>`,
+    }),
+  });
+}
+
+export async function sendTicketAdminNotification(data: {
+  ticketNumber: string;
+  customerName: string;
+  customerEmail: string;
+  subject: string;
+  message: string;
+}): Promise<void> {
+  await sendEmail({
+    to: getAdminEmail(),
+    subject: `[Green Rock] Support Ticket ${data.ticketNumber} — ${data.subject}`,
+    replyTo: data.customerEmail,
+    html: buildAdminEmail({
+      preheader: data.subject,
+      badge: 'Support Ticket',
+      badgeColor: '#dc2626',
+      title: 'New Support Ticket',
+      intro: 'A customer opened a support ticket in the portal.',
+      rows: [
+        { label: 'Ticket #', value: data.ticketNumber, highlight: true },
+        { label: 'Customer', value: data.customerName },
+        { label: 'Email', value: data.customerEmail },
+        { label: 'Subject', value: data.subject, highlight: true },
+      ],
+      message: data.message,
+      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/tickets`,
+      actionLabel: 'Reply in Admin',
+    }),
+  });
+}
+
+export async function sendTicketReplyCustomerNotification(data: {
+  name: string;
+  email: string;
+  ticketNumber: string;
+  subject: string;
+  replyMessage: string;
+}): Promise<void> {
+  await sendEmail({
+    to: data.email,
+    subject: `Green Rock — Update on Ticket ${data.ticketNumber}`,
+    html: buildCustomerEmail({
+      title: 'Support Reply',
+      greeting: `Dear ${data.name},`,
+      body: `<p style="margin:0 0 12px;">Our team replied to your ticket <strong>${data.ticketNumber}</strong> regarding <strong>${data.subject}</strong>:</p>
+        <blockquote style="margin:0;padding:12px 16px;background:#f8fafc;border-left:4px solid #0b6e4f;border-radius:8px;">${data.replyMessage.replace(/</g, '&lt;')}</blockquote>
+        <p style="margin:16px 0 0;">You can view the full conversation in your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/portal/support">customer portal</a>.</p>`,
+    }),
+  });
+}
+
+export async function sendInvoiceCustomerNotification(data: {
+  name: string;
+  email: string;
+  invoiceNumber: string;
+  title: string;
+  amount: number;
+  currency: string;
+  dueDate?: Date | null;
+}): Promise<void> {
+  await sendEmail({
+    to: data.email,
+    subject: `Green Rock — Invoice ${data.invoiceNumber}`,
+    html: buildCustomerEmail({
+      title: 'New Invoice',
+      greeting: `Dear ${data.name},`,
+      body: `<p style="margin:0 0 12px;">An invoice has been issued for you:</p>
+        <table role="presentation" style="width:100%;background:#f8fafc;border-radius:12px;padding:16px;margin:16px 0;">
+          <tr><td style="padding:6px 0;color:#64748b;font-size:13px;">Invoice</td><td style="padding:6px 0;font-weight:600;">${data.invoiceNumber}</td></tr>
+          <tr><td style="padding:6px 0;color:#64748b;font-size:13px;">Description</td><td style="padding:6px 0;">${data.title}</td></tr>
+          <tr><td style="padding:6px 0;color:#64748b;font-size:13px;">Amount</td><td style="padding:6px 0;font-weight:600;">${data.amount.toLocaleString()} ${data.currency}</td></tr>
+          ${data.dueDate ? `<tr><td style="padding:6px 0;color:#64748b;font-size:13px;">Due</td><td style="padding:6px 0;">${data.dueDate.toLocaleDateString('en-RW')}</td></tr>` : ''}
+        </table>
+        <p style="margin:0;">View and download it in your <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/portal/invoices">customer portal</a>.</p>`,
+    }),
+  });
+}
+
+export async function sendOrderStatusCustomerNotification(data: {
+  name: string;
+  email: string;
+  orderNumber: string;
+  status: string;
+}): Promise<void> {
+  await sendEmail({
+    to: data.email,
+    subject: `Green Rock — Order ${data.orderNumber} is now ${data.status}`,
+    html: buildCustomerEmail({
+      title: 'Order Status Updated',
+      greeting: `Dear ${data.name},`,
+      body: `<p style="margin:0;">Your material order <strong>${data.orderNumber}</strong> status has been updated to <strong>${data.status.replace(/_/g, ' ')}</strong>. Check your portal for details.</p>`,
     }),
   });
 }

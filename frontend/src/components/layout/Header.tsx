@@ -13,20 +13,13 @@ import {
   Moon,
   Phone,
   Mail,
-  Globe,
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
 import { NavMegaMenu } from "@/components/layout/NavMegaMenu";
 import { MobileNavAccordion } from "@/components/layout/MobileNavAccordion";
 import { NAV_LINKS } from "@/lib/nav-data";
-import { SITE_CONFIG, LOCALES } from "@/lib/constants";
-import { useLocale } from "@/hooks/useLocale";
+import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -34,7 +27,6 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
-  const { locale, setLocale } = useLocale();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -115,34 +107,11 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="hidden sm:flex">
-                  <Globe className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="z-50 min-w-[180px] rounded-xl border border-border bg-background p-1.5 shadow-xl"
-              >
-                <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-primary">
-                  Language
-                </p>
-                {LOCALES.map((loc) => (
-                  <DropdownMenuItem
-                    key={loc.code}
-                    className={cn(
-                      "flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm cursor-pointer outline-none hover:bg-primary/10",
-                      locale === loc.code && "bg-primary/10 text-primary font-medium"
-                    )}
-                    onSelect={() => setLocale(loc.code)}
-                  >
-                    <span>{loc.flag}</span>
-                    {loc.label}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button variant="ghost" size="icon" className="hidden sm:flex" asChild>
+              <Link href="/search" aria-label="Search site">
+                <Search className="h-4 w-4" />
+              </Link>
+            </Button>
 
             {mounted && (
               <Button
@@ -198,25 +167,16 @@ export function Header() {
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Portals</p>
                   <div className="grid grid-cols-1 gap-2">
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
+                      <Link href="/search" onClick={() => setMobileOpen(false)}>
+                        <Search className="w-4 h-4 mr-2" /> Search Site
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/portal/login" onClick={() => setMobileOpen(false)}>Customer Portal</Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/admin/login" onClick={() => setMobileOpen(false)}>Admin ERP</Link>
                     </Button>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-muted-foreground shrink-0" />
-                    <select
-                      value={locale}
-                      onChange={(e) => setLocale(e.target.value as typeof locale)}
-                      className="flex-1 rounded-lg border border-border bg-background px-3 py-2.5 text-sm"
-                    >
-                      {LOCALES.map((loc) => (
-                        <option key={loc.code} value={loc.code}>
-                          {loc.flag} {loc.label}
-                        </option>
-                      ))}
-                    </select>
                   </div>
                   <Button asChild className="w-full rounded-lg">
                     <Link href="/properties" onClick={() => setMobileOpen(false)}>

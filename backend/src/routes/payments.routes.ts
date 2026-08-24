@@ -1,17 +1,18 @@
 import { Router, Request, Response } from 'express';
-import { PaymentStatus, InvoiceStatus } from '@prisma/client';
 import { z } from 'zod';
+import { PaymentStatus, InvoiceStatus } from '@prisma/client';
 import prisma from '../lib/prisma';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
-import { authenticate, requireAdmin } from '../middleware/auth';
-import { validateBody, validateParams, validateQuery } from '../middleware/validate';
+import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
+import { requireCustomer } from '../middleware/portalAuth';
+import { validateBody, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { generateNumber } from '../lib/roles';
+import { initiateOnlinePayment } from '../lib/payment-gateway';
+import { createUserNotification } from '../lib/notifications';
 
 const router = Router();
-
-router.use(authenticate, requireAdmin);
 
 const createSchema = z.object({
   invoiceId: z.string().uuid(),
@@ -21,10 +22,123 @@ const createSchema = z.object({
   paidAt: z.string().optional(),
 });
 
+const initiateSchema = z.object({
+  invoiceId: z.string().uuid(),
+  method: z.enum(['MOMO', 'CARD', 'BANK']),
+});
+
+const webhookSchema = z.object({
+  tx_ref: z.string(),
+  status: z.string(),
+  amount: z.number().optional(),
+  currency: z.string().optional(),
+});
+
 const listQuerySchema = z.object({
   page: z.string().optional(),
   limit: z.string().optional(),
 });
+
+/** Flutterwave webhook (no auth) */
+router.post(
+  '/webhook/flutterwave',
+  validateBody(webhookSchema),
+  asyncHandler(async (req, res: Response) => {
+    const { tx_ref, status, amount } = req.body as z.infer<typeof webhookSchema>;
+    if (status !== 'successful') {
+      res.json({ success: true, message: 'Ignored non-success status' });
+      return;
+    }
+
+    const payment = await prisma.payment.findFirst({ where: { reference: tx_ref } });
+    if (!payment) throw new AppError('Payment reference not found', 404);
+
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { status: PaymentStatus.COMPLETED, paidAt: new Date() },
+    });
+
+    if (payment.invoiceId) {
+      const invoice = await prisma.invoice.findUnique({
+        where: { id: payment.invoiceId },
+        include: { payments: true },
+      });
+      if (invoice) {
+        const paidTotal = invoice.payments
+          .filter((p) => p.status === PaymentStatus.COMPLETED || p.id === payment.id)
+          .reduce((sum, p) => sum + (p.id === payment.id ? (amount ?? p.amount) : p.amount), 0);
+        if (paidTotal >= invoice.amount) {
+          await prisma.invoice.update({
+            where: { id: invoice.id },
+            data: { status: InvoiceStatus.PAID },
+          });
+        }
+      }
+    }
+
+    createUserNotification({
+      userId: payment.userId,
+      title: 'Payment received',
+      message: 'Your payment was processed successfully.',
+      link: '/portal/payments',
+      type: 'payment',
+    }).catch(() => {});
+
+    res.json({ success: true, message: 'Webhook processed' });
+  })
+);
+
+/** Customer: initiate online payment */
+router.post(
+  '/initiate',
+  authenticate,
+  requireCustomer,
+  validateBody(initiateSchema),
+  asyncHandler(async (req: AuthRequest, res: Response) => {
+    const { invoiceId, method } = req.body as z.infer<typeof initiateSchema>;
+    const userId = req.user!.userId;
+
+    const invoice = await prisma.invoice.findFirst({
+      where: { id: invoiceId, userId },
+      include: { user: { select: { name: true, email: true, phone: true } } },
+    });
+    if (!invoice) throw new AppError('Invoice not found', 404);
+    if (invoice.status === 'PAID') throw new AppError('Invoice is already paid', 400);
+
+    const paidTotal = await prisma.payment.aggregate({
+      where: { invoiceId, status: PaymentStatus.COMPLETED },
+      _sum: { amount: true },
+    });
+    const remaining = invoice.amount - (paidTotal._sum.amount ?? 0);
+    if (remaining <= 0) throw new AppError('Invoice is already paid', 400);
+
+    const result = await initiateOnlinePayment({
+      invoiceNumber: invoice.invoiceNumber,
+      amount: remaining,
+      currency: invoice.currency,
+      customerEmail: invoice.user.email,
+      customerName: invoice.user.name,
+      customerPhone: invoice.user.phone,
+      method,
+    });
+
+    await prisma.payment.create({
+      data: {
+        userId,
+        invoiceId: invoice.id,
+        amount: remaining,
+        currency: invoice.currency,
+        method: method === 'MOMO' ? 'Mobile Money' : method === 'CARD' ? 'Card' : 'Bank Transfer',
+        reference: result.reference,
+        status: PaymentStatus.PENDING,
+      },
+    });
+
+    res.json({ success: true, data: result });
+  })
+);
+
+router.use(authenticate, requireAdmin);
 
 router.get(
   '/',

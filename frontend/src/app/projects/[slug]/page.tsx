@@ -51,6 +51,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
 
   const imageUrl = project.images?.[0]?.url ?? "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&q=80";
+  const galleryImages = project.images?.length ? project.images : [{ id: "0", url: imageUrl, order: 0, projectId: project.id, createdAt: "" }];
 
 
 
@@ -135,6 +136,19 @@ export default async function ProjectDetailPage({ params }: Props) {
               )}
 
             </div>
+
+            {galleryImages.length > 1 && (
+              <div>
+                <h3 className="font-semibold mb-3">Project Progress Gallery</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {galleryImages.map((img) => (
+                    <div key={img.id} className="relative aspect-[4/3] rounded-xl overflow-hidden">
+                      <Image src={img.url} alt="" fill className="object-cover" sizes="200px" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
           </div>
 

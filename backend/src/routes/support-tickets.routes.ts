@@ -7,6 +7,8 @@ import { AppError } from '../utils/AppError';
 import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
+import { sendTicketReplyCustomerNotification } from '../lib/email';
+import { createUserNotification } from '../lib/notifications';
 
 const router = Router();
 
@@ -101,6 +103,22 @@ router.post(
         data: { status: ticket.status === 'OPEN' ? 'IN_PROGRESS' : ticket.status },
       }),
     ]);
+
+    sendTicketReplyCustomerNotification({
+      name: ticket.user.name,
+      email: ticket.user.email,
+      ticketNumber: ticket.ticketNumber,
+      subject: ticket.subject,
+      replyMessage: req.body.message,
+    }).catch(() => {});
+
+    createUserNotification({
+      userId: ticket.userId,
+      title: 'Support ticket reply',
+      message: `Our team replied to ticket ${ticket.ticketNumber}.`,
+      link: '/portal/support',
+      type: 'support',
+    }).catch(() => {});
 
     res.status(201).json({ success: true, message: 'Reply sent', data: reply });
   })

@@ -9,6 +9,8 @@ import Image from "next/image";
 import { PageHero } from "@/components/shared/PageHero";
 
 import { ContactForm } from "@/components/shared/ContactForm";
+import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
+import { MortgageCalculator } from "@/components/shared/MortgageCalculator";
 
 import { fetchPublicOne } from "@/lib/server-api";
 
@@ -190,12 +192,22 @@ export default async function PropertyDetailPage({ params }: Props) {
 
 
 
-          <div className="pro-card p-8 rounded-2xl h-fit sticky top-24">
-
-            <h3 className="text-xl font-semibold mb-6">Schedule a Viewing</h3>
-
-            <ContactForm defaultType="PROPERTY" />
-
+          <div className="space-y-6 sticky top-24 h-fit">
+            <div className="pro-card p-8 rounded-2xl">
+              <h3 className="text-xl font-semibold mb-6">Schedule a Viewing</h3>
+            <ContactForm
+              defaultType="PROPERTY"
+              propertyId={property.id}
+              propertyTitle={property.title}
+              hideTypeSelector
+            />
+            </div>
+            <WhatsAppButton
+              variant="outline"
+              className="w-full"
+              message={`Hello Green Rock, I am interested in ${property.title} (${property.location}).`}
+            />
+            <MortgageCalculator defaultPrice={property.price} />
           </div>
 
         </div>

@@ -1,19 +1,21 @@
 # Green Rock Platform Architecture
 
-Green Rock General Supply Ltd runs as a **unified enterprise platform** with four portals sharing one backend API and PostgreSQL database.
+Green Rock General Supply Ltd runs as a **unified business platform** with three portals sharing one backend API and PostgreSQL database.
 
 ## Portals
 
 | Portal | URL | Roles | Purpose |
 |--------|-----|-------|---------|
-| **Public Website** | `/` | Everyone | Marketing, listings, contact, careers |
-| **Customer Portal** | `/portal` | `USER` | Saved properties, quotes, orders, support |
-| **Employee Portal** | `/employee` | Staff roles | Tasks, attendance, leave, payslips |
-| **Admin / ERP** | `/admin` | `ADMIN`, `MANAGER`, `SUPER_ADMIN`, `MANAGING_DIRECTOR` | Full business management |
+| **Public Website** | `/` | Everyone | Marketing, listings, contact, careers, search |
+| **Customer Portal** | `/portal` | `USER` | Saved properties, quotes, orders, support, invoices, payments |
+| **Admin** | `/admin` | `ADMIN`, `MANAGER`, `SUPER_ADMIN`, `MANAGING_DIRECTOR` | CMS, leads, operations, finance |
 
-## Public Website (Complete)
+## Public Website
 
 - Home, About, Services, Projects, Properties, Materials, Gallery, Testimonials, Blog, Careers, Contact, FAQ
+- Global search at `/search`
+- Property inquiries tied to listings; mortgage estimator on properties pages
+- WhatsApp lead capture on property pages
 
 ## Customer Portal
 
@@ -23,69 +25,50 @@ Green Rock General Supply Ltd runs as a **unified enterprise platform** with fou
 | Login | `/portal/login` | `POST /api/auth/login` |
 | Dashboard | `/portal/dashboard` | `GET /api/portal/dashboard` |
 | Saved Properties | `/portal/saved-properties` | `GET /api/portal/favorites` |
-| Quotes | `/portal/quotes` | `GET /api/portal/inquiries?type=QUOTE` |
-| Construction | `/portal/construction-requests` | `GET /api/portal/inquiries?type=CONSTRUCTION` |
 | Material Orders | `/portal/material-orders` | `GET/POST /api/portal/material-orders` |
-| Appointments | `/portal/appointments` | `GET /api/portal/appointments` |
-| Invoices | `/portal/invoices` | `GET /api/portal/invoices` |
+| Invoices + Pay | `/portal/invoices` | `GET /api/portal/invoices`, `POST /api/payments/initiate` |
 | Payments | `/portal/payments` | `GET /api/portal/payments` |
 | Support | `/portal/support` | `GET/POST /api/portal/tickets` |
 | Documents | `/portal/documents` | `GET /api/portal/documents` |
-| Notifications | `/portal/notifications` | `GET /api/portal/notifications` |
-| Messages | `/portal/messages` | `GET /api/portal/messages` |
 | Profile | `/portal/profile` | `PATCH /api/portal/profile` |
 
-## Employee Portal
+## Admin (Operations + CMS)
 
-| Feature | Route | API |
-|---------|-------|-----|
-| Login | `/employee/login` | `POST /api/auth/login` |
-| Dashboard | `/employee/dashboard` | `GET /api/employee/dashboard` |
-| Projects | `/employee/projects` | `GET /api/employee/projects` |
-| Tasks | `/employee/tasks` | `GET /api/employee/tasks` |
-| Attendance | `/employee/attendance` | `GET/POST /api/employee/attendance/*` |
-| Leave | `/employee/leave` | `GET/POST /api/employee/leave` |
-| Payslips | `/employee/payslips` | `GET /api/employee/payslips` |
-| Messages | `/employee/messages` | `GET /api/employee/messages` |
-| Reports | `/employee/reports` | `GET /api/employee/reports/summary` |
-| Documents | `/employee/documents` | `GET /api/employee/documents` |
+**Sales & Operations:** Leads & Inquiries, Material Orders, Support Tickets, Appointments, Invoices, Documents
 
-## Admin ERP Modules
+**Content:** Properties, Projects, Services, Products, Blog, Gallery, Careers, Users, Newsletter
 
-Grouped navigation in `/admin` covers:
+**Key workflows:**
+- Convert quote/lead → invoice (one click)
+- Assign staff to leads
+- Record payments / customer MoMo-card initiation
+- Share documents with customers
+- Email + in-app notifications on orders, tickets, invoices
 
-- **CRM & Sales** — Leads, inquiries, appointments, quotations, contracts
-- **Real Estate** — Properties, projects, services
-- **Inventory & Supply** — Products, inventory, procurement, fleet
-- **Finance** — Accounting, invoices, payments
-- **HR** — Employees, payroll, careers, users & roles
-- **Marketing & CMS** — Campaigns, blog, gallery, testimonials
-- **System** — Settings, audit logs, analytics
+## Payment Integration
 
-## Roles (RBAC)
+Set in backend environment:
+- `FLUTTERWAVE_PUBLIC_KEY` / `FLUTTERWAVE_SECRET_KEY` for card payments
+- `MOMO_MERCHANT_CODE` for MoMo instructions (fallback manual flow)
+- Webhook: `POST /api/payments/webhook/flutterwave`
 
-`SUPER_ADMIN`, `ADMIN`, `MANAGER`, `MANAGING_DIRECTOR`, `FINANCE_MANAGER`, `HR_MANAGER`, `PROJECT_MANAGER`, `SALES_MANAGER`, `REAL_ESTATE_OFFICER`, `PROCUREMENT_OFFICER`, `INVENTORY_MANAGER`, `WAREHOUSE_OFFICER`, `DELIVERY_OFFICER`, `CUSTOMER_SUPPORT`, `MARKETING_OFFICER`, `AGENT`, `EMPLOYEE`, `USER`
+## Email
 
-## Database Models (Portal Extensions)
-
-`EmployeeProfile`, `Task`, `Attendance`, `LeaveRequest`, `SalarySlip`, `SupportTicket`, `Invoice`, `Payment`, `MaterialOrder`, `Document`, `Notification`, `DirectMessage`, `AuditLog`
-
-## Setup After Schema Changes
-
-```bash
-cd backend
-npx prisma db push
-npm run db:seed
-```
+Configure `SMTP_USER`, `SMTP_PASS`, `ADMIN_EMAIL`, `FRONTEND_URL` in backend `.env`.
 
 ## Demo Accounts (after seed)
 
-| Portal | Email | Password | Role |
-|--------|-------|----------|------|
-| Admin | admin@greenrock.com | Admin@123456 | ADMIN |
-| Customer | customer@greenrock.com | Customer@123 | USER |
-| Employee | employee@greenrock.com | Employee@123 | EMPLOYEE |
+| Portal | Email | Password |
+|--------|-------|----------|
+| Admin | admin@greenrock.com | Admin@123456 |
+| Customer | customer@greenrock.com | Customer@123 |
+
+Production admin: `ishimwehervin10@gmail.com`
 
 ## Stack
 
-Next.js 16 · React · TypeScript · TailwindCSS · Shadcn UI · Express · Prisma · PostgreSQL · JWT · Cloudinary · Swagger · Docker · CI/CD
+Next.js 16 · React · TypeScript · TailwindCSS · Express · Prisma · PostgreSQL · JWT · Cloudinary · Vercel
+
+## Roadmap note
+
+Full ERP modules (payroll, fleet, GL accounting) are **deferred** until the business requires them. The current system targets website + CRM-lite + customer portal + invoicing.

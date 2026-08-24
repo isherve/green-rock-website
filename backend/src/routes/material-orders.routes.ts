@@ -7,6 +7,8 @@ import { AppError } from '../utils/AppError';
 import { authenticate, requireAdmin } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
+import { sendOrderStatusCustomerNotification } from '../lib/email';
+import { createUserNotification } from '../lib/notifications';
 
 const router = Router();
 
@@ -60,6 +62,23 @@ router.patch(
       data: req.body,
       include: { user: { select: { id: true, name: true, email: true, phone: true } } },
     });
+
+    if (req.body.status && req.body.status !== existing.status) {
+      sendOrderStatusCustomerNotification({
+        name: order.user.name,
+        email: order.user.email,
+        orderNumber: order.orderNumber,
+        status: order.status,
+      }).catch(() => {});
+
+      createUserNotification({
+        userId: order.userId,
+        title: 'Order status updated',
+        message: `Order ${order.orderNumber} is now ${order.status.replace(/_/g, ' ')}.`,
+        link: '/portal/material-orders',
+        type: 'order',
+      }).catch(() => {});
+    }
 
     res.json({ success: true, message: 'Order updated', data: order });
   })

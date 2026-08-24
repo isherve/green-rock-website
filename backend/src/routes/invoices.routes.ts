@@ -4,10 +4,12 @@ import prisma from '../lib/prisma';
 import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import { authenticate, requireAdmin } from '../middleware/auth';
-import { validateParams, validateBody, validateQuery } from '../middleware/validate';
+import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { generateNumber } from '../lib/roles';
 import { buildInvoicePdf, parseInvoiceItems } from '../lib/invoice-pdf';
+import { sendInvoiceCustomerNotification } from '../lib/email';
+import { createUserNotification } from '../lib/notifications';
 
 const router = Router();
 
@@ -129,6 +131,26 @@ router.post(
       },
       include: { user: { select: { id: true, name: true, email: true, phone: true } } },
     });
+
+    if (status === 'SENT' || status === 'OVERDUE') {
+      sendInvoiceCustomerNotification({
+        name: invoice.user.name,
+        email: invoice.user.email,
+        invoiceNumber: invoice.invoiceNumber,
+        title: invoice.title,
+        amount: invoice.amount,
+        currency: invoice.currency,
+        dueDate: invoice.dueDate,
+      }).catch(() => {});
+
+      createUserNotification({
+        userId,
+        title: 'New invoice available',
+        message: `Invoice ${invoice.invoiceNumber} for ${title} has been issued.`,
+        link: '/portal/invoices',
+        type: 'invoice',
+      }).catch(() => {});
+    }
 
     res.status(201).json({ success: true, message: 'Invoice created', data: invoice });
   })

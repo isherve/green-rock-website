@@ -55,6 +55,9 @@ type ContactFormData = z.infer<typeof contactSchema>;
 interface ContactFormProps {
   className?: string;
   defaultType?: ContactFormData["type"];
+  propertyId?: string;
+  propertyTitle?: string;
+  hideTypeSelector?: boolean;
 }
 
 const TYPE_HINTS: Record<ContactFormData["type"], string> = {
@@ -66,7 +69,13 @@ const TYPE_HINTS: Record<ContactFormData["type"], string> = {
   GENERAL: "How can we help you today?",
 };
 
-export function ContactForm({ className, defaultType = "GENERAL" }: ContactFormProps) {
+export function ContactForm({
+  className,
+  defaultType = "GENERAL",
+  propertyId,
+  propertyTitle,
+  hideTypeSelector = false,
+}: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [successTitle, setSuccessTitle] = useState("Message Sent!");
@@ -104,12 +113,16 @@ export function ContactForm({ className, defaultType = "GENERAL" }: ContactFormP
         });
         setSuccessTitle("Booking Request Sent!");
       } else {
+        const message = propertyTitle
+          ? `[${propertyTitle}] ${data.message}`
+          : data.message;
         await api.post("/inquiries", {
           name: data.name,
           email: data.email,
           phone: data.phone,
           type: data.type,
-          message: data.message,
+          message,
+          ...(propertyId ? { propertyId } : {}),
         });
         setSuccessTitle(isOrder ? "Order Request Sent!" : "Message Sent!");
       }
@@ -179,7 +192,7 @@ export function ContactForm({ className, defaultType = "GENERAL" }: ContactFormP
           <Input placeholder="+250 785 652 011" {...register("phone")} />
           {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>}
         </div>
-        <div>
+        <div className={hideTypeSelector ? "hidden" : ""}>
           <label className="text-sm font-medium mb-1.5 block">Request Type *</label>
           <Select
             defaultValue={defaultType}

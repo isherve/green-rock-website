@@ -25,6 +25,7 @@ import invoicesRoutes from './invoices.routes';
 import materialOrdersRoutes from './material-orders.routes';
 import supportTicketsRoutes from './support-tickets.routes';
 import paymentsRoutes from './payments.routes';
+import documentsRoutes from './documents.routes';
 import auditLogsRoutes from './audit-logs.routes';
 
 const router = Router();
@@ -55,6 +56,7 @@ router.use('/invoices', invoicesRoutes);
 router.use('/material-orders', materialOrdersRoutes);
 router.use('/support-tickets', supportTicketsRoutes);
 router.use('/payments', paymentsRoutes);
+router.use('/documents', documentsRoutes);
 router.use('/audit-logs', auditLogsRoutes);
 
 export default router;

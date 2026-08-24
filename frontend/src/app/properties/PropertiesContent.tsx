@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { PageHero } from "@/components/shared/PageHero";
 import { PropertyCard } from "@/components/shared/PropertyCard";
+import { MortgageCalculator } from "@/components/shared/MortgageCalculator";
 import { PropertySearchBar } from "@/components/shared/PropertySearchBar";
 import { usePublicList } from "@/hooks/usePublicData";
 import { MOCK_PROPERTIES } from "@/lib/mock-data";
@@ -92,10 +93,19 @@ export default function PropertiesContent() {
             </p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filtered.map((p, i: number) => (
-              <PropertyCard key={p.id} property={p} index={i} />
-            ))}
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <div className="grid sm:grid-cols-2 gap-8">
+                {filtered.map((p, i: number) => (
+                  <PropertyCard key={p.id} property={p} index={i} />
+                ))}
+              </div>
+            </div>
+            <div className="lg:col-span-1">
+              <div className="sticky top-24">
+                <MortgageCalculator />
+              </div>
+            </div>
           </div>
         )}
       </section>

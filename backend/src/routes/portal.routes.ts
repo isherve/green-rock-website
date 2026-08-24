@@ -9,6 +9,12 @@ import { requireCustomer } from '../middleware/portalAuth';
 import { validateBody, validateParams } from '../middleware/validate';
 import { generateNumber } from '../lib/roles';
 import { buildInvoicePdf, parseInvoiceItems } from '../lib/invoice-pdf';
+import {
+  sendMaterialOrderAdminNotification,
+  sendMaterialOrderCustomerConfirmation,
+  sendTicketAdminNotification,
+} from '../lib/email';
+import { createUserNotification } from '../lib/notifications';
 
 const router = Router();
 
@@ -259,6 +265,31 @@ router.post(
         notes,
       },
     });
+
+    const customer = await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: { name: true, email: true },
+    });
+
+    if (customer) {
+      sendMaterialOrderAdminNotification({
+        orderNumber: order.orderNumber,
+        customerName: customer.name,
+        customerEmail: customer.email,
+        totalAmount,
+        currency: order.currency,
+        itemCount: items.length,
+      }).catch(() => {});
+
+      sendMaterialOrderCustomerConfirmation({
+        name: customer.name,
+        email: customer.email,
+        orderNumber: order.orderNumber,
+        totalAmount,
+        currency: order.currency,
+      }).catch(() => {});
+    }
+
     res.status(201).json({ success: true, data: order });
   })
 );
@@ -348,6 +379,17 @@ router.post(
         priority: req.body.priority ?? 'MEDIUM',
       },
     });
+
+    if (user) {
+      sendTicketAdminNotification({
+        ticketNumber: ticket.ticketNumber,
+        customerName: user.name,
+        customerEmail: user.email,
+        subject: ticket.subject,
+        message: ticket.message,
+      }).catch(() => {});
+    }
+
     res.status(201).json({ success: true, data: ticket });
   })
 );
