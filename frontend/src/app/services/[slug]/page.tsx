@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PageHero } from "@/components/shared/PageHero";
 import { fetchPublicOne } from "@/lib/server-api";
 import { MOCK_SERVICES } from "@/lib/mock-data";
+import { getServiceImage } from "@/lib/service-images";
 import { ContactForm } from "@/components/shared/ContactForm";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -34,7 +35,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <>
-      <PageHero title={service.title} subtitle={service.description} />
+      <PageHero title={service.title} subtitle={service.description} image={getServiceImage(service)} />
       <section className="py-20 container mx-auto px-4">
         <Button variant="ghost" asChild className="mb-8">
           <Link href="/services"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Services</Link>

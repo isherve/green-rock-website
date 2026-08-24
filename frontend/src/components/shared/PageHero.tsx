@@ -22,6 +22,7 @@ export function PageHero({
         alt=""
         fill
         priority
+        unoptimized
         className="object-cover object-center opacity-60"
         sizes="100vw"
       />

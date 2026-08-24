@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { TiltCard3D } from "@/components/motion/TiltCard3D";
+import { getServiceImage } from "@/lib/service-images";
 import type { Service } from "@/types";
 
 interface ServiceCardProps {
@@ -13,9 +14,7 @@ interface ServiceCardProps {
 }
 
 export function ServiceCard({ service, index = 0 }: ServiceCardProps) {
-  const imageUrl =
-    service.image ??
-    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80";
+  const imageUrl = getServiceImage(service);
 
   return (
     <motion.article
@@ -32,6 +31,7 @@ export function ServiceCard({ service, index = 0 }: ServiceCardProps) {
             src={imageUrl}
             alt={service.title}
             fill
+            unoptimized
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />

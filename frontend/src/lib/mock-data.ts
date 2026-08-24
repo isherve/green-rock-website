@@ -18,14 +18,16 @@ export const MOCK_PRODUCTS: Product[] = [
   { id: "3", slug: "ceramic-floor-tiles", name: "Ceramic Floor Tiles", description: "Premium ceramic tiles in various designs.", price: 15000, currency: "RWF", stock: 1000, availability: true, deliveryOption: true, featured: false, images: ["https://images.unsplash.com/photo-1615971677496-40a0a834d2a4?w=400&q=80"], categoryId: "3", category: { id: "3", name: "Tiles", slug: "tiles", order: 3, isActive: true, createdAt: "", updatedAt: "" } satisfies Category, createdAt: "", updatedAt: "" },
 ];
 
+import { SERVICE_IMAGES } from "@/lib/service-images";
+
 export const MOCK_SERVICES: Service[] = [
-  { id: "0", slug: "architecture", title: "Architecture & Drawings", description: "House drawings, architectural plans, and detailed quotations for your building project.", icon: "PenTool", featured: true, order: 0, isActive: true, createdAt: "", updatedAt: "" },
-  { id: "1", slug: "real-estate", title: "Real Estate", description: "Buy, sell, rent and list premium properties across Rwanda.", icon: "Building2", featured: true, order: 1, isActive: true, createdAt: "", updatedAt: "" },
-  { id: "2", slug: "construction", title: "Construction", description: "Residential, commercial and infrastructure construction services.", icon: "HardHat", featured: true, order: 2, isActive: true, createdAt: "", updatedAt: "" },
-  { id: "3", slug: "building-materials", title: "Building Materials", description: "Quality cement, steel, tiles, paint and more with delivery.", icon: "Package", featured: true, order: 3, isActive: true, createdAt: "", updatedAt: "" },
-  { id: "4", slug: "interior-design", title: "Interior Design", description: "Luxury interior design for homes, offices and commercial spaces.", icon: "Palette", featured: true, order: 4, isActive: true, createdAt: "", updatedAt: "" },
-  { id: "5", slug: "painting", title: "Painting Services", description: "Interior, exterior and industrial painting solutions.", icon: "Paintbrush", featured: false, order: 5, isActive: true, createdAt: "", updatedAt: "" },
-  { id: "6", slug: "timber", title: "Timber Sales", description: "Quality timber sales, processing and wood construction.", icon: "TreePine", featured: false, order: 6, isActive: true, createdAt: "", updatedAt: "" },
+  { id: "0", slug: "architecture", title: "Architecture & Drawings", description: "House drawings, architectural plans, and detailed quotations for your building project.", icon: "PenTool", image: SERVICE_IMAGES.architecture, featured: true, order: 0, isActive: true, createdAt: "", updatedAt: "" },
+  { id: "1", slug: "real-estate", title: "Real Estate", description: "Buy, sell, rent and list premium properties across Rwanda.", icon: "Building2", image: SERVICE_IMAGES["real-estate"], featured: true, order: 1, isActive: true, createdAt: "", updatedAt: "" },
+  { id: "2", slug: "construction", title: "Construction", description: "Residential, commercial and infrastructure construction services.", icon: "HardHat", image: SERVICE_IMAGES.construction, featured: true, order: 2, isActive: true, createdAt: "", updatedAt: "" },
+  { id: "3", slug: "building-materials", title: "Building Materials", description: "Quality cement, steel, tiles, paint and more with delivery.", icon: "Package", image: SERVICE_IMAGES["building-materials"], featured: true, order: 3, isActive: true, createdAt: "", updatedAt: "" },
+  { id: "4", slug: "interior-design", title: "Interior Design", description: "Luxury interior design for homes, offices and commercial spaces.", icon: "Palette", image: SERVICE_IMAGES["interior-design"], featured: true, order: 4, isActive: true, createdAt: "", updatedAt: "" },
+  { id: "5", slug: "painting", title: "Painting Services", description: "Interior, exterior and industrial painting solutions.", icon: "Paintbrush", image: SERVICE_IMAGES.painting, featured: false, order: 5, isActive: true, createdAt: "", updatedAt: "" },
+  { id: "6", slug: "timber", title: "Timber Sales", description: "Quality timber sales, processing and wood construction.", icon: "TreePine", image: SERVICE_IMAGES.timber, featured: false, order: 6, isActive: true, createdAt: "", updatedAt: "" },
 ];
 
 export const MOCK_TESTIMONIALS: Testimonial[] = [
