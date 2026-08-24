@@ -8,7 +8,7 @@ import { sendEmail } from '../src/lib/email';
 import { buildAdminEmail } from '../src/lib/email-templates';
 
 async function main() {
-  const status = getEmailConfigStatus();
+  const status = await getEmailConfigStatus();
   console.log('Email config:', status);
 
   if (!status.configured) {

@@ -17,6 +17,7 @@ type EmailStatus = {
   smtpPort: string;
   smtpUser: string | null;
   hasResendKey?: boolean;
+  resendSource?: "env" | "database" | null;
   hasSmtpPass?: boolean;
   missing?: string[];
   from: string | null;
@@ -59,7 +60,9 @@ export default function AdminSettingsPage() {
     workingHours: "Mon - Sat: 8:00 AM - 6:00 PM",
   });
   const [emailStatus, setEmailStatus] = useState<EmailStatus | null>(null);
+  const [resendApiKey, setResendApiKey] = useState("");
   const [testingEmail, setTestingEmail] = useState(false);
+  const [configuringEmail, setConfiguringEmail] = useState(false);
   const [emailTestResult, setEmailTestResult] = useState("");
 
   useEffect(() => {
@@ -76,6 +79,29 @@ export default function AdminSettingsPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  async function handleConfigureEmail() {
+    if (!resendApiKey.trim().startsWith("re_")) {
+      setEmailTestResult("Paste a valid Resend API key (starts with re_)");
+      return;
+    }
+    setConfiguringEmail(true);
+    setEmailTestResult("");
+    try {
+      const res = await api.post("/settings/email/configure", { resendApiKey: resendApiKey.trim() });
+      setEmailStatus(res.data.data as EmailStatus);
+      setEmailTestResult(res.data.message || "Email configured!");
+      setResendApiKey("");
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === "object" && "response" in err
+          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
+          : "Failed to configure email";
+      setEmailTestResult(msg || "Failed to configure email");
+    } finally {
+      setConfiguringEmail(false);
+    }
+  }
 
   async function handleTestEmail() {
     setTestingEmail(true);
@@ -177,26 +203,42 @@ export default function AdminSettingsPage() {
               </div>
 
               {!emailStatus.configured && (
-                <div className="text-sm text-muted-foreground space-y-4 rounded-lg border p-4 bg-muted/30">
+                <div className="text-sm space-y-3 rounded-lg border p-4 bg-muted/30">
                   <div>
-                    <p className="font-medium text-foreground">Setup Resend (recommended, ~2 min):</p>
-                    <ol className="list-decimal list-inside space-y-1 mt-2">
-                      <li>Sign up free at <a href="https://resend.com/signup" className="text-primary underline" target="_blank" rel="noreferrer">resend.com</a> with <strong>{emailStatus.adminEmail}</strong></li>
-                      <li>Create an API key at <a href="https://resend.com/api-keys" className="text-primary underline" target="_blank" rel="noreferrer">resend.com/api-keys</a></li>
-                      <li>In Vercel → Settings → Environment Variables, add <code className="text-xs bg-muted px-1 rounded">RESEND_API_KEY</code> = your key (starts with <code className="text-xs bg-muted px-1 rounded">re_</code>)</li>
-                      <li>Redeploy, then click &quot;Send Test Email&quot; below</li>
+                    <p className="font-medium text-foreground">Connect Resend in 2 steps:</p>
+                    <ol className="list-decimal list-inside space-y-1 mt-2 text-muted-foreground">
+                      <li>
+                        <a href="https://resend.com/signup" className="text-primary underline" target="_blank" rel="noreferrer">Create free Resend account</a> with <strong>{emailStatus.adminEmail}</strong>
+                      </li>
+                      <li>
+                        <a href="https://resend.com/api-keys" className="text-primary underline" target="_blank" rel="noreferrer">Create API key</a> and paste it below
+                      </li>
                     </ol>
-                    <p className="text-xs mt-2 opacity-80">Without a custom domain, emails send from <code className="bg-muted px-1 rounded">onboarding@resend.dev</code>. Later you can verify your domain at resend.com/domains for branded emails.</p>
                   </div>
-                  <details className="text-xs">
-                    <summary className="cursor-pointer font-medium text-foreground">Alternative: Gmail SMTP</summary>
-                    <ol className="list-decimal list-inside space-y-1 mt-2">
-                      <li>Enable 2-Step Verification on Google</li>
-                      <li>Create App Password at <a href="https://myaccount.google.com/apppasswords" className="text-primary underline" target="_blank" rel="noreferrer">myaccount.google.com/apppasswords</a></li>
-                      <li>Add <code className="bg-muted px-1 rounded">SMTP_PASS</code> in Vercel</li>
-                    </ol>
-                  </details>
+                  <div>
+                    <label className="text-sm font-medium mb-1 block">Resend API Key</label>
+                    <Input
+                      type="password"
+                      placeholder="re_xxxxxxxxxxxxxxxx"
+                      value={resendApiKey}
+                      onChange={(e) => setResendApiKey(e.target.value)}
+                      autoComplete="off"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleConfigureEmail}
+                    disabled={configuringEmail || !resendApiKey.trim()}
+                  >
+                    {configuringEmail ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
+                    Save & Send Test Email
+                  </Button>
+                  <p className="text-xs text-muted-foreground">No Vercel redeploy needed — key is saved securely in your database.</p>
                 </div>
+              )}
+
+              {emailStatus.configured && emailStatus.resendSource === "database" && (
+                <p className="text-xs text-muted-foreground">Resend key saved in admin settings.</p>
               )}
 
               <div className="flex flex-wrap gap-2">

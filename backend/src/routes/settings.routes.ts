@@ -7,6 +7,11 @@ import { authenticate, requireAdmin } from '../middleware/auth';
 import { validateBody, validateParams } from '../middleware/validate';
 import { getEmailConfigStatus } from '../lib/email-config';
 import { sendTestEmail } from '../lib/email';
+import { saveResendApiKey } from '../lib/email-settings';
+
+const configureEmailSchema = z.object({
+  resendApiKey: z.string().trim().min(10).startsWith('re_', 'Invalid Resend API key format'),
+});
 
 const router = Router();
 
@@ -41,9 +46,27 @@ router.get(
       success: true,
       message: 'Email status retrieved',
       data: {
-        ...getEmailConfigStatus(),
+        ...(await getEmailConfigStatus()),
         events: EMAIL_EVENTS,
       },
+    });
+  })
+);
+
+router.post(
+  '/email/configure',
+  authenticate,
+  requireAdmin,
+  validateBody(configureEmailSchema),
+  asyncHandler(async (req: Request, res: Response) => {
+    const { resendApiKey } = req.body as z.infer<typeof configureEmailSchema>;
+    await saveResendApiKey(resendApiKey);
+    await sendTestEmail();
+    const status = await getEmailConfigStatus();
+    res.json({
+      success: true,
+      message: `Resend connected. Test email sent to ${status.adminEmail}.`,
+      data: status,
     });
   })
 );
@@ -53,7 +76,7 @@ router.post(
   authenticate,
   requireAdmin,
   asyncHandler(async (_req: Request, res: Response) => {
-    const status = getEmailConfigStatus();
+    const status = await getEmailConfigStatus();
     if (!status.configured) {
       throw new AppError(status.hint, 503);
     }

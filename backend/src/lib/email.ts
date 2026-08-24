@@ -9,6 +9,7 @@ import {
   inquiryBadgeColor,
 } from './email-templates';
 import { getEmailFrom, getEmailProvider, isEmailConfigured } from './email-config';
+import { getResendApiKey } from './email-settings';
 
 function createTransporter() {
   return nodemailer.createTransport({
@@ -31,10 +32,12 @@ export interface EmailOptions {
 }
 
 async function sendViaResend(options: EmailOptions): Promise<void> {
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const apiKey = await getResendApiKey();
+  if (!apiKey) throw new Error('Resend API key not configured');
+  const resend = new Resend(apiKey);
   const to = Array.isArray(options.to) ? options.to : [options.to];
   const { error } = await resend.emails.send({
-    from: getEmailFrom(),
+    from: getEmailFrom('resend'),
     to,
     subject: options.subject,
     html: options.html,
@@ -48,7 +51,7 @@ async function sendViaResend(options: EmailOptions): Promise<void> {
 
 async function sendViaSmtp(options: EmailOptions): Promise<void> {
   await createTransporter().sendMail({
-    from: getEmailFrom(),
+    from: getEmailFrom('smtp'),
     to: options.to,
     subject: options.subject,
     html: options.html,
@@ -58,7 +61,7 @@ async function sendViaSmtp(options: EmailOptions): Promise<void> {
 }
 
 export async function sendEmail(options: EmailOptions): Promise<void> {
-  if (!isEmailConfigured()) {
+  if (!(await isEmailConfigured())) {
     const msg = `[Email] NOT SENT — set RESEND_API_KEY or SMTP_USER/SMTP_PASS. Would send "${options.subject}" → ${options.to}`;
     console.error(msg);
     if (process.env.NODE_ENV === 'production') {
@@ -67,7 +70,7 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
     return;
   }
 
-  const provider = getEmailProvider();
+  const provider = await getEmailProvider();
 
   try {
     if (provider === 'resend') {
@@ -492,7 +495,7 @@ export async function sendPaymentAdminNotification(data: {
 
 export async function sendTestEmail(): Promise<void> {
   const adminEmail = getAdminEmail();
-  const provider = getEmailProvider();
+  const provider = await getEmailProvider();
   await sendEmail({
     to: adminEmail,
     subject: '[Green Rock] Test Email — Notifications Working',
@@ -505,7 +508,7 @@ export async function sendTestEmail(): Promise<void> {
       rows: [
         { label: 'Sent to', value: adminEmail, highlight: true },
         { label: 'Provider', value: provider === 'resend' ? 'Resend' : 'Gmail SMTP', highlight: true },
-        { label: 'From', value: getEmailFrom() },
+        { label: 'From', value: getEmailFrom(provider) },
         { label: 'Time', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
       ],
       message: 'You will now receive emails when visitors submit contact forms, book appointments, place orders, open support tickets, subscribe to the newsletter, or apply for jobs.',

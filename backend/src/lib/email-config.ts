@@ -1,24 +1,25 @@
 import { getAdminEmail } from './email-templates';
+import { getResendApiKey } from './email-settings';
 
 export type EmailProvider = 'resend' | 'smtp' | null;
 
-export function getEmailProvider(): EmailProvider {
-  if (process.env.RESEND_API_KEY?.trim()) return 'resend';
+export async function getEmailProvider(): Promise<EmailProvider> {
+  if (await getResendApiKey()) return 'resend';
   if (process.env.SMTP_USER?.trim() && process.env.SMTP_PASS?.trim()) return 'smtp';
   return null;
 }
 
-export function isEmailConfigured(): boolean {
-  return getEmailProvider() !== null;
+export async function isEmailConfigured(): Promise<boolean> {
+  return (await getEmailProvider()) !== null;
 }
 
-export function getEmailFrom(): string {
+export function getEmailFrom(provider: EmailProvider): string {
   const from = process.env.EMAIL_FROM?.trim();
   if (from) {
     if (from.includes('<')) return from;
     return `Green Rock <${from}>`;
   }
-  if (getEmailProvider() === 'resend') {
+  if (provider === 'resend') {
     return 'Green Rock <onboarding@resend.dev>';
   }
   const smtpUser = process.env.SMTP_USER?.trim();
@@ -26,52 +27,40 @@ export function getEmailFrom(): string {
   return 'Green Rock <notifications@greenrock.rw>';
 }
 
-function getMissingVars(): string[] {
-  const hasResend = Boolean(process.env.RESEND_API_KEY?.trim());
-  const hasSmtp = Boolean(process.env.SMTP_USER?.trim() && process.env.SMTP_PASS?.trim());
-  if (hasResend || hasSmtp) return [];
-
-  const missing: string[] = [];
-  if (!process.env.RESEND_API_KEY?.trim()) missing.push('RESEND_API_KEY');
-  if (!process.env.SMTP_USER?.trim()) missing.push('SMTP_USER');
-  if (!process.env.SMTP_PASS?.trim()) missing.push('SMTP_PASS');
-  return missing;
-}
-
-export function getEmailConfigStatus() {
-  const provider = getEmailProvider();
+export async function getEmailConfigStatus() {
+  const provider = await getEmailProvider();
   const configured = provider !== null;
   const smtpUser = process.env.SMTP_USER?.trim() || null;
-  const hasResendKey = Boolean(process.env.RESEND_API_KEY?.trim());
+  const hasResendKeyEnv = Boolean(process.env.RESEND_API_KEY?.trim());
+  const hasResendKeyDb = Boolean(!hasResendKeyEnv && (await getResendApiKey()));
+  const hasResendKey = hasResendKeyEnv || hasResendKeyDb;
   const hasSmtpPass = Boolean(process.env.SMTP_PASS?.trim());
-  const missing = getMissingVars();
+  const resendSource = hasResendKeyEnv ? 'env' : hasResendKeyDb ? 'database' : null;
 
   let hint: string;
   if (configured && provider === 'resend') {
-    hint = `Email is ready via Resend. Notifications will be sent to ${getAdminEmail()}.`;
+    hint = `Email is ready via Resend (${resendSource === 'database' ? 'saved in admin settings' : 'Vercel env'}). Notifications go to ${getAdminEmail()}.`;
   } else if (configured && provider === 'smtp') {
     hint = `Email is ready via Gmail SMTP. Notifications will be sent to ${getAdminEmail()}.`;
-  } else if (hasResendKey) {
-    hint = 'RESEND_API_KEY is set but invalid or incomplete. Check your Resend dashboard.';
-  } else if (smtpUser && !hasSmtpPass) {
+  } else if (smtpUser && !hasSmtpPass && !hasResendKey) {
     hint =
-      'Gmail SMTP is partially configured (SMTP_USER set, SMTP_PASS missing). Easiest fix: add RESEND_API_KEY in Vercel instead — no App Password needed.';
+      'Add a Resend API key below (recommended) or SMTP_PASS in Vercel. Messages save in admin but emails are NOT sent yet.';
   } else {
     hint =
-      'Add RESEND_API_KEY in Vercel (recommended) or SMTP_USER + SMTP_PASS for Gmail. Messages save in admin but emails are NOT sent yet.';
+      'Paste your Resend API key below, or set RESEND_API_KEY in Vercel. Messages save in admin but emails are NOT sent yet.';
   }
 
   return {
     configured,
     provider,
     adminEmail: getAdminEmail(),
-    from: getEmailFrom(),
+    from: getEmailFrom(provider),
     hasResendKey,
+    resendSource,
     smtpHost: process.env.SMTP_HOST || 'smtp.gmail.com',
     smtpPort: process.env.SMTP_PORT || '587',
     smtpUser,
     hasSmtpPass,
-    missing,
     hint,
   };
 }

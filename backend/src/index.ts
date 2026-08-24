@@ -10,7 +10,7 @@ async function startServer() {
     await prisma.$connect();
     console.log('Database connected');
 
-    const emailStatus = getEmailConfigStatus();
+    const emailStatus = await getEmailConfigStatus();
     if (emailStatus.configured) {
       console.log(`Email configured (${emailStatus.provider}) → notifications to ${emailStatus.adminEmail}`);
     } else {

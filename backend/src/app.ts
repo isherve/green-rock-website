@@ -114,7 +114,7 @@ app.get('/health', async (_req, res) => {
       environment: process.env.NODE_ENV || 'development',
       platform: process.env.VERCEL ? 'vercel' : 'node',
       database,
-      email: getEmailConfigStatus(),
+      email: await getEmailConfigStatus(),
     },
   });
 });
