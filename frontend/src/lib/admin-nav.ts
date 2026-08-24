@@ -14,18 +14,13 @@ import {
   Users,
   Settings,
   Calendar,
-  Target,
-  Warehouse,
-  Truck,
-  ShoppingCart,
-  UserCog,
-  Wallet,
   Receipt,
-  FileSignature,
-  Megaphone,
-  LineChart,
   Shield,
   ClipboardList,
+  ShoppingBag,
+  LifeBuoy,
+  UserCheck,
+  Mail,
 } from "lucide-react";
 
 export type AdminNavItem = { label: string; href: string; icon: LucideIcon };
@@ -35,23 +30,22 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
   {
     title: "Overview",
     items: [
-      { label: "ERP Dashboard", href: "/admin/dashboard", icon: BarChart3 },
-      { label: "Analytics", href: "/admin/analytics", icon: LineChart },
+      { label: "Dashboard", href: "/admin/dashboard", icon: BarChart3 },
       { label: "Audit Logs", href: "/admin/audit-logs", icon: Shield },
     ],
   },
   {
-    title: "CRM & Sales",
+    title: "Sales & Operations",
     items: [
-      { label: "CRM / Leads", href: "/admin/crm", icon: Target },
-      { label: "Messages & Inquiries", href: "/admin/messages", icon: MessageSquare },
+      { label: "Leads & Inquiries", href: "/admin/leads", icon: MessageSquare },
+      { label: "Material Orders", href: "/admin/orders", icon: ShoppingBag },
+      { label: "Support Tickets", href: "/admin/tickets", icon: LifeBuoy },
       { label: "Appointments", href: "/admin/appointments", icon: Calendar },
-      { label: "Quotations", href: "/admin/quotations", icon: ClipboardList },
-      { label: "Contracts", href: "/admin/contracts", icon: FileSignature },
+      { label: "Invoices", href: "/admin/invoices", icon: Receipt },
     ],
   },
   {
-    title: "Real Estate",
+    title: "Real Estate & Projects",
     items: [
       { label: "Properties", href: "/admin/properties", icon: Home },
       { label: "Projects", href: "/admin/projects", icon: Building2 },
@@ -59,35 +53,19 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     ],
   },
   {
-    title: "Inventory & Supply",
+    title: "Materials",
     items: [
-      { label: "Products / Materials", href: "/admin/products", icon: Package },
+      { label: "Products", href: "/admin/products", icon: Package },
       { label: "Categories", href: "/admin/categories", icon: Package },
-      { label: "Inventory", href: "/admin/inventory", icon: Warehouse },
-      { label: "Procurement", href: "/admin/procurement", icon: ShoppingCart },
-      { label: "Fleet & Delivery", href: "/admin/fleet", icon: Truck },
     ],
   },
   {
-    title: "Finance",
+    title: "People & Content",
     items: [
-      { label: "Finance", href: "/admin/finance", icon: Wallet },
-      { label: "Invoices", href: "/admin/invoices", icon: Receipt },
-    ],
-  },
-  {
-    title: "Human Resources",
-    items: [
-      { label: "HR", href: "/admin/hr", icon: UserCog },
-      { label: "Payroll", href: "/admin/payroll", icon: Receipt },
+      { label: "Job Applications", href: "/admin/applications", icon: UserCheck },
       { label: "Careers", href: "/admin/careers", icon: Briefcase },
-      { label: "Users & Roles", href: "/admin/users", icon: Users },
-    ],
-  },
-  {
-    title: "Marketing & CMS",
-    items: [
-      { label: "Marketing", href: "/admin/marketing", icon: Megaphone },
+      { label: "Users", href: "/admin/users", icon: Users },
+      { label: "Newsletter", href: "/admin/subscribers", icon: Mail },
       { label: "Blog", href: "/admin/blog", icon: FileText },
       { label: "Gallery", href: "/admin/gallery", icon: ImageIcon },
       { label: "Testimonials", href: "/admin/testimonials", icon: Star },
@@ -103,3 +81,19 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
 export const ADMIN_NAV = ADMIN_NAV_GROUPS.flatMap((g) => g.items);
 
 export const PAGE_TITLES = Object.fromEntries(ADMIN_NAV.map((item) => [item.href, item.label]));
+
+/** Legacy redirects for removed placeholder modules */
+export const REMOVED_ADMIN_PATHS = [
+  "/admin/crm",
+  "/admin/inventory",
+  "/admin/procurement",
+  "/admin/fleet",
+  "/admin/finance",
+  "/admin/hr",
+  "/admin/payroll",
+  "/admin/contracts",
+  "/admin/marketing",
+  "/admin/analytics",
+  "/admin/messages",
+  "/admin/quotations",
+];

@@ -22,6 +22,9 @@ import partnersRoutes from './partners.routes';
 import portalRoutes from './portal.routes';
 import setupRoutes from './setup.routes';
 import invoicesRoutes from './invoices.routes';
+import materialOrdersRoutes from './material-orders.routes';
+import supportTicketsRoutes from './support-tickets.routes';
+import paymentsRoutes from './payments.routes';
 import auditLogsRoutes from './audit-logs.routes';
 
 const router = Router();
@@ -49,6 +52,9 @@ router.use('/partners', partnersRoutes);
 router.use('/portal', portalRoutes);
 router.use('/setup', setupRoutes);
 router.use('/invoices', invoicesRoutes);
+router.use('/material-orders', materialOrdersRoutes);
+router.use('/support-tickets', supportTicketsRoutes);
+router.use('/payments', paymentsRoutes);
 router.use('/audit-logs', auditLogsRoutes);
 
 export default router;

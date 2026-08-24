@@ -1,5 +1,5 @@
-﻿import { AdminModule } from "@/components/admin/AdminModulePages";
+﻿import { AdminRedirect } from "@/components/admin/AdminRedirect";
 
 export default function Page() {
-  return <AdminModule module="marketing" />;
+  return <AdminRedirect to="/admin/blog" />;
 }

@@ -110,6 +110,37 @@ router.get(
 );
 
 router.get(
+  '/applications/list',
+  authenticate,
+  requireAdmin,
+  validateQuery(z.object({ page: z.string().optional(), limit: z.string().optional(), status: z.nativeEnum(ApplicationStatus).optional() })),
+  asyncHandler(async (req: Request, res: Response) => {
+    const query = req.query as { page?: string; limit?: string; status?: ApplicationStatus };
+    const { page, limit, skip } = parsePagination(query);
+    const where = query.status ? { status: query.status } : {};
+
+    const [applications, total] = await Promise.all([
+      prisma.application.findMany({
+        where,
+        include: {
+          career: { select: { id: true, title: true, slug: true, department: true } },
+          reviewedBy: { select: { id: true, name: true } },
+        },
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.application.count({ where }),
+    ]);
+
+    res.json({
+      success: true,
+      data: paginatedResponse(applications, total, page, limit),
+    });
+  })
+);
+
+router.get(
   '/:slug',
   validateParams(slugParamSchema),
   asyncHandler(async (req: Request, res: Response) => {
@@ -280,7 +311,7 @@ router.patch(
   requireAdmin,
   validateParams(z.object({ applicationId: z.string().uuid() })),
   validateBody(updateApplicationSchema),
-  asyncHandler(async (req: Request, res: Response) => {
+  asyncHandler(async (req: AuthRequest, res: Response) => {
     const { applicationId } = req.params;
 
     const application = await prisma.application.update({
@@ -289,6 +320,7 @@ router.patch(
         ...req.body,
         reviewedById: req.user!.userId,
       },
+      include: { career: { select: { title: true } } },
     });
 
     res.json({ success: true, message: 'Application updated', data: application });

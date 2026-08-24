@@ -1,5 +1,5 @@
-﻿import { redirect } from "next/navigation";
+﻿import { AdminRedirect } from "@/components/admin/AdminRedirect";
 
-export default function AdminAnalyticsPage() {
-  redirect("/admin/dashboard");
+export default function Page() {
+  return <AdminRedirect to="/admin/dashboard" />;
 }

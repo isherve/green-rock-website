@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Download, Loader2, Plus, RefreshCw } from "lucide-react";
+import { Download, Loader2, Plus, RefreshCw, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -62,6 +62,10 @@ export function AdminInvoicesManager() {
   const [saving, setSaving] = useState(false);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [paymentInvoice, setPaymentInvoice] = useState<InvoiceRow | null>(null);
+  const [paymentForm, setPaymentForm] = useState({ amount: "", method: "Bank transfer", reference: "" });
+  const [recordingPayment, setRecordingPayment] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     userId: "",
@@ -160,6 +164,42 @@ export function AdminInvoicesManager() {
     }
   };
 
+  const openPaymentDialog = (invoice: InvoiceRow) => {
+    setPaymentInvoice(invoice);
+    setPaymentForm({
+      amount: String(invoice.amount),
+      method: "Bank transfer",
+      reference: "",
+    });
+    setPaymentOpen(true);
+  };
+
+  const handleRecordPayment = async () => {
+    if (!paymentInvoice) return;
+    const amount = Number(paymentForm.amount);
+    if (!amount || amount <= 0) {
+      alert("Enter a valid payment amount");
+      return;
+    }
+
+    setRecordingPayment(true);
+    try {
+      await api.post("/payments", {
+        invoiceId: paymentInvoice.id,
+        amount,
+        method: paymentForm.method.trim() || "Manual",
+        reference: paymentForm.reference.trim() || undefined,
+      });
+      setPaymentOpen(false);
+      setPaymentInvoice(null);
+      fetchInvoices();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Failed to record payment");
+    } finally {
+      setRecordingPayment(false);
+    }
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -187,7 +227,7 @@ export function AdminInvoicesManager() {
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Amount</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Due</th>
-                <th className="px-4 py-3 w-36">Actions</th>
+                <th className="px-4 py-3 w-52">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -227,20 +267,27 @@ export function AdminInvoicesManager() {
                     </td>
                     <td className="px-4 py-3">{invoice.dueDate ? formatDate(invoice.dueDate) : "—"}</td>
                     <td className="px-4 py-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDownload(invoice)}
-                        disabled={downloadingId === invoice.id}
-                      >
-                        {downloadingId === invoice.id ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                        ) : (
-                          <>
-                            <Download className="w-4 h-4 mr-1" /> PDF
-                          </>
+                      <div className="flex flex-wrap gap-1">
+                        {invoice.status !== "PAID" && invoice.status !== "CANCELLED" && (
+                          <Button variant="outline" size="sm" onClick={() => openPaymentDialog(invoice)}>
+                            <Banknote className="w-4 h-4 mr-1" /> Pay
+                          </Button>
                         )}
-                      </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDownload(invoice)}
+                          disabled={downloadingId === invoice.id}
+                        >
+                          {downloadingId === invoice.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <>
+                              <Download className="w-4 h-4 mr-1" /> PDF
+                            </>
+                          )}
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -347,8 +394,58 @@ export function AdminInvoicesManager() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={paymentOpen} onOpenChange={setPaymentOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Record Payment</DialogTitle>
+          </DialogHeader>
+          {paymentInvoice && (
+            <div className="grid gap-4 py-2">
+              <p className="text-sm text-muted-foreground">
+                {paymentInvoice.invoiceNumber} — {paymentInvoice.title} ({formatPrice(paymentInvoice.amount, paymentInvoice.currency)})
+              </p>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Amount (RWF) *</label>
+                <Input
+                  type="number"
+                  min={1}
+                  value={paymentForm.amount}
+                  onChange={(e) => setPaymentForm((p) => ({ ...p, amount: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Payment method</label>
+                <Select value={paymentForm.method} onValueChange={(v) => setPaymentForm((p) => ({ ...p, method: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Bank transfer">Bank transfer</SelectItem>
+                    <SelectItem value="Mobile Money">Mobile Money</SelectItem>
+                    <SelectItem value="Cash">Cash</SelectItem>
+                    <SelectItem value="Cheque">Cheque</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Reference / transaction ID</label>
+                <Input
+                  value={paymentForm.reference}
+                  onChange={(e) => setPaymentForm((p) => ({ ...p, reference: e.target.value }))}
+                  placeholder="Optional"
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPaymentOpen(false)}>Cancel</Button>
+            <Button onClick={handleRecordPayment} disabled={recordingPayment}>
+              {recordingPayment ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+              Record Payment
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
-
-export { Badge };
