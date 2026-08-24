@@ -1,14 +1,19 @@
 import Link from "next/link";
 import { PageHero } from "@/components/shared/PageHero";
 import { BlogCard } from "@/components/shared/BlogCard";
-import { fetchPublic, withFallback } from "@/lib/server-api";
+import { fetchPublic, withFallback, fetchPublicOne } from "@/lib/server-api";
+import { getServerLocale } from "@/lib/server-locale";
+import { localizeBlog } from "@/lib/i18n/content";
 import { MOCK_BLOG } from "@/lib/mock-data";
 import type { Blog } from "@/types";
 
 export const metadata = { title: "Blog", description: "Construction tips, real estate news and industry insights." };
 
 export default async function BlogPage() {
-  const posts = withFallback(await fetchPublic<Blog>("/blog", { limit: "50" }), MOCK_BLOG);
+  const locale = await getServerLocale();
+  const apiPosts = await fetchPublic<Blog>("/blog", { limit: "50" });
+  const posts =
+    apiPosts.length > 0 ? apiPosts : MOCK_BLOG.map((b) => localizeBlog(b, locale));
 
   return (
     <>

@@ -7,6 +7,11 @@ import { authenticate, requireAdmin } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { slugify } from '../utils/slug';
+import {
+  parseContentLocale,
+  localizeService,
+  localizeList,
+} from '../lib/locale';
 
 const router = Router();
 
@@ -37,6 +42,7 @@ const listQuerySchema = z.object({
   featured: z.enum(['true', 'false']).optional(),
   parentId: z.string().optional(),
   isActive: z.enum(['true', 'false']).optional(),
+  locale: z.enum(['en', 'fr', 'rw']).optional(),
 });
 
 router.get(
@@ -44,7 +50,8 @@ router.get(
   validateQuery(listQuerySchema),
   asyncHandler(async (req: Request, res: Response) => {
     const { page, limit, skip } = parsePagination(req.query);
-    const { featured, parentId, isActive } = req.query as z.infer<typeof listQuerySchema>;
+    const { featured, parentId, isActive, locale: localeParam } = req.query as z.infer<typeof listQuerySchema>;
+    const locale = parseContentLocale(localeParam);
 
     const where = {
       ...(featured !== undefined && { featured: featured === 'true' }),
@@ -66,7 +73,7 @@ router.get(
     res.json({
       success: true,
       message: 'Services retrieved',
-      data: paginatedResponse(services, total, page, limit),
+      data: paginatedResponse(localizeList(services, locale, localizeService), total, page, limit),
     });
   })
 );
@@ -75,6 +82,7 @@ router.get(
   '/:slug',
   validateParams(slugParamSchema),
   asyncHandler(async (req: Request, res: Response) => {
+    const locale = parseContentLocale(req.query.locale);
     const service = await prisma.service.findUnique({
       where: { slug: req.params.slug },
       include: {
@@ -85,7 +93,7 @@ router.get(
 
     if (!service) throw new AppError('Service not found', 404);
 
-    res.json({ success: true, message: 'Service retrieved', data: service });
+    res.json({ success: true, message: 'Service retrieved', data: localizeService(service, locale) });
   })
 );
 

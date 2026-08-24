@@ -273,6 +273,8 @@ export interface Blog {
   titleRw?: string | null;
   slug: string;
   excerpt: string;
+  excerptFr?: string | null;
+  excerptRw?: string | null;
   content: string;
   contentFr?: string | null;
   contentRw?: string | null;

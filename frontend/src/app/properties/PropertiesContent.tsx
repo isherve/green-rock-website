@@ -7,6 +7,7 @@ import { MortgageCalculator } from "@/components/shared/MortgageCalculator";
 import { PropertySearchBar } from "@/components/shared/PropertySearchBar";
 import { usePublicList } from "@/hooks/usePublicData";
 import { MOCK_PROPERTIES } from "@/lib/mock-data";
+import { localizeProperty } from "@/lib/i18n/content";
 import { Loader2 } from "lucide-react";
 import type { Property } from "@/types";
 
@@ -29,7 +30,8 @@ export default function PropertiesContent() {
   const { data: properties = [], isLoading } = usePublicList<Property>(
     "/properties",
     { limit: "50" },
-    MOCK_PROPERTIES
+    MOCK_PROPERTIES,
+    localizeProperty
   );
 
   const filtered: Property[] = properties.filter((p: Property) => {

@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchPublicOne } from "@/lib/server-api";
+import { getServerLocale } from "@/lib/server-locale";
+import { localizeBlog } from "@/lib/i18n/content";
 import { MOCK_BLOG } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -12,13 +14,19 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await fetchPublicOne<Blog>(`/blog/${slug}`) ?? MOCK_BLOG.find((b) => b.slug === slug);
+  const locale = await getServerLocale();
+  const apiPost = await fetchPublicOne<Blog>(`/blog/${slug}`);
+  const mock = MOCK_BLOG.find((b) => b.slug === slug);
+  const post = apiPost ?? (mock ? localizeBlog(mock, locale) : null);
   return { title: post?.title, description: post?.excerpt };
 }
 
 export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params;
-  const post = (await fetchPublicOne<Blog>(`/blog/${slug}`)) ?? MOCK_BLOG.find((b) => b.slug === slug);
+  const locale = await getServerLocale();
+  const apiPost = await fetchPublicOne<Blog>(`/blog/${slug}`);
+  const mock = MOCK_BLOG.find((b) => b.slug === slug);
+  const post = apiPost ?? (mock ? localizeBlog(mock, locale) : null);
   if (!post) notFound();
 
   const cover = post.coverImage ?? "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80";

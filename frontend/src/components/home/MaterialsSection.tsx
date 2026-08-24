@@ -8,11 +8,17 @@ import { Button } from "@/components/ui/button";
 import { usePublicList } from "@/hooks/usePublicData";
 import { useLocale } from "@/hooks/useLocale";
 import { MOCK_PRODUCTS } from "@/lib/mock-data";
+import { localizeProduct } from "@/lib/i18n/content";
 import type { Product } from "@/types";
 
 export function MaterialsSection() {
   const { t } = useLocale();
-  const { data: products = [] } = usePublicList<Product>("/products", { limit: "6", featured: "true" }, MOCK_PRODUCTS);
+  const { data: products = [] } = usePublicList<Product>(
+    "/products",
+    { limit: "6", featured: "true" },
+    MOCK_PRODUCTS,
+    localizeProduct
+  );
 
   return (
     <section className="py-20 lg:py-28 section-padding bg-accent/50">

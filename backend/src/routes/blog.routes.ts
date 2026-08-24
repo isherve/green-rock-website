@@ -7,6 +7,12 @@ import { authenticate, requireAdmin, optionalAuth, AuthRequest } from '../middle
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { slugify } from '../utils/slug';
+import {
+  parseContentLocale,
+  localizeBlog,
+  localizeList,
+  multilingualSearch,
+} from '../lib/locale';
 
 const router = Router();
 
@@ -16,6 +22,8 @@ const createBlogSchema = z.object({
   titleRw: z.string().optional(),
   slug: z.string().optional(),
   excerpt: z.string().min(10),
+  excerptFr: z.string().optional(),
+  excerptRw: z.string().optional(),
   content: z.string().min(20),
   contentFr: z.string().optional(),
   contentRw: z.string().optional(),
@@ -46,6 +54,7 @@ const listQuerySchema = z.object({
   search: z.string().optional(),
   published: z.enum(['true', 'false']).optional(),
   showAll: z.enum(['true']).optional(),
+  locale: z.enum(['en', 'fr', 'rw']).optional(),
 });
 
 const blogInclude = {
@@ -60,6 +69,7 @@ router.get(
   asyncHandler(async (req: Request, res: Response) => {
     const query = req.query as z.infer<typeof listQuerySchema>;
     const authReq = req as AuthRequest;
+    const locale = parseContentLocale(query.locale);
     const isAdmin = authReq.user && ['ADMIN', 'MANAGER'].includes(authReq.user.role);
     const showAll = query.showAll === 'true' && isAdmin;
     const { page, limit, skip } = parsePagination(query);
@@ -73,10 +83,7 @@ router.get(
           ? { published: query.published === 'true' }
           : { published: true }),
       ...(query.search && {
-        OR: [
-          { title: { contains: query.search, mode: 'insensitive' as const } },
-          { excerpt: { contains: query.search, mode: 'insensitive' as const } },
-        ],
+        OR: multilingualSearch(['title', 'excerpt', 'content'], query.search),
       }),
     };
 
@@ -94,7 +101,7 @@ router.get(
     res.json({
       success: true,
       message: 'Blog posts retrieved',
-      data: paginatedResponse(posts, total, page, limit),
+      data: paginatedResponse(localizeList(posts, locale, localizeBlog), total, page, limit),
     });
   })
 );
@@ -104,6 +111,7 @@ router.get(
   optionalAuth,
   validateParams(slugParamSchema),
   asyncHandler(async (req: Request, res: Response) => {
+    const locale = parseContentLocale(req.query.locale);
     const post = await prisma.blog.findUnique({
       where: { slug: req.params.slug },
       include: {
@@ -124,7 +132,7 @@ router.get(
       data: { views: { increment: 1 } },
     });
 
-    res.json({ success: true, message: 'Blog post retrieved', data: post });
+    res.json({ success: true, message: 'Blog post retrieved', data: localizeBlog(post, locale) });
   })
 );
 

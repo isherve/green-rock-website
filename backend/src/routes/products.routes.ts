@@ -7,6 +7,12 @@ import { authenticate, requireAdmin } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { slugify } from '../utils/slug';
+import {
+  parseContentLocale,
+  localizeProduct,
+  localizeList,
+  multilingualSearch,
+} from '../lib/locale';
 
 const router = Router();
 
@@ -46,6 +52,7 @@ const listQuerySchema = z.object({
   maxPrice: z.string().optional(),
   sortBy: z.enum(['price', 'name', 'createdAt']).optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
+  locale: z.enum(['en', 'fr', 'rw']).optional(),
 });
 
 const productInclude = {
@@ -57,6 +64,7 @@ router.get(
   validateQuery(listQuerySchema),
   asyncHandler(async (req: Request, res: Response) => {
     const query = req.query as z.infer<typeof listQuerySchema>;
+    const locale = parseContentLocale(query.locale);
     const { page, limit, skip } = parsePagination(query);
     const sortBy = query.sortBy || 'createdAt';
     const sortOrder = query.sortOrder || 'desc';
@@ -79,10 +87,7 @@ router.get(
         },
       }),
       ...(query.search && {
-        OR: [
-          { name: { contains: query.search, mode: 'insensitive' as const } },
-          { description: { contains: query.search, mode: 'insensitive' as const } },
-        ],
+        OR: multilingualSearch(['name', 'description'], query.search),
       }),
     };
 
@@ -100,7 +105,7 @@ router.get(
     res.json({
       success: true,
       message: 'Products retrieved',
-      data: paginatedResponse(products, total, page, limit),
+      data: paginatedResponse(localizeList(products, locale, localizeProduct), total, page, limit),
     });
   })
 );
@@ -109,6 +114,7 @@ router.get(
   '/:slug',
   validateParams(slugParamSchema),
   asyncHandler(async (req: Request, res: Response) => {
+    const locale = parseContentLocale(req.query.locale);
     const product = await prisma.product.findUnique({
       where: { slug: req.params.slug },
       include: productInclude,
@@ -116,7 +122,7 @@ router.get(
 
     if (!product) throw new AppError('Product not found', 404);
 
-    res.json({ success: true, message: 'Product retrieved', data: product });
+    res.json({ success: true, message: 'Product retrieved', data: localizeProduct(product, locale) });
   })
 );
 

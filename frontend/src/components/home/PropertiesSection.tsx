@@ -8,11 +8,17 @@ import { Button } from "@/components/ui/button";
 import { usePublicList } from "@/hooks/usePublicData";
 import { useLocale } from "@/hooks/useLocale";
 import { MOCK_PROPERTIES } from "@/lib/mock-data";
+import { localizeProperty } from "@/lib/i18n/content";
 import type { Property } from "@/types";
 
 export function PropertiesSection() {
   const { t } = useLocale();
-  const { data: properties = [] } = usePublicList<Property>("/properties", { limit: "6", featured: "true" }, MOCK_PROPERTIES);
+  const { data: properties = [] } = usePublicList<Property>(
+    "/properties",
+    { limit: "6", featured: "true" },
+    MOCK_PROPERTIES,
+    localizeProperty
+  );
   const featured = properties.slice(0, 3);
 
   return (

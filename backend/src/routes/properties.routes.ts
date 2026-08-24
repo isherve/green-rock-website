@@ -8,6 +8,12 @@ import { authenticate, requireAdmin, optionalAuth } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { slugify } from '../utils/slug';
+import {
+  parseContentLocale,
+  localizeProperty,
+  localizeList,
+  multilingualSearch,
+} from '../lib/locale';
 
 const router = Router();
 
@@ -70,6 +76,7 @@ const searchQuerySchema = z.object({
   featured: z.enum(['true', 'false']).optional(),
   sortBy: z.enum(['price', 'createdAt', 'area']).optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
+  locale: z.enum(['en', 'fr', 'rw']).optional(),
 });
 
 function buildPropertyWhere(query: z.infer<typeof searchQuerySchema>) {
@@ -96,11 +103,9 @@ function buildPropertyWhere(query: z.infer<typeof searchQuerySchema>) {
       },
     }),
     ...(query.search && {
-      OR: [
-        { title: { contains: query.search, mode: 'insensitive' as const } },
-        { description: { contains: query.search, mode: 'insensitive' as const } },
+      OR: multilingualSearch(['title', 'description'], query.search).concat([
         { location: { contains: query.search, mode: 'insensitive' as const } },
-      ],
+      ]),
     }),
   };
 }
@@ -116,6 +121,7 @@ router.get(
   validateQuery(searchQuerySchema),
   asyncHandler(async (req: Request, res: Response) => {
     const query = req.query as z.infer<typeof searchQuerySchema>;
+    const locale = parseContentLocale(query.locale);
     const { page, limit, skip } = parsePagination(query);
     const where = buildPropertyWhere(query);
     const sortBy = query.sortBy || 'createdAt';
@@ -135,7 +141,7 @@ router.get(
     res.json({
       success: true,
       message: 'Properties retrieved',
-      data: paginatedResponse(properties, total, page, limit),
+      data: paginatedResponse(localizeList(properties, locale, localizeProperty), total, page, limit),
     });
   })
 );
@@ -145,6 +151,7 @@ router.get(
   optionalAuth,
   validateParams(slugParamSchema),
   asyncHandler(async (req: Request, res: Response) => {
+    const locale = parseContentLocale(req.query.locale);
     const property = await prisma.property.findUnique({
       where: { slug: req.params.slug },
       include: propertyInclude,
@@ -168,7 +175,7 @@ router.get(
     res.json({
       success: true,
       message: 'Property retrieved',
-      data: { ...property, isFavorited },
+      data: { ...localizeProperty(property, locale), isFavorited },
     });
   })
 );

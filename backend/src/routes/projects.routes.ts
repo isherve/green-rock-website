@@ -8,6 +8,12 @@ import { authenticate, requireAdmin } from '../middleware/auth';
 import { validateBody, validateParams, validateQuery } from '../middleware/validate';
 import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { slugify } from '../utils/slug';
+import {
+  parseContentLocale,
+  localizeProject,
+  localizeList,
+  multilingualSearch,
+} from '../lib/locale';
 
 const router = Router();
 
@@ -47,6 +53,7 @@ const listQuerySchema = z.object({
   status: z.nativeEnum(ProjectStatus).optional(),
   featured: z.enum(['true', 'false']).optional(),
   search: z.string().optional(),
+  locale: z.enum(['en', 'fr', 'rw']).optional(),
 });
 
 const projectInclude = {
@@ -58,17 +65,17 @@ router.get(
   validateQuery(listQuerySchema),
   asyncHandler(async (req: Request, res: Response) => {
     const query = req.query as z.infer<typeof listQuerySchema>;
+    const locale = parseContentLocale(query.locale);
     const { page, limit, skip } = parsePagination(query);
 
     const where = {
       ...(query.status && { status: query.status }),
       ...(query.featured !== undefined && { featured: query.featured === 'true' }),
       ...(query.search && {
-        OR: [
-          { title: { contains: query.search, mode: 'insensitive' as const } },
+        OR: multilingualSearch(['title', 'description'], query.search).concat([
           { location: { contains: query.search, mode: 'insensitive' as const } },
           { client: { contains: query.search, mode: 'insensitive' as const } },
-        ],
+        ]),
       }),
     };
 
@@ -86,7 +93,7 @@ router.get(
     res.json({
       success: true,
       message: 'Projects retrieved',
-      data: paginatedResponse(projects, total, page, limit),
+      data: paginatedResponse(localizeList(projects, locale, localizeProject), total, page, limit),
     });
   })
 );
@@ -95,6 +102,7 @@ router.get(
   '/:slug',
   validateParams(slugParamSchema),
   asyncHandler(async (req: Request, res: Response) => {
+    const locale = parseContentLocale(req.query.locale);
     const project = await prisma.project.findUnique({
       where: { slug: req.params.slug },
       include: projectInclude,
@@ -102,7 +110,7 @@ router.get(
 
     if (!project) throw new AppError('Project not found', 404);
 
-    res.json({ success: true, message: 'Project retrieved', data: project });
+    res.json({ success: true, message: 'Project retrieved', data: localizeProject(project, locale) });
   })
 );
 

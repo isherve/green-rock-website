@@ -13,6 +13,7 @@ import { LOCALES, type LocaleCode } from "@/lib/constants";
 import { translate } from "@/lib/i18n/translations";
 
 const STORAGE_KEY = "green-rock-locale";
+const LOCALE_COOKIE = "green-rock-locale";
 
 type LocaleContextValue = {
   locale: LocaleCode;
@@ -34,6 +35,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     if (stored && LOCALES.some((l) => l.code === stored)) {
       setLocaleState(stored);
       document.documentElement.lang = stored;
+      document.cookie = `${LOCALE_COOKIE}=${stored};path=/;max-age=31536000;sameSite=lax`;
     }
     setIsReady(true);
   }, []);
@@ -42,6 +44,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     setLocaleState(code);
     localStorage.setItem(STORAGE_KEY, code);
     document.documentElement.lang = code;
+    document.cookie = `${LOCALE_COOKIE}=${code};path=/;max-age=31536000;sameSite=lax`;
   }, []);
 
   const t = useCallback((key: string) => translate(key, locale), [locale]);

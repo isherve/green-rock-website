@@ -431,6 +431,8 @@ model Blog {
   titleRw       String?
   slug          String    @unique
   excerpt       String    @db.Text
+  excerptFr     String?   @db.Text
+  excerptRw     String?   @db.Text
   content       String    @db.Text
   contentFr     String?   @db.Text
   contentRw     String?   @db.Text

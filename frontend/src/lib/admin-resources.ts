@@ -3,6 +3,15 @@ import type { FieldDef } from "@/components/admin/AdminCRUD";
 /** Stable reference — avoids AdminCRUD refetch loops when passed as listParams */
 export const ADMIN_LIST_ALL = { showAll: "true" } as const;
 
+function i18nText(base: string, label: string, opts?: { required?: boolean; rows?: number }): FieldDef[] {
+  const type = opts?.rows ? "textarea" as const : "text" as const;
+  return [
+    { name: base, label: `${label} (English)`, type, required: opts?.required, rows: opts?.rows },
+    { name: `${base}Fr`, label: `${label} (French)`, type, rows: opts?.rows },
+    { name: `${base}Rw`, label: `${label} (Kinyarwanda)`, type, rows: opts?.rows },
+  ];
+}
+
 const propertyTypes = [
   { value: "HOUSE", label: "House" }, { value: "APARTMENT", label: "Apartment" },
   { value: "LAND", label: "Land" }, { value: "COMMERCIAL", label: "Commercial" },
@@ -29,8 +38,8 @@ const blogCategories = [
 ].map((c) => ({ value: c, label: c }));
 
 export const PROPERTY_FIELDS: FieldDef[] = [
-  { name: "title", label: "Title", type: "text", required: true },
-  { name: "description", label: "Description", type: "textarea", required: true, rows: 4 },
+  ...i18nText("title", "Title", { required: true }),
+  ...i18nText("description", "Description", { required: true, rows: 4 }),
   { name: "price", label: "Price (RWF)", type: "number", required: true },
   { name: "location", label: "Location", type: "text", required: true },
   { name: "address", label: "Address", type: "text" },
@@ -46,8 +55,8 @@ export const PROPERTY_FIELDS: FieldDef[] = [
 ];
 
 export const PROJECT_FIELDS: FieldDef[] = [
-  { name: "title", label: "Title", type: "text", required: true },
-  { name: "description", label: "Description", type: "textarea", required: true, rows: 4 },
+  ...i18nText("title", "Title", { required: true }),
+  ...i18nText("description", "Description", { required: true, rows: 4 }),
   { name: "location", label: "Location", type: "text", required: true },
   { name: "client", label: "Client", type: "text" },
   { name: "status", label: "Status", type: "select", options: projectStatuses, defaultValue: "ONGOING" },
@@ -57,8 +66,8 @@ export const PROJECT_FIELDS: FieldDef[] = [
 ];
 
 export const PRODUCT_FIELDS: FieldDef[] = [
-  { name: "name", label: "Product Name", type: "text", required: true },
-  { name: "description", label: "Description", type: "textarea", required: true, rows: 3 },
+  ...i18nText("name", "Product Name", { required: true }),
+  ...i18nText("description", "Description", { required: true, rows: 3 }),
   { name: "price", label: "Price (RWF)", type: "number", required: true },
   { name: "categoryId", label: "Category", type: "select", required: true, loadOptionsKey: "categories" },
   { name: "stock", label: "Stock", type: "number", defaultValue: 0 },
@@ -70,9 +79,9 @@ export const PRODUCT_FIELDS: FieldDef[] = [
 ];
 
 export const BLOG_FIELDS: FieldDef[] = [
-  { name: "title", label: "Title", type: "text", required: true },
-  { name: "excerpt", label: "Excerpt", type: "textarea", required: true, rows: 2 },
-  { name: "content", label: "Content", type: "textarea", required: true, rows: 8 },
+  ...i18nText("title", "Title", { required: true }),
+  ...i18nText("excerpt", "Excerpt", { required: true, rows: 2 }),
+  ...i18nText("content", "Content", { required: true, rows: 8 }),
   { name: "category", label: "Category", type: "select", required: true, options: blogCategories },
   { name: "coverImage", label: "Cover Image", type: "image" },
   { name: "tags", label: "Tags (comma separated)", type: "text" },
@@ -200,8 +209,8 @@ export const CATEGORY_FIELDS: FieldDef[] = [
 ];
 
 export const SERVICE_FIELDS: FieldDef[] = [
-  { name: "title", label: "Service Title", type: "text", required: true },
-  { name: "description", label: "Description", type: "textarea", required: true, rows: 4 },
+  ...i18nText("title", "Service Title", { required: true }),
+  ...i18nText("description", "Description", { required: true, rows: 4 }),
   { name: "icon", label: "Icon name (Lucide)", type: "text" },
   { name: "image", label: "Image", type: "image" },
   { name: "featured", label: "Featured", type: "boolean", defaultValue: false },

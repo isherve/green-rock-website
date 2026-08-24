@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PageHero } from "@/components/shared/PageHero";
 import { fetchPublicOne } from "@/lib/server-api";
+import { getServerLocale } from "@/lib/server-locale";
+import { localizeService } from "@/lib/i18n/content";
 import { MOCK_SERVICES } from "@/lib/mock-data";
 import { getServiceImage } from "@/lib/service-images";
 import { ContactForm } from "@/components/shared/ContactForm";
@@ -24,13 +26,19 @@ const DETAILS: Record<string, string[]> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const service = (await fetchPublicOne<Service>(`/services/${slug}`)) ?? MOCK_SERVICES.find((s) => s.slug === slug);
+  const locale = await getServerLocale();
+  const apiService = await fetchPublicOne<Service>(`/services/${slug}`);
+  const mock = MOCK_SERVICES.find((s) => s.slug === slug);
+  const service = apiService ?? (mock ? localizeService(mock, locale) : null);
   return { title: service?.title, description: service?.description };
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
-  const service = (await fetchPublicOne<Service>(`/services/${slug}`)) ?? MOCK_SERVICES.find((s) => s.slug === slug);
+  const locale = await getServerLocale();
+  const apiService = await fetchPublicOne<Service>(`/services/${slug}`);
+  const mock = MOCK_SERVICES.find((s) => s.slug === slug);
+  const service = apiService ?? (mock ? localizeService(mock, locale) : null);
   if (!service) notFound();
 
   return (

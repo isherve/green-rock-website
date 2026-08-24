@@ -8,11 +8,17 @@ import { Button } from "@/components/ui/button";
 import { usePublicList } from "@/hooks/usePublicData";
 import { useLocale } from "@/hooks/useLocale";
 import { MOCK_PROJECTS } from "@/lib/mock-data";
+import { localizeProject } from "@/lib/i18n/content";
 import type { Project } from "@/types";
 
 export function ProjectsSection() {
   const { t } = useLocale();
-  const { data: projects = [] } = usePublicList<Project>("/projects", { limit: "6", featured: "true" }, MOCK_PROJECTS);
+  const { data: projects = [] } = usePublicList<Project>(
+    "/projects",
+    { limit: "6", featured: "true" },
+    MOCK_PROJECTS,
+    localizeProject
+  );
 
   return (
     <section className="py-20 lg:py-28 section-padding">

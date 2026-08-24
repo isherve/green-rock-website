@@ -6,6 +6,7 @@ import { Search, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
+import { useLocale } from "@/hooks/useLocale";
 
 type SearchResults = {
   properties: { slug: string; title: string; location: string }[];
@@ -15,6 +16,7 @@ type SearchResults = {
 };
 
 export function SiteSearch({ compact = false }: { compact?: boolean }) {
+  const { locale } = useLocale();
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<SearchResults | null>(null);
@@ -27,7 +29,7 @@ export function SiteSearch({ compact = false }: { compact?: boolean }) {
     }
     setLoading(true);
     try {
-      const res = await api.get("/search", { params: { q: q.trim(), limit: 5 } });
+      const res = await api.get("/search", { params: { q: q.trim(), limit: 5, locale } });
       setResults(res.data.data);
       setOpen(true);
     } catch {

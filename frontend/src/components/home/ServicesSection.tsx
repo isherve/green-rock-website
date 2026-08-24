@@ -8,11 +8,17 @@ import { Button } from "@/components/ui/button";
 import { usePublicList } from "@/hooks/usePublicData";
 import { useLocale } from "@/hooks/useLocale";
 import { MOCK_SERVICES } from "@/lib/mock-data";
+import { localizeService } from "@/lib/i18n/content";
 import type { Service } from "@/types";
 
 export function ServicesSection() {
   const { t } = useLocale();
-  const { data: services = [] } = usePublicList<Service>("/services", { limit: "6", featured: "true" }, MOCK_SERVICES);
+  const { data: services = [] } = usePublicList<Service>(
+    "/services",
+    { limit: "6", featured: "true" },
+    MOCK_SERVICES,
+    localizeService
+  );
   const featured = services.filter((s) => s.featured).slice(0, 6).length ? services.filter((s) => s.featured).slice(0, 6) : services.slice(0, 6);
 
   return (

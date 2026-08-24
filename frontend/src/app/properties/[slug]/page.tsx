@@ -13,7 +13,8 @@ import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 import { MortgageCalculator } from "@/components/shared/MortgageCalculator";
 
 import { fetchPublicOne } from "@/lib/server-api";
-
+import { getServerLocale } from "@/lib/server-locale";
+import { localizeProperty } from "@/lib/i18n/content";
 import { MOCK_PROPERTIES } from "@/lib/mock-data";
 
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const { slug } = await params;
 
-  const property = (await fetchPublicOne<Property>(`/properties/${slug}`)) ?? MOCK_PROPERTIES.find((p) => p.slug === slug);
+  const locale = await getServerLocale();
+  const apiProperty = await fetchPublicOne<Property>(`/properties/${slug}`);
+  const mock = MOCK_PROPERTIES.find((p) => p.slug === slug);
+  const property = apiProperty ?? (mock ? localizeProperty(mock, locale) : null);
 
   return { title: property?.title, description: property?.description };
 
@@ -50,7 +54,10 @@ export default async function PropertyDetailPage({ params }: Props) {
 
   const { slug } = await params;
 
-  const property = (await fetchPublicOne<Property>(`/properties/${slug}`)) ?? MOCK_PROPERTIES.find((p) => p.slug === slug);
+  const locale = await getServerLocale();
+  const apiProperty = await fetchPublicOne<Property>(`/properties/${slug}`);
+  const mock = MOCK_PROPERTIES.find((p) => p.slug === slug);
+  const property = apiProperty ?? (mock ? localizeProperty(mock, locale) : null);
 
   if (!property) notFound();
 
