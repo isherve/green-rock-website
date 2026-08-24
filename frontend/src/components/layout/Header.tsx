@@ -20,6 +20,9 @@ import { NavMegaMenu } from "@/components/layout/NavMegaMenu";
 import { MobileNavAccordion } from "@/components/layout/MobileNavAccordion";
 import { NAV_LINKS } from "@/lib/nav-data";
 import { SITE_CONFIG } from "@/lib/constants";
+import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
+import { useLocale } from "@/hooks/useLocale";
+import { translate } from "@/lib/i18n/translations";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -27,6 +30,7 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
+  const { locale } = useLocale();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -57,8 +61,12 @@ export function Header() {
             </a>
           </div>
           <div className="flex items-center gap-4 text-white/70">
-            <Link href="/portal/login" className="hover:text-secondary transition-colors">Customer Portal</Link>
-            <Link href="/admin/login" className="hover:text-secondary transition-colors">Admin ERP</Link>
+            <Link href="/portal/login" className="hover:text-secondary transition-colors">
+              {translate("customerPortal", locale)}
+            </Link>
+            <Link href="/admin/login" className="hover:text-secondary transition-colors">
+              {translate("adminPortal", locale)}
+            </Link>
             <span className="text-white/40">|</span>
             <span>{SITE_CONFIG.address}</span>
           </div>
@@ -107,6 +115,10 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <div className="hidden md:block">
+              <LanguageSwitcher variant="header" />
+            </div>
+
             <Button variant="ghost" size="icon" className="hidden sm:flex" asChild>
               <Link href="/search" aria-label="Search site">
                 <Search className="h-4 w-4" />
@@ -129,7 +141,7 @@ export function Header() {
             )}
 
             <Button asChild className="hidden md:inline-flex rounded-lg">
-              <Link href="/properties">Search Property</Link>
+              <Link href="/properties">{translate("searchProperty", locale)}</Link>
             </Button>
 
             <Button
@@ -166,21 +178,26 @@ export function Header() {
                 <div className="pt-4 px-4 space-y-3 border-t border-border mt-3">
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Portals</p>
                   <div className="grid grid-cols-1 gap-2">
+                    <LanguageSwitcher variant="compact" className="w-full mb-1" />
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/search" onClick={() => setMobileOpen(false)}>
-                        <Search className="w-4 h-4 mr-2" /> Search Site
+                        <Search className="w-4 h-4 mr-2" /> {translate("searchSite", locale)}
                       </Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
-                      <Link href="/portal/login" onClick={() => setMobileOpen(false)}>Customer Portal</Link>
+                      <Link href="/portal/login" onClick={() => setMobileOpen(false)}>
+                        {translate("customerPortal", locale)}
+                      </Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
-                      <Link href="/admin/login" onClick={() => setMobileOpen(false)}>Admin ERP</Link>
+                      <Link href="/admin/login" onClick={() => setMobileOpen(false)}>
+                        {translate("adminPortal", locale)}
+                      </Link>
                     </Button>
                   </div>
                   <Button asChild className="w-full rounded-lg">
                     <Link href="/properties" onClick={() => setMobileOpen(false)}>
-                      Search Property
+                      {translate("searchProperty", locale)}
                     </Link>
                   </Button>
                 </div>

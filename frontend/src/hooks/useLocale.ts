@@ -13,6 +13,7 @@ export function useLocale() {
     const stored = localStorage.getItem(STORAGE_KEY) as LocaleCode | null;
     if (stored && LOCALES.some((l) => l.code === stored)) {
       setLocaleState(stored);
+      document.documentElement.lang = stored;
     }
     setIsReady(true);
   }, []);

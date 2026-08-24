@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useLocale } from "@/hooks/useLocale";
+import { translate } from "@/lib/i18n/translations";
 
 interface NewsletterFormProps {
   variant?: "default" | "footer";
@@ -16,6 +18,7 @@ export function NewsletterForm({
   variant = "default",
   className,
 }: NewsletterFormProps) {
+  const { locale } = useLocale();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
@@ -57,7 +60,7 @@ export function NewsletterForm({
     >
       <Input
         type="email"
-        placeholder="Enter your email"
+        placeholder={translate("footerEmailPlaceholder", locale)}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
@@ -77,7 +80,7 @@ export function NewsletterForm({
         ) : (
           <>
             <Send className="h-4 w-4" />
-            Subscribe
+            {translate("footerSubscribe", locale)}
           </>
         )}
       </Button>

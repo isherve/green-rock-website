@@ -5,7 +5,6 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { AnimatedPageShell } from "@/components/motion/AnimatedPageShell";
-import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -22,7 +21,6 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
       <AnimatedPageShell>{children}</AnimatedPageShell>
       <Footer />
       <CookieConsent />
-      <WhatsAppButton />
     </>
   );
 }
