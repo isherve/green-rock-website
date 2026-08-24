@@ -11,6 +11,7 @@ import { parsePagination, paginatedResponse } from '../utils/pagination';
 import { generateNumber } from '../lib/roles';
 import { initiateOnlinePayment } from '../lib/payment-gateway';
 import { createUserNotification } from '../lib/notifications';
+import { sendPaymentAdminNotification, notifyAsync } from '../lib/email';
 
 const router = Router();
 
@@ -50,7 +51,13 @@ router.post(
       return;
     }
 
-    const payment = await prisma.payment.findFirst({ where: { reference: tx_ref } });
+    const payment = await prisma.payment.findFirst({
+      where: { reference: tx_ref },
+      include: {
+        user: { select: { name: true, email: true } },
+        invoice: { select: { invoiceNumber: true } },
+      },
+    });
     if (!payment) throw new AppError('Payment reference not found', 404);
 
     await prisma.payment.update({
@@ -75,6 +82,17 @@ router.post(
         }
       }
     }
+
+    notifyAsync('payment-admin', () =>
+      sendPaymentAdminNotification({
+        customerName: payment.user.name,
+        customerEmail: payment.user.email,
+        amount: amount ?? payment.amount,
+        currency: payment.currency,
+        reference: tx_ref,
+        invoiceNumber: payment.invoice?.invoiceNumber,
+      })
+    );
 
     createUserNotification({
       userId: payment.userId,

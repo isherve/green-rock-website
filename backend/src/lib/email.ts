@@ -87,6 +87,39 @@ export async function sendContactNotification(data: {
   });
 }
 
+export async function sendContactCustomerConfirmation(data: {
+  name: string;
+  email: string;
+}): Promise<void> {
+  await sendEmail({
+    to: data.email,
+    subject: 'Green Rock — We Received Your Message',
+    html: buildCustomerEmail({
+      title: 'Message Received',
+      greeting: `Dear ${data.name},`,
+      body: `<p style="margin:0;">Thank you for contacting Green Rock. Our team has received your message and will reply within 1–2 business days.</p>
+        <p style="margin:12px 0 0;">For urgent matters, call us at <strong>+250 785 652 011</strong>.</p>`,
+    }),
+  });
+}
+
+export async function sendInquiryCustomerConfirmation(data: {
+  name: string;
+  email: string;
+  type: string;
+}): Promise<void> {
+  const typeLabel = INQUIRY_TYPE_LABELS[data.type] || data.type;
+  await sendEmail({
+    to: data.email,
+    subject: `Green Rock — Your ${typeLabel} Request is Received`,
+    html: buildCustomerEmail({
+      title: 'Request Received',
+      greeting: `Dear ${data.name},`,
+      body: `<p style="margin:0;">We received your <strong>${typeLabel}</strong> request. A Green Rock team member will follow up with you shortly.</p>`,
+    }),
+  });
+}
+
 export async function sendInquiryNotification(data: {
   name: string;
   email: string;
@@ -396,5 +429,63 @@ export async function sendOrderStatusCustomerNotification(data: {
       body: `<p style="margin:0;">Your material order <strong>${data.orderNumber}</strong> status has been updated to <strong>${data.status.replace(/_/g, ' ')}</strong>. Check your portal for details.</p>`,
     }),
   });
+}
+
+export async function sendPaymentAdminNotification(data: {
+  customerName: string;
+  customerEmail: string;
+  amount: number;
+  currency: string;
+  reference: string;
+  invoiceNumber?: string;
+}): Promise<void> {
+  await sendEmail({
+    to: getAdminEmail(),
+    subject: `[Green Rock] Payment Received — ${data.amount.toLocaleString()} ${data.currency}`,
+    replyTo: data.customerEmail,
+    html: buildAdminEmail({
+      preheader: `Payment from ${data.customerName}`,
+      badge: 'Payment',
+      badgeColor: '#16a34a',
+      title: 'Payment Received',
+      intro: 'A customer completed an online payment.',
+      rows: [
+        { label: 'Customer', value: data.customerName, highlight: true },
+        { label: 'Email', value: data.customerEmail },
+        { label: 'Amount', value: `${data.amount.toLocaleString()} ${data.currency}`, highlight: true },
+        { label: 'Reference', value: data.reference },
+        ...(data.invoiceNumber ? [{ label: 'Invoice', value: data.invoiceNumber }] : []),
+        { label: 'Received', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
+      ],
+      actionUrl: `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/invoices`,
+      actionLabel: 'View Invoices',
+    }),
+  });
+}
+
+export async function sendTestEmail(): Promise<void> {
+  const adminEmail = getAdminEmail();
+  await sendEmail({
+    to: adminEmail,
+    subject: '[Green Rock] Test Email — Notifications Working',
+    html: buildAdminEmail({
+      preheader: 'Email notifications are configured correctly',
+      badge: 'Test',
+      badgeColor: '#0b6e4f',
+      title: 'Email Setup Successful',
+      intro: 'This is a test email from your Green Rock website. If you received this, SMTP is configured correctly.',
+      rows: [
+        { label: 'Sent to', value: adminEmail, highlight: true },
+        { label: 'Time', value: new Date().toLocaleString('en-RW', { dateStyle: 'full', timeStyle: 'short' }) },
+        { label: 'SMTP Host', value: process.env.SMTP_HOST || 'smtp.gmail.com' },
+      ],
+      message: 'You will now receive emails when visitors submit contact forms, book appointments, place orders, open support tickets, subscribe to the newsletter, or apply for jobs.',
+    }),
+  });
+}
+
+/** Fire-and-forget with error logging (use instead of .catch(() => {})) */
+export function notifyAsync(label: string, fn: () => Promise<void>): void {
+  fn().catch((err) => console.error(`[Email] ${label} failed:`, err));
 }
 

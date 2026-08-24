@@ -5,6 +5,8 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { AppError } from '../utils/AppError';
 import { authenticate, requireAdmin } from '../middleware/auth';
 import { validateBody, validateParams } from '../middleware/validate';
+import { getEmailConfigStatus } from '../lib/email-config';
+import { sendTestEmail } from '../lib/email';
 
 const router = Router();
 
@@ -15,6 +17,57 @@ const updateSettingSchema = z.object({
 const bulkUpdateSchema = z.record(z.unknown());
 
 const keyParamSchema = z.object({ key: z.string().min(1) });
+
+const EMAIL_EVENTS = [
+  { event: 'Contact form message', recipient: 'Admin', customerCopy: true },
+  { event: 'Quote / property / material inquiry', recipient: 'Admin', customerCopy: true },
+  { event: 'Appointment booking', recipient: 'Admin + Customer', customerCopy: true },
+  { event: 'Newsletter subscription', recipient: 'Admin', customerCopy: false },
+  { event: 'Job application', recipient: 'Admin + Applicant', customerCopy: true },
+  { event: 'Material order (portal)', recipient: 'Admin + Customer', customerCopy: true },
+  { event: 'Support ticket (portal)', recipient: 'Admin', customerCopy: false },
+  { event: 'Ticket reply from staff', recipient: 'Customer', customerCopy: false },
+  { event: 'Invoice issued', recipient: 'Customer', customerCopy: false },
+  { event: 'Online payment received', recipient: 'Admin', customerCopy: false },
+  { event: 'Order status update', recipient: 'Customer', customerCopy: false },
+];
+
+router.get(
+  '/email/status',
+  authenticate,
+  requireAdmin,
+  asyncHandler(async (_req: Request, res: Response) => {
+    res.json({
+      success: true,
+      message: 'Email status retrieved',
+      data: {
+        ...getEmailConfigStatus(),
+        events: EMAIL_EVENTS,
+      },
+    });
+  })
+);
+
+router.post(
+  '/email/test',
+  authenticate,
+  requireAdmin,
+  asyncHandler(async (_req: Request, res: Response) => {
+    const status = getEmailConfigStatus();
+    if (!status.configured) {
+      throw new AppError(
+        'Email is not configured. Set SMTP_USER and SMTP_PASS in Vercel environment variables (Gmail App Password).',
+        503
+      );
+    }
+    await sendTestEmail();
+    res.json({
+      success: true,
+      message: `Test email sent to ${status.adminEmail}`,
+      data: { sentTo: status.adminEmail },
+    });
+  })
+);
 
 router.get(
   '/',
