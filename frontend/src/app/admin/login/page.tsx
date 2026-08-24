@@ -26,7 +26,7 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const { register, handleSubmit, formState: { isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { email: "admin@greenrock.com", password: "" },
+    defaultValues: { email: "ishimwehervin10@gmail.com", password: "" },
   });
 
   const onSubmit = async (data: FormData) => {
@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
           <p className="text-white/60 text-sm mt-2">{SITE_CONFIG.shortName} Dashboard</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input type="email" placeholder="Email" defaultValue="admin@greenrock.com" className="bg-white/10 border-white/20 text-white placeholder:text-white/40" {...register("email")} />
+          <Input type="email" placeholder="Email" defaultValue="ishimwehervin10@gmail.com" className="bg-white/10 border-white/20 text-white placeholder:text-white/40" {...register("email")} />
           <Input type="password" placeholder="Password" className="bg-white/10 border-white/20 text-white placeholder:text-white/40" {...register("password")} />
           {error && <p className="text-red-400 text-sm">{error}</p>}
           <Button type="submit" className="w-full" disabled={isSubmitting}>
