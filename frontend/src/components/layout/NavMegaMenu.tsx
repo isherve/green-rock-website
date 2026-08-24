@@ -32,7 +32,7 @@ export function NavMegaMenu({ item, isOpen, onClose }: NavMegaMenuProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22 }}
-            className="absolute left-0 right-0 top-full z-50 hidden lg:block border-b border-border shadow-2xl bg-background"
+            className="absolute left-0 right-0 top-full z-50 hidden lg:block border-b border-slate-200 dark:border-slate-700 shadow-2xl bg-white dark:bg-slate-900"
             onMouseLeave={onClose}
           >
             <div className="container mx-auto px-4 py-8">

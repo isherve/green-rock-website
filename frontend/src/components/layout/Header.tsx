@@ -77,9 +77,8 @@ export function Header() {
       <header
         className={cn(
           "sticky top-0 z-50 w-full transition-all duration-300 border-b",
-          isScrolled
-            ? "bg-background/98 shadow-md border-border backdrop-blur-md"
-            : "bg-background/95 backdrop-blur-sm border-border/60"
+          "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700",
+          isScrolled && "shadow-md"
         )}
         onMouseLeave={() => setActiveMega(null)}
       >
@@ -95,7 +94,8 @@ export function Header() {
                     href={item.href}
                     onMouseEnter={() => hasMega && setActiveMega(item.label)}
                     className={cn(
-                      "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-foreground/90 transition-colors hover:text-primary whitespace-nowrap",
+                      "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap",
+                      "text-slate-800 dark:text-slate-100 hover:text-primary",
                       activeMega === item.label && "text-primary"
                     )}
                   >

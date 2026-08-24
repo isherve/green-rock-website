@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SITE_CONFIG } from "@/lib/constants";
+import { LogoMark } from "@/components/shared/LogoMark";
 import { cn } from "@/lib/utils";
 
 interface BrandLogoProps {
@@ -11,34 +11,35 @@ interface BrandLogoProps {
 }
 
 const sizes = {
-  sm: { img: 40, className: "h-10 w-10" },
-  md: { img: 48, className: "h-11 w-11" },
-  lg: { img: 56, className: "h-14 w-14" },
+  sm: "h-10 w-10",
+  md: "h-11 w-11",
+  lg: "h-14 w-14",
 };
 
 export function BrandLogo({ size = "md", showText = true, variant = "default", className }: BrandLogoProps) {
-  const s = sizes[size];
   const onDark = variant === "onDark";
 
   return (
     <Link href="/" className={cn("flex items-center gap-3 group shrink-0", className)}>
-      <Image
-        src={SITE_CONFIG.logo}
-        alt={`${SITE_CONFIG.name} logo`}
-        width={s.img}
-        height={s.img}
+      <span
         className={cn(
-          s.className,
-          "rounded-full object-cover ring-2 ring-primary/30 group-hover:ring-primary/50 transition-all bg-white"
+          sizes[size],
+          "rounded-full ring-2 ring-primary/30 group-hover:ring-primary/50 transition-all overflow-hidden inline-flex bg-white"
         )}
-        priority
-      />
+      >
+        <LogoMark className="h-full w-full" />
+      </span>
       {showText && (
         <div className="hidden sm:block">
-          <span className={cn("font-bold text-lg leading-tight block font-display", onDark ? "text-white" : "text-foreground")}>
+          <span
+            className={cn(
+              "font-bold text-lg leading-tight block font-display",
+              onDark ? "text-white" : "text-slate-900 dark:text-white"
+            )}
+          >
             Green Rock
           </span>
-          <span className={cn("text-xs tracking-wide", onDark ? "text-white/60" : "text-muted-foreground")}>
+          <span className={cn("text-xs tracking-wide", onDark ? "text-white/70" : "text-slate-600 dark:text-white/70")}>
             General Supply Ltd
           </span>
         </div>
