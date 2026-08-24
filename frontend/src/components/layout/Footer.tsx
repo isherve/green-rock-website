@@ -14,7 +14,6 @@ import {
 import { SITE_CONFIG, SOCIAL_LINKS } from "@/lib/constants";
 import { BrandLogo } from "@/components/shared/BrandLogo";
 import { NewsletterForm } from "@/components/shared/NewsletterForm";
-import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
 import { useLocale } from "@/hooks/useLocale";
 import { FOOTER_NAV, translate } from "@/lib/i18n/translations";
 
@@ -151,14 +150,12 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-white/8 max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            <p className="text-xs text-white/45 text-center lg:text-left order-3 lg:order-1">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <p className="text-xs text-white/45 text-center md:text-left">
               © {currentYear} {SITE_CONFIG.shortName}. {translate("footerRights", locale)}
             </p>
 
-            <LanguageSwitcher variant="footer" className="order-1 lg:order-2" />
-
-            <div className="flex items-center gap-2 order-2 lg:order-3">
+            <div className="flex items-center gap-2">
               {SOCIAL_LINKS.map((social) => {
                 const Icon = socialIcons[social.icon] ?? Facebook;
                 return (

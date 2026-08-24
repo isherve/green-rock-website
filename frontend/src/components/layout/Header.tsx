@@ -60,7 +60,9 @@ export function Header() {
               {SITE_CONFIG.email}
             </a>
           </div>
-          <div className="flex items-center gap-4 text-white/70">
+          <div className="flex items-center gap-4 text-white/70 flex-wrap justify-end">
+            <LanguageSwitcher variant="pills" className="hidden lg:flex" />
+            <span className="hidden lg:inline text-white/30">|</span>
             <Link href="/portal/login" className="hover:text-secondary transition-colors">
               {translate("customerPortal", locale)}
             </Link>
@@ -115,10 +117,6 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <div className="hidden md:block">
-              <LanguageSwitcher variant="header" />
-            </div>
-
             <Button variant="ghost" size="icon" className="hidden sm:flex" asChild>
               <Link href="/search" aria-label="Search site">
                 <Search className="h-4 w-4" />
@@ -176,9 +174,9 @@ export function Header() {
                   onNavigate={() => setMobileOpen(false)}
                 />
                 <div className="pt-4 px-4 space-y-3 border-t border-border mt-3">
+                  <LanguageSwitcher variant="pills" surface="light" className="lg:hidden" />
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Portals</p>
                   <div className="grid grid-cols-1 gap-2">
-                    <LanguageSwitcher variant="compact" className="w-full mb-1" />
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/search" onClick={() => setMobileOpen(false)}>
                         <Search className="w-4 h-4 mr-2" /> {translate("searchSite", locale)}
