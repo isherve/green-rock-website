@@ -61,8 +61,6 @@ export function Header() {
             </a>
           </div>
           <div className="flex items-center gap-4 text-white/70 flex-wrap justify-end">
-            <LanguageSwitcher variant="pills" className="hidden lg:flex" />
-            <span className="hidden lg:inline text-white/30">|</span>
             <Link href="/portal/login" className="hover:text-secondary transition-colors">
               {translate("customerPortal", locale)}
             </Link>

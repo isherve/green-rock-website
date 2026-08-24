@@ -1,13 +1,15 @@
 "use client";
 
-import { Globe } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Check, Globe } from "lucide-react";
 import { LOCALES, type LocaleCode } from "@/lib/constants";
 import { useLocale } from "@/hooks/useLocale";
 import { translate } from "@/lib/i18n/translations";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type LanguageSwitcherProps = {
-  variant?: "header" | "pills" | "compact";
+  variant?: "header" | "pills" | "compact" | "icon";
   surface?: "dark" | "light";
   className?: string;
 };
@@ -18,6 +20,69 @@ export function LanguageSwitcher({
   className,
 }: LanguageSwitcherProps) {
   const { locale, setLocale } = useLocale();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [open]);
+
+  if (variant === "icon") {
+    const current = LOCALES.find((l) => l.code === locale) ?? LOCALES[0];
+
+    return (
+      <div ref={ref} className={cn("relative", className)}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={translate("footerLanguage", locale)}
+          aria-expanded={open}
+          className="text-primary hover:text-primary hover:bg-primary/10"
+        >
+          <Globe className="h-4 w-4" />
+        </Button>
+
+        {open && (
+          <div className="absolute right-0 top-full mt-2 z-50 min-w-[168px] rounded-xl border border-border bg-background shadow-xl p-1.5 animate-in fade-in slide-in-from-top-1">
+            <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-primary">
+              {translate("footerLanguage", locale)}
+            </p>
+            {LOCALES.map((loc) => (
+              <button
+                key={loc.code}
+                type="button"
+                onClick={() => {
+                  setLocale(loc.code as LocaleCode);
+                  setOpen(false);
+                }}
+                className={cn(
+                  "flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-sm transition-colors",
+                  locale === loc.code
+                    ? "bg-primary/10 text-primary font-medium"
+                    : "text-foreground/80 hover:bg-muted"
+                )}
+              >
+                <span>
+                  {loc.flag} {loc.label}
+                </span>
+                {locale === loc.code && <Check className="h-4 w-4 shrink-0" />}
+              </button>
+            ))}
+            <p className="px-3 py-1 text-[10px] text-muted-foreground border-t border-border mt-1 pt-2">
+              {current.flag} {current.label}
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (variant === "pills") {
     const onLight = surface === "light";
