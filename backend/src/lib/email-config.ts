@@ -13,14 +13,41 @@ export async function isEmailConfigured(): Promise<boolean> {
   return (await getEmailProvider()) !== null;
 }
 
+function extractEmailAddress(from: string): string {
+  const match = from.match(/<([^>]+)>/);
+  return (match?.[1] || from).trim().toLowerCase();
+}
+
+function isPublicInboxDomain(from: string): boolean {
+  const domain = extractEmailAddress(from).split('@')[1];
+  const publicDomains = new Set([
+    'gmail.com',
+    'googlemail.com',
+    'yahoo.com',
+    'hotmail.com',
+    'outlook.com',
+    'live.com',
+    'icloud.com',
+    'aol.com',
+  ]);
+  return !domain || publicDomains.has(domain);
+}
+
 export function getEmailFrom(provider: EmailProvider): string {
   const from = process.env.EMAIL_FROM?.trim();
+
+  if (provider === 'resend') {
+    // Resend rejects gmail/yahoo etc. — use onboarding address until a custom domain is verified.
+    if (from && !isPublicInboxDomain(from)) {
+      if (from.includes('<')) return from;
+      return `Green Rock <${from}>`;
+    }
+    return 'Green Rock <onboarding@resend.dev>';
+  }
+
   if (from) {
     if (from.includes('<')) return from;
     return `Green Rock <${from}>`;
-  }
-  if (provider === 'resend') {
-    return 'Green Rock <onboarding@resend.dev>';
   }
   const smtpUser = process.env.SMTP_USER?.trim();
   if (smtpUser) return `Green Rock <${smtpUser}>`;

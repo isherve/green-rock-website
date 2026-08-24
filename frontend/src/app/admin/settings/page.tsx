@@ -93,11 +93,16 @@ export default function AdminSettingsPage() {
       setEmailTestResult(res.data.message || "Email configured!");
       setResendApiKey("");
     } catch (err: unknown) {
-      const msg =
-        err && typeof err === "object" && "response" in err
-          ? (err as { response?: { data?: { message?: string } } }).response?.data?.message
-          : "Failed to configure email";
-      setEmailTestResult(msg || "Failed to configure email");
+      const response = err && typeof err === "object" && "response" in err
+        ? (err as { response?: { data?: { message?: string }; status?: number } }).response
+        : undefined;
+      const msg = response?.data?.message || "Failed to configure email";
+      setEmailTestResult(msg);
+      if (response?.status === 502) {
+        api.get("/settings/email/status").then((r) => {
+          if (r.data?.data) setEmailStatus(r.data.data as EmailStatus);
+        }).catch(() => {});
+      }
     } finally {
       setConfiguringEmail(false);
     }

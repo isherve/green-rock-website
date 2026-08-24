@@ -61,13 +61,22 @@ router.post(
   asyncHandler(async (req: Request, res: Response) => {
     const { resendApiKey } = req.body as z.infer<typeof configureEmailSchema>;
     await saveResendApiKey(resendApiKey);
-    await sendTestEmail();
     const status = await getEmailConfigStatus();
-    res.json({
-      success: true,
-      message: `Resend connected. Test email sent to ${status.adminEmail}.`,
-      data: status,
-    });
+
+    try {
+      await sendTestEmail();
+      res.json({
+        success: true,
+        message: `Resend connected. Test email sent to ${status.adminEmail}.`,
+        data: status,
+      });
+    } catch (err) {
+      const detail = err instanceof Error ? err.message : 'Test email failed';
+      throw new AppError(
+        `API key saved, but test email failed: ${detail}. Check spam folder or verify your domain at resend.com/domains.`,
+        502
+      );
+    }
   })
 );
 
