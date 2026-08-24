@@ -15,7 +15,7 @@ import { SITE_CONFIG, SOCIAL_LINKS } from "@/lib/constants";
 import { BrandLogo } from "@/components/shared/BrandLogo";
 import { NewsletterForm } from "@/components/shared/NewsletterForm";
 import { useLocale } from "@/hooks/useLocale";
-import { FOOTER_NAV, translate } from "@/lib/i18n/translations";
+import { FOOTER_NAV } from "@/lib/i18n/translations";
 
 const socialIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   facebook: Facebook,
@@ -26,7 +26,7 @@ const socialIcons: Record<string, React.ComponentType<{ className?: string }>> =
 };
 
 export function Footer() {
-  const { locale } = useLocale();
+  const { t } = useLocale();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -40,11 +40,11 @@ export function Footer() {
           <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-center max-w-6xl mx-auto">
             <div>
               <h3 className="text-2xl lg:text-3xl font-bold font-display leading-tight">
-                {translate("footerNewsletterTitle", locale)}{" "}
+                {t("footerNewsletterTitle")}{" "}
                 <span className="text-secondary">Green Rock</span>
               </h3>
               <p className="text-white/60 mt-3 max-w-md text-sm leading-relaxed">
-                {translate("footerNewsletterSubtitle", locale)}
+                {t("footerNewsletterSubtitle")}
               </p>
             </div>
             <NewsletterForm variant="footer" />
@@ -59,10 +59,10 @@ export function Footer() {
           <div className="lg:col-span-4">
             <BrandLogo size="md" variant="onDark" className="mb-5" />
             <p className="text-white/65 text-sm leading-relaxed mb-3">
-              {translate("siteDescription", locale)}
+              {t("siteDescription")}
             </p>
             <p className="text-secondary/85 text-xs leading-relaxed mb-6 font-medium">
-              {translate("architectureNote", locale)}
+              {t("architectureNote")}
             </p>
             <div className="space-y-2.5 text-sm">
               <div className="flex items-center gap-3 text-white/70">
@@ -89,13 +89,13 @@ export function Footer() {
           {/* Link columns */}
           <div className="lg:col-span-2">
             <h4 className="text-secondary text-sm font-semibold uppercase tracking-wider mb-4">
-              {translate("footerCompany", locale)}
+              {t("footerCompany")}
             </h4>
             <ul className="space-y-2.5">
               {FOOTER_NAV.company.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-white/65 hover:text-white transition-colors">
-                    {translate(link.key, locale)}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -104,13 +104,13 @@ export function Footer() {
 
           <div className="lg:col-span-2">
             <h4 className="text-secondary text-sm font-semibold uppercase tracking-wider mb-4">
-              {translate("footerServices", locale)}
+              {t("footerServices")}
             </h4>
             <ul className="space-y-2.5">
               {FOOTER_NAV.services.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-white/65 hover:text-white transition-colors">
-                    {translate(link.key, locale)}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -119,13 +119,13 @@ export function Footer() {
 
           <div className="lg:col-span-2">
             <h4 className="text-secondary text-sm font-semibold uppercase tracking-wider mb-4">
-              {translate("footerResources", locale)}
+              {t("footerResources")}
             </h4>
             <ul className="space-y-2.5">
               {FOOTER_NAV.resources.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-white/65 hover:text-white transition-colors">
-                    {translate(link.key, locale)}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -134,13 +134,13 @@ export function Footer() {
 
           <div className="lg:col-span-2">
             <h4 className="text-secondary text-sm font-semibold uppercase tracking-wider mb-4">
-              {translate("footerPortals", locale)}
+              {t("footerPortals")}
             </h4>
             <ul className="space-y-2.5">
               {FOOTER_NAV.portals.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-white/65 hover:text-white transition-colors">
-                    {translate(link.key, locale)}
+                    {t(link.key)}
                   </Link>
                 </li>
               ))}
@@ -152,7 +152,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-white/8 max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-xs text-white/45 text-center md:text-left">
-              © {currentYear} {SITE_CONFIG.shortName}. {translate("footerRights", locale)}
+              © {currentYear} {SITE_CONFIG.shortName}. {t("footerRights")}
             </p>
 
             <div className="flex items-center gap-2">
@@ -176,10 +176,10 @@ export function Footer() {
 
           <div className="flex justify-center gap-6 mt-4 text-xs text-white/40">
             <Link href="/privacy" className="hover:text-white/70 transition-colors">
-              {translate("footerPrivacy", locale)}
+              {t("footerPrivacy")}
             </Link>
             <Link href="/terms" className="hover:text-white/70 transition-colors">
-              {translate("footerTerms", locale)}
+              {t("footerTerms")}
             </Link>
           </div>
         </div>

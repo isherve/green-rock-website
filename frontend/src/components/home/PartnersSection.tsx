@@ -4,10 +4,12 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { usePublicList } from "@/hooks/usePublicData";
+import { useLocale } from "@/hooks/useLocale";
 import { MOCK_PARTNERS } from "@/lib/mock-data";
 import type { Partner } from "@/types";
 
 export function PartnersSection() {
+  const { t } = useLocale();
   const { data: partners = [] } = usePublicList<Partner>("/partners", { limit: "12" }, MOCK_PARTNERS);
 
   if (partners.length === 0) return null;
@@ -16,9 +18,9 @@ export function PartnersSection() {
     <section className="py-16 lg:py-20 section-padding" id="partners">
       <div className="container mx-auto px-4">
         <SectionHeading
-          subtitle="Partnerships"
-          title="Trusted By Industry Leaders"
-          description="We collaborate with leading organizations to deliver world-class results."
+          subtitle={t("homePartnersSubtitle")}
+          title={t("homePartnersTitle")}
+          description={t("homePartnersDesc")}
         />
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center">

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/lib/nav-data";
+import { useLocale } from "@/hooks/useLocale";
 
 interface MobileNavAccordionProps {
   items: NavItem[];
@@ -27,6 +28,7 @@ function MobileNavItem({
   item: NavItem;
   onNavigate: () => void;
 }) {
+  const { t } = useLocale();
   const hasMega = Boolean(item.sections?.length);
 
   if (!hasMega) {
@@ -86,7 +88,7 @@ function MobileNavItem({
           onClick={onNavigate}
           className="block mx-3 mt-2 mb-1 text-center text-sm font-semibold text-primary py-2"
         >
-          View all {item.label.toLowerCase()} →
+          {t("viewAll")} {item.label?.toLowerCase()} →
         </Link>
       </div>
     </details>

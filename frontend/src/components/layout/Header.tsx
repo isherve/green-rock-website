@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,11 +18,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { NavMegaMenu } from "@/components/layout/NavMegaMenu";
 import { MobileNavAccordion } from "@/components/layout/MobileNavAccordion";
-import { NAV_LINKS } from "@/lib/nav-data";
 import { SITE_CONFIG } from "@/lib/constants";
 import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
 import { useLocale } from "@/hooks/useLocale";
-import { translate } from "@/lib/i18n/translations";
+import { getLocalizedNav } from "@/lib/i18n/nav";
 import { cn } from "@/lib/utils";
 
 export function Header() {
@@ -30,7 +29,8 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
+  const navLinks = useMemo(() => getLocalizedNav(locale), [locale]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -62,10 +62,10 @@ export function Header() {
           </div>
           <div className="flex items-center gap-4 text-white/70 flex-wrap justify-end">
             <Link href="/portal/login" className="hover:text-secondary transition-colors">
-              {translate("customerPortal", locale)}
+              {t("customerPortal")}
             </Link>
             <Link href="/admin/login" className="hover:text-secondary transition-colors">
-              {translate("adminPortal", locale)}
+              {t("adminPortal")}
             </Link>
             <span className="text-white/40">|</span>
             <span>{SITE_CONFIG.address}</span>
@@ -85,17 +85,17 @@ export function Header() {
           <BrandLogo />
 
           <nav className="hidden lg:flex items-center gap-0.5 relative">
-            {NAV_LINKS.map((item) => {
+            {navLinks.map((item) => {
               const hasMega = Boolean(item.mega && item.sections?.length);
               return (
-                <div key={item.label}>
+                <div key={item.labelKey}>
                   <Link
                     href={item.href}
-                    onMouseEnter={() => hasMega && setActiveMega(item.label)}
+                    onMouseEnter={() => hasMega && setActiveMega(item.labelKey)}
                     className={cn(
                       "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap",
                       "text-slate-800 dark:text-slate-100 hover:text-primary",
-                      activeMega === item.label && "text-primary"
+                      activeMega === item.labelKey && "text-primary"
                     )}
                   >
                     {item.label}
@@ -103,7 +103,7 @@ export function Header() {
                       <ChevronDown
                         className={cn(
                           "h-3.5 w-3.5 opacity-60 transition-transform",
-                          activeMega === item.label && "rotate-180"
+                          activeMega === item.labelKey && "rotate-180"
                         )}
                       />
                     )}
@@ -139,7 +139,7 @@ export function Header() {
             )}
 
             <Button asChild className="hidden md:inline-flex rounded-lg">
-              <Link href="/properties">{translate("searchProperty", locale)}</Link>
+              <Link href="/properties">{t("searchProperty")}</Link>
             </Button>
 
             <Button
@@ -155,7 +155,7 @@ export function Header() {
         </div>
 
         <NavMegaMenu
-          item={NAV_LINKS.find((n) => n.label === activeMega) ?? null}
+          item={navLinks.find((n) => n.labelKey === activeMega) ?? null}
           isOpen={Boolean(activeMega)}
           onClose={() => setActiveMega(null)}
         />
@@ -170,31 +170,31 @@ export function Header() {
             >
               <div className="container mx-auto px-2 py-4">
                 <MobileNavAccordion
-                  items={NAV_LINKS}
+                  items={navLinks}
                   onNavigate={() => setMobileOpen(false)}
                 />
                 <div className="pt-4 px-4 space-y-3 border-t border-border mt-3">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Portals</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("footerPortals")}</p>
                   <div className="grid grid-cols-1 gap-2">
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/search" onClick={() => setMobileOpen(false)}>
-                        <Search className="w-4 h-4 mr-2" /> {translate("searchSite", locale)}
+                        <Search className="w-4 h-4 mr-2" /> {t("searchSite")}
                       </Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/portal/login" onClick={() => setMobileOpen(false)}>
-                        {translate("customerPortal", locale)}
+                        {t("customerPortal")}
                       </Link>
                     </Button>
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
                       <Link href="/admin/login" onClick={() => setMobileOpen(false)}>
-                        {translate("adminPortal", locale)}
+                        {t("adminPortal")}
                       </Link>
                     </Button>
                   </div>
                   <Button asChild className="w-full rounded-lg">
                     <Link href="/properties" onClick={() => setMobileOpen(false)}>
-                      {translate("searchProperty", locale)}
+                      {t("searchProperty")}
                     </Link>
                   </Button>
                 </div>

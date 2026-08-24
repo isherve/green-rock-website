@@ -32,153 +32,166 @@ import {
 } from "lucide-react";
 
 export type NavLinkItem = {
-  label: string;
+  labelKey: string;
   href: string;
-  description?: string;
+  descriptionKey?: string;
   icon?: LucideIcon;
+  badgeKey?: string;
+  /** Resolved at runtime by getLocalizedNav */
+  label?: string;
+  description?: string;
   badge?: string;
 };
 
 export type NavMegaSection = {
-  title: string;
+  titleKey: string;
   items: NavLinkItem[];
+  /** Resolved at runtime */
+  title?: string;
 };
 
 export type NavFeaturedPanel = {
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   href: string;
-  cta: string;
+  ctaKey: string;
   image: string;
+  /** Resolved at runtime */
+  title?: string;
+  description?: string;
+  cta?: string;
 };
 
 export type NavItem = {
-  label: string;
+  labelKey: string;
   href: string;
   mega?: boolean;
   sections?: NavMegaSection[];
   featured?: NavFeaturedPanel;
   children?: NavLinkItem[];
+  /** Resolved at runtime */
+  label?: string;
 };
 
 export const PROPERTY_MEGA_SECTIONS: NavMegaSection[] = [
   {
-    title: "Property Type",
+    titleKey: "megaPropertyType",
     items: [
-      { label: "Residential Houses", href: "/properties?type=HOUSE", description: "Villas, homes & townhouses", icon: Home },
-      { label: "Residential Apartments", href: "/properties?type=APARTMENT", description: "Flats & luxury units", icon: Building2 },
-      { label: "Commercial Property", href: "/properties?type=COMMERCIAL", description: "Offices, retail & warehouses", icon: Store },
-      { label: "Plots of Land", href: "/properties?type=LAND", description: "Residential & commercial plots", icon: LandPlot },
-      { label: "Office Spaces", href: "/properties?type=OFFICE", description: "Professional workspaces", icon: Building },
-      { label: "Warehouses", href: "/properties?type=WAREHOUSE", description: "Industrial & storage", icon: Warehouse },
+      { labelKey: "megaResidentialHouses", href: "/properties?type=HOUSE", descriptionKey: "megaResidentialHousesDesc", icon: Home },
+      { labelKey: "megaResidentialApartments", href: "/properties?type=APARTMENT", descriptionKey: "megaResidentialApartmentsDesc", icon: Building2 },
+      { labelKey: "megaCommercialProperty", href: "/properties?type=COMMERCIAL", descriptionKey: "megaCommercialPropertyDesc", icon: Store },
+      { labelKey: "megaPlotsOfLand", href: "/properties?type=LAND", descriptionKey: "megaPlotsOfLandDesc", icon: LandPlot },
+      { labelKey: "megaOfficeSpaces", href: "/properties?type=OFFICE", descriptionKey: "megaOfficeSpacesDesc", icon: Building },
+      { labelKey: "megaWarehouses", href: "/properties?type=WAREHOUSE", descriptionKey: "megaWarehousesDesc", icon: Warehouse },
     ],
   },
   {
-    title: "Buy or Rent",
+    titleKey: "megaBuyOrRent",
     items: [
-      { label: "Properties For Sale", href: "/properties?purpose=SALE", description: "Own your next asset", icon: Tag, badge: "Buy" },
-      { label: "Properties For Rent", href: "/properties?purpose=RENT", description: "Monthly rentals", icon: Key, badge: "Rent" },
-      { label: "Featured Listings", href: "/properties?featured=true", description: "Handpicked by our team", icon: Star },
+      { labelKey: "megaForSale", href: "/properties?purpose=SALE", descriptionKey: "megaForSaleDesc", icon: Tag, badgeKey: "badgeBuy" },
+      { labelKey: "megaForRent", href: "/properties?purpose=RENT", descriptionKey: "megaForRentDesc", icon: Key, badgeKey: "badgeRent" },
+      { labelKey: "megaFeaturedListings", href: "/properties?featured=true", descriptionKey: "megaFeaturedListingsDesc", icon: Star },
     ],
   },
   {
-    title: "Popular Locations",
+    titleKey: "megaPopularLocations",
     items: [
-      { label: "Kimihurura", href: "/properties?q=Kimihurura", icon: MapPin },
-      { label: "Nyarutarama", href: "/properties?q=Nyarutarama", icon: MapPin },
-      { label: "Kacyiru", href: "/properties?q=Kacyiru", icon: MapPin },
-      { label: "Gacuriro", href: "/properties?q=Gacuriro", icon: MapPin },
-      { label: "Kagugu", href: "/properties?q=Kagugu", icon: MapPin },
-      { label: "Remera", href: "/properties?q=Remera", icon: MapPin },
+      { labelKey: "locKimihurura", href: "/properties?q=Kimihurura", icon: MapPin },
+      { labelKey: "locNyarutarama", href: "/properties?q=Nyarutarama", icon: MapPin },
+      { labelKey: "locKacyiru", href: "/properties?q=Kacyiru", icon: MapPin },
+      { labelKey: "locGacuriro", href: "/properties?q=Gacuriro", icon: MapPin },
+      { labelKey: "locKagugu", href: "/properties?q=Kagugu", icon: MapPin },
+      { labelKey: "locRemera", href: "/properties?q=Remera", icon: MapPin },
     ],
   },
   {
-    title: "Special Listings",
+    titleKey: "megaSpecialListings",
     items: [
-      { label: "Joint Venture", href: "/contact?type=PROPERTY", description: "Partner on prime developments", icon: Handshake },
-      { label: "Off-Plan Properties", href: "/contact?type=PROPERTY", description: "Pre-construction investments", icon: HardHat },
-      { label: "Co-Listing", href: "/contact?type=PROPERTY", description: "List with Green Rock agents", icon: Users },
-      { label: "List Your Property", href: "/contact?type=PROPERTY", description: "Sell or rent with us", icon: Phone },
+      { labelKey: "megaJointVenture", href: "/contact?type=PROPERTY", descriptionKey: "megaJointVentureDesc", icon: Handshake },
+      { labelKey: "megaOffPlan", href: "/contact?type=PROPERTY", descriptionKey: "megaOffPlanDesc", icon: HardHat },
+      { labelKey: "megaCoListing", href: "/contact?type=PROPERTY", descriptionKey: "megaCoListingDesc", icon: Users },
+      { labelKey: "megaListYourProperty", href: "/contact?type=PROPERTY", descriptionKey: "megaListYourPropertyDesc", icon: Phone },
     ],
   },
 ];
 
 export const SERVICES_MEGA_SECTIONS: NavMegaSection[] = [
   {
-    title: "Design & Planning",
+    titleKey: "megaDesignPlanning",
     items: [
-      { label: "Architecture & Drawings", href: "/services/architecture", description: "House plans & 3D visuals", icon: PenTool },
-      { label: "BOQ & Quotations", href: "/services/architecture", description: "Detailed cost estimates", icon: ClipboardList },
-      { label: "Interior Design", href: "/services/interior-design", description: "Luxury finishing concepts", icon: Ruler },
+      { labelKey: "architecture", href: "/services/architecture", descriptionKey: "megaArchitectureDesc", icon: PenTool },
+      { labelKey: "megaBoqQuotations", href: "/services/architecture", descriptionKey: "megaBoqQuotationsDesc", icon: ClipboardList },
+      { labelKey: "interiorDesign", href: "/services/interior-design", descriptionKey: "megaInteriorDesignDesc", icon: Ruler },
     ],
   },
   {
-    title: "Build & Deliver",
+    titleKey: "megaBuildDeliver",
     items: [
-      { label: "Construction", href: "/services/construction", description: "Residential & commercial builds", icon: Hammer },
-      { label: "Project Management", href: "/services/project-management", description: "End-to-end site delivery", icon: HardHat },
-      { label: "Renovation & Finishing", href: "/services/construction", description: "Upgrades & fit-outs", icon: Layers },
+      { labelKey: "construction", href: "/services/construction", descriptionKey: "megaConstructionDesc", icon: Hammer },
+      { labelKey: "megaProjectManagement", href: "/services/project-management", descriptionKey: "megaProjectManagementDesc", icon: HardHat },
+      { labelKey: "megaRenovation", href: "/services/construction", descriptionKey: "megaRenovationDesc", icon: Layers },
     ],
   },
   {
-    title: "Real Estate Services",
+    titleKey: "megaRealEstateServices",
     items: [
-      { label: "Buy & Sell", href: "/services/real-estate", description: "Transaction advisory", icon: Building2 },
-      { label: "Property Management", href: "/services/real-estate", description: "Tenant & asset care", icon: Key },
-      { label: "Investment Advisory", href: "/contact?type=PROPERTY", description: "Portfolio guidance", icon: Briefcase },
+      { labelKey: "megaBuySell", href: "/services/real-estate", descriptionKey: "megaBuySellDesc", icon: Building2 },
+      { labelKey: "megaPropertyManagement", href: "/services/real-estate", descriptionKey: "megaPropertyManagementDesc", icon: Key },
+      { labelKey: "megaInvestmentAdvisory", href: "/contact?type=PROPERTY", descriptionKey: "megaInvestmentAdvisoryDesc", icon: Briefcase },
     ],
   },
 ];
 
 export const MATERIALS_MEGA_SECTIONS: NavMegaSection[] = [
   {
-    title: "Structural Materials",
+    titleKey: "megaStructuralMaterials",
     items: [
-      { label: "Cement & Concrete", href: "/materials?q=cement", description: "Portland & ready-mix", icon: Package },
-      { label: "Steel & Rebar", href: "/materials?q=steel", description: "Reinforcement supplies", icon: Layers },
-      { label: "Blocks & Bricks", href: "/materials?q=blocks", description: "Masonry units", icon: Building },
+      { labelKey: "megaCementConcrete", href: "/materials?q=cement", descriptionKey: "megaCementConcreteDesc", icon: Package },
+      { labelKey: "megaSteelRebar", href: "/materials?q=steel", descriptionKey: "megaSteelRebarDesc", icon: Layers },
+      { labelKey: "megaBlocksBricks", href: "/materials?q=blocks", descriptionKey: "megaBlocksBricksDesc", icon: Building },
     ],
   },
   {
-    title: "Finishes & MEP",
+    titleKey: "megaFinishesMep",
     items: [
-      { label: "Tiles & Flooring", href: "/materials?q=tiles", description: "Ceramic, porcelain & stone", icon: PaintBucket },
-      { label: "Roofing Materials", href: "/materials?q=roofing", description: "Sheets, trusses & gutters", icon: Home },
-      { label: "Plumbing Supplies", href: "/materials?q=plumbing", description: "Pipes, fittings & fixtures", icon: Pipette },
-      { label: "Electrical Supplies", href: "/materials?q=electrical", description: "Cables, switches & panels", icon: Zap },
+      { labelKey: "megaTilesFlooring", href: "/materials?q=tiles", descriptionKey: "megaTilesFlooringDesc", icon: PaintBucket },
+      { labelKey: "megaRoofing", href: "/materials?q=roofing", descriptionKey: "megaRoofingDesc", icon: Home },
+      { labelKey: "megaPlumbing", href: "/materials?q=plumbing", descriptionKey: "megaPlumbingDesc", icon: Pipette },
+      { labelKey: "megaElectrical", href: "/materials?q=electrical", descriptionKey: "megaElectricalDesc", icon: Zap },
     ],
   },
   {
-    title: "Order & Delivery",
+    titleKey: "megaOrderDelivery",
     items: [
-      { label: "Browse Full Catalog", href: "/materials", description: "All building materials", icon: Package },
-      { label: "Bulk Order Quote", href: "/contact?type=MATERIAL", description: "Volume pricing", icon: ClipboardList },
-      { label: "Site Delivery", href: "/contact?type=MATERIAL", description: "Nationwide dispatch", icon: Truck },
+      { labelKey: "megaBrowseCatalog", href: "/materials", descriptionKey: "megaBrowseCatalogDesc", icon: Package },
+      { labelKey: "megaBulkOrder", href: "/contact?type=MATERIAL", descriptionKey: "megaBulkOrderDesc", icon: ClipboardList },
+      { labelKey: "megaSiteDelivery", href: "/contact?type=MATERIAL", descriptionKey: "megaSiteDeliveryDesc", icon: Truck },
     ],
   },
 ];
 
 export const COMPANY_MEGA_SECTIONS: NavMegaSection[] = [
   {
-    title: "About Green Rock",
+    titleKey: "megaAboutGreenRock",
     items: [
-      { label: "Our Story", href: "/about", description: "Mission, vision & values", icon: Building2 },
-      { label: "Our Team", href: "/about#team", description: "Meet the experts", icon: Users },
-      { label: "Partners", href: "/about#partners", description: "Industry collaborators", icon: Handshake },
-      { label: "Careers", href: "/careers", description: "Join our growing team", icon: Briefcase },
+      { labelKey: "megaOurStory", href: "/about", descriptionKey: "megaOurStoryDesc", icon: Building2 },
+      { labelKey: "ourTeam", href: "/about#team", descriptionKey: "megaOurTeamDesc", icon: Users },
+      { labelKey: "partners", href: "/about#partners", descriptionKey: "megaPartnersDesc", icon: Handshake },
+      { labelKey: "careers", href: "/careers", descriptionKey: "megaCareersDesc", icon: Briefcase },
     ],
   },
   {
-    title: "Resources",
+    titleKey: "megaResources",
     items: [
-      { label: "Blog & Insights", href: "/blog", description: "Market news & tips", icon: BookOpen },
-      { label: "Project Gallery", href: "/gallery", description: "Completed work showcase", icon: Image },
-      { label: "FAQ", href: "/faq", description: "Common questions answered", icon: HelpCircle },
-      { label: "Privacy Policy", href: "/privacy", description: "Data & privacy", icon: FileText },
+      { labelKey: "megaBlogInsights", href: "/blog", descriptionKey: "megaBlogInsightsDesc", icon: BookOpen },
+      { labelKey: "megaProjectGallery", href: "/gallery", descriptionKey: "megaProjectGalleryDesc", icon: Image },
+      { labelKey: "faq", href: "/faq", descriptionKey: "megaFaqDesc", icon: HelpCircle },
+      { labelKey: "footerPrivacy", href: "/privacy", descriptionKey: "megaPrivacyDesc", icon: FileText },
     ],
   },
 ];
 
+/** @deprecated Use getLocalizedSearchCategories(locale) */
 export const PROPERTY_SEARCH_CATEGORIES = [
   { value: "ALL", label: "All Categories" },
   { value: "HOUSE", label: "Residential Houses" },
@@ -189,6 +202,7 @@ export const PROPERTY_SEARCH_CATEGORIES = [
   { value: "WAREHOUSE", label: "Warehouses" },
 ] as const;
 
+/** @deprecated Use getLocalizedPriceRanges(locale) */
 export const PROPERTY_PRICE_RANGES = [
   { value: "ALL", label: "Any Price" },
   { value: "0-50000000", label: "Under 50M RWF" },
@@ -198,59 +212,59 @@ export const PROPERTY_PRICE_RANGES = [
 ] as const;
 
 export const NAV_LINKS: NavItem[] = [
-  { label: "Home", href: "/" },
+  { labelKey: "navHome", href: "/" },
   {
-    label: "Properties",
+    labelKey: "navProperties",
     href: "/properties",
     mega: true,
     sections: PROPERTY_MEGA_SECTIONS,
     featured: {
-      title: "Find Your Property in Rwanda",
-      description: "Browse premium listings across Kigali and beyond — sale, rent, land & commercial.",
+      titleKey: "featPropertiesTitle",
+      descriptionKey: "featPropertiesDesc",
       href: "/properties",
-      cta: "View All Properties",
+      ctaKey: "featPropertiesCta",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80",
     },
   },
   {
-    label: "Services",
+    labelKey: "navServices",
     href: "/services",
     mega: true,
     sections: SERVICES_MEGA_SECTIONS,
     featured: {
-      title: "Architecture to Handover",
-      description: "Drawings, quotations, construction & project management under one roof.",
+      titleKey: "featServicesTitle",
+      descriptionKey: "featServicesDesc",
       href: "/contact?type=CONSTRUCTION",
-      cta: "Request a Quote",
+      ctaKey: "featServicesCta",
       image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80",
     },
   },
   {
-    label: "Materials",
+    labelKey: "navMaterials",
     href: "/materials",
     mega: true,
     sections: MATERIALS_MEGA_SECTIONS,
     featured: {
-      title: "Quality Building Supplies",
-      description: "Cement, steel, tiles & more — bulk orders with reliable site delivery.",
+      titleKey: "featMaterialsTitle",
+      descriptionKey: "featMaterialsDesc",
       href: "/materials",
-      cta: "Shop Materials",
+      ctaKey: "featMaterialsCta",
       image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80",
     },
   },
-  { label: "Projects", href: "/projects" },
+  { labelKey: "navProjects", href: "/projects" },
   {
-    label: "Company",
+    labelKey: "navCompany",
     href: "/about",
     mega: true,
     sections: COMPANY_MEGA_SECTIONS,
     featured: {
-      title: "Green Rock General Supply Ltd",
-      description: "Trusted construction, real estate & materials partner since 2010.",
+      titleKey: "featCompanyTitle",
+      descriptionKey: "featCompanyDesc",
       href: "/about",
-      cta: "Learn About Us",
+      ctaKey: "featCompanyCta",
       image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80",
     },
   },
-  { label: "Contact", href: "/contact" },
+  { labelKey: "navContact", href: "/contact" },
 ];

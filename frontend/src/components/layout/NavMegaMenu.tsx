@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/lib/nav-data";
+import { useLocale } from "@/hooks/useLocale";
 
 interface NavMegaMenuProps {
   item: NavItem | null;
@@ -14,6 +15,7 @@ interface NavMegaMenuProps {
 }
 
 export function NavMegaMenu({ item, isOpen, onClose }: NavMegaMenuProps) {
+  const { t } = useLocale();
   if (!item?.sections?.length) return null;
 
   return (
@@ -125,11 +127,11 @@ export function NavMegaMenu({ item, isOpen, onClose }: NavMegaMenuProps) {
                   onClick={onClose}
                   className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:gap-3 transition-all"
                 >
-                  Browse all {item.label.toLowerCase()}
+                  {t("viewAll")} {item.label?.toLowerCase()}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <span className="text-xs text-muted-foreground hidden sm:block">
-                  Rwanda · Real Estate · Construction · Supply
+                  {t("heroEyebrow")}
                 </span>
               </div>
             </div>

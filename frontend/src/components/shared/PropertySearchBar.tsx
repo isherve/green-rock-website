@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Search, MapPin, Tag, Key, Layers, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  PROPERTY_SEARCH_CATEGORIES,
-  PROPERTY_PRICE_RANGES,
-} from "@/lib/nav-data";
+import { getLocalizedSearchCategories, getLocalizedPriceRanges } from "@/lib/i18n/nav";
+import { useLocale } from "@/hooks/useLocale";
 import { cn } from "@/lib/utils";
 
 interface PropertySearchBarProps {
@@ -38,6 +36,9 @@ export function PropertySearchBar({
   defaultPrice = "ALL",
 }: PropertySearchBarProps) {
   const router = useRouter();
+  const { locale, t } = useLocale();
+  const categories = useMemo(() => getLocalizedSearchCategories(locale), [locale]);
+  const priceRanges = useMemo(() => getLocalizedPriceRanges(locale), [locale]);
   const [tab, setTab] = useState<"SALE" | "RENT">(
     defaultPurpose === "RENT" ? "RENT" : "SALE"
   );
@@ -82,7 +83,6 @@ export function PropertySearchBar({
         className
       )}
     >
-      {/* Buy / Rent tabs — Kwanda-style */}
       <div className="flex border-b border-border bg-accent/30">
         <button
           type="button"
@@ -95,7 +95,7 @@ export function PropertySearchBar({
           )}
         >
           <Tag className="h-4 w-4" />
-          Buy
+          {t("searchBuy")}
         </button>
         <button
           type="button"
@@ -108,56 +108,53 @@ export function PropertySearchBar({
           )}
         >
           <Key className="h-4 w-4" />
-          Rent
+          {t("searchRent")}
         </button>
       </div>
 
       <div className="p-2 md:p-3">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1fr_auto] gap-2 md:gap-0 md:items-stretch md:divide-x divide-border">
-          {/* Location */}
           <div className="flex items-center gap-2 px-3 rounded-lg md:rounded-none border border-border md:border-0">
             <MapPin className="w-4 h-4 text-primary shrink-0" />
             <Input
-              placeholder="Location (Kigali, Kimihurura...)"
+              placeholder={t("searchLocationPlaceholder")}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className={cn(fieldClass, "h-11")}
             />
           </div>
 
-          {/* Property status */}
           <div className="rounded-lg md:rounded-none border border-border md:border-0 px-1">
             <Select value={purpose} onValueChange={setPurpose}>
               <SelectTrigger className={cn(fieldClass, "gap-2")}>
                 <Tag className="h-3.5 w-3.5 text-primary shrink-0" />
-                <SelectValue placeholder="Property Status" />
+                <SelectValue placeholder={t("searchPropertyStatus")} />
               </SelectTrigger>
               <SelectContent className="min-w-[220px]">
                 <SelectGroup>
                   <SelectLabel className="text-[10px] uppercase tracking-widest text-primary pl-8 pr-2 py-2">
-                    Property Status
+                    {t("searchPropertyStatus")}
                   </SelectLabel>
-                  <SelectItem value="ALL">All Statuses</SelectItem>
-                  <SelectItem value="SALE">For Sale</SelectItem>
-                  <SelectItem value="RENT">For Rent</SelectItem>
+                  <SelectItem value="ALL">{t("searchAllStatuses")}</SelectItem>
+                  <SelectItem value="SALE">{t("searchForSale")}</SelectItem>
+                  <SelectItem value="RENT">{t("searchForRent")}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Property category */}
           <div className="rounded-lg md:rounded-none border border-border md:border-0 px-1">
             <Select value={type} onValueChange={setType}>
               <SelectTrigger className={cn(fieldClass, "gap-2")}>
                 <Layers className="h-3.5 w-3.5 text-primary shrink-0" />
-                <SelectValue placeholder="Property Category" />
+                <SelectValue placeholder={t("searchPropertyCategory")} />
               </SelectTrigger>
               <SelectContent className="min-w-[260px]">
                 <SelectGroup>
                   <SelectLabel className="text-[10px] uppercase tracking-widest text-primary pl-8 pr-2 py-2">
-                    Property Category
+                    {t("searchPropertyCategory")}
                   </SelectLabel>
-                  {PROPERTY_SEARCH_CATEGORIES.map((cat) => (
+                  {categories.map((cat) => (
                     <SelectItem key={cat.value} value={cat.value}>
                       {cat.label}
                     </SelectItem>
@@ -167,19 +164,18 @@ export function PropertySearchBar({
             </Select>
           </div>
 
-          {/* Price range */}
           <div className="rounded-lg md:rounded-none border border-border md:border-0 px-1">
             <Select value={price} onValueChange={setPrice}>
               <SelectTrigger className={cn(fieldClass, "gap-2")}>
                 <DollarSign className="h-3.5 w-3.5 text-primary shrink-0" />
-                <SelectValue placeholder="Price Range" />
+                <SelectValue placeholder={t("searchPriceRange")} />
               </SelectTrigger>
               <SelectContent className="min-w-[220px]">
                 <SelectGroup>
                   <SelectLabel className="text-[10px] uppercase tracking-widest text-primary pl-8 pr-2 py-2">
-                    Price Range (RWF)
+                    {t("searchPriceRange")}
                   </SelectLabel>
-                  {PROPERTY_PRICE_RANGES.map((range) => (
+                  {priceRanges.map((range) => (
                     <SelectItem key={range.value} value={range.value}>
                       {range.label}
                     </SelectItem>
@@ -195,7 +191,7 @@ export function PropertySearchBar({
             className="h-11 md:px-8 rounded-lg shrink-0 w-full md:w-auto"
           >
             <Search className="w-4 h-4" />
-            Search Property
+            {t("searchProperty")}
           </Button>
         </div>
       </div>

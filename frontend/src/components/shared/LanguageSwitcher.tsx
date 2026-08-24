@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Check, Globe } from "lucide-react";
 import { LOCALES, type LocaleCode } from "@/lib/constants";
 import { useLocale } from "@/hooks/useLocale";
-import { translate } from "@/lib/i18n/translations";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -19,7 +18,7 @@ export function LanguageSwitcher({
   surface = "dark",
   className,
 }: LanguageSwitcherProps) {
-  const { locale, setLocale } = useLocale();
+  const { locale, setLocale, t } = useLocale();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -42,7 +41,7 @@ export function LanguageSwitcher({
           variant="ghost"
           size="icon"
           onClick={() => setOpen((v) => !v)}
-          aria-label={translate("footerLanguage", locale)}
+          aria-label={t("footerLanguage")}
           aria-expanded={open}
           className="text-primary hover:text-primary hover:bg-primary/10"
         >
@@ -52,7 +51,7 @@ export function LanguageSwitcher({
         {open && (
           <div className="absolute right-0 top-full mt-2 z-50 min-w-[168px] rounded-xl border border-border bg-background shadow-xl p-1.5 animate-in fade-in slide-in-from-top-1">
             <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-primary">
-              {translate("footerLanguage", locale)}
+              {t("footerLanguage")}
             </p>
             {LOCALES.map((loc) => (
               <button
@@ -95,7 +94,7 @@ export function LanguageSwitcher({
           )}
         >
           <Globe className="h-3.5 w-3.5" />
-          {translate("footerLanguage", locale)}
+          {t("footerLanguage")}
         </span>
         <div className="flex flex-wrap gap-1.5">
           {LOCALES.map((loc) => (
@@ -129,7 +128,7 @@ export function LanguageSwitcher({
           "rounded-lg border border-border bg-background px-2 py-2 text-sm min-w-[130px]",
           className
         )}
-        aria-label={translate("footerLanguage", locale)}
+        aria-label={t("footerLanguage")}
       >
         {LOCALES.map((loc) => (
           <option key={loc.code} value={loc.code}>
@@ -146,7 +145,7 @@ export function LanguageSwitcher({
         value={locale}
         onChange={(e) => setLocale(e.target.value as LocaleCode)}
         className="appearance-none rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 pl-8 pr-8 py-2 text-sm font-medium cursor-pointer hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/30 min-w-[140px]"
-        aria-label={translate("footerLanguage", locale)}
+        aria-label={t("footerLanguage")}
       >
         {LOCALES.map((loc) => (
           <option key={loc.code} value={loc.code}>

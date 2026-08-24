@@ -6,8 +6,11 @@ import { Phone, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/shared/ContactForm";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useLocale } from "@/hooks/useLocale";
 
 export function ContactCTA() {
+  const { t } = useLocale();
+
   return (
     <section className="py-20 lg:py-28 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
@@ -21,16 +24,14 @@ export function ContactCTA() {
             transition={{ duration: 0.6 }}
           >
             <span className="inline-block text-secondary font-semibold text-sm uppercase tracking-widest mb-3">
-              Get In Touch
+              {t("homeContactEyebrow")}
             </span>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight font-display">
-              Ready to Start Your{" "}
-              <span className="text-primary">Next Project?</span>
+              {t("homeContactTitle")}{" "}
+              <span className="text-primary">{t("homeContactTitleHighlight")}</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              Whether you need construction services, property consultation, or
-              building materials — our team is ready to help bring your vision
-              to life.
+              {t("homeContactDesc")}
             </p>
 
             <div className="space-y-4 mb-8">
@@ -42,7 +43,7 @@ export function ContactCTA() {
                   <Phone className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Call Us</p>
+                  <p className="text-sm text-muted-foreground">{t("homeCallUs")}</p>
                   <p className="font-semibold">{SITE_CONFIG.phone}</p>
                 </div>
               </a>
@@ -54,7 +55,7 @@ export function ContactCTA() {
                   <Mail className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Email Us</p>
+                  <p className="text-sm text-muted-foreground">{t("homeEmailUs")}</p>
                   <p className="font-semibold">{SITE_CONFIG.email}</p>
                 </div>
               </a>
@@ -62,7 +63,7 @@ export function ContactCTA() {
 
             <Button asChild variant="outline" size="lg">
               <Link href="/contact">
-                Visit Contact Page
+                {t("homeVisitContact")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>

@@ -4,8 +4,12 @@ import { motion } from "framer-motion";
 import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { COMPANY_STATS } from "@/lib/constants";
+import { useLocale } from "@/hooks/useLocale";
+import { STAT_KEYS } from "@/lib/i18n/translations";
 
 export function StatsSection() {
+  const { t } = useLocale();
+
   return (
     <section className="py-16 lg:py-20 bg-primary relative overflow-hidden perspective-[1200px]">
       <div className="absolute inset-0 opacity-20">
@@ -15,9 +19,9 @@ export function StatsSection() {
 
       <div className="container relative mx-auto px-4">
         <SectionHeading
-          subtitle="Our Track Record"
-          title="Numbers That Speak"
-          description="Years of dedication to excellence in construction, real estate, and supply."
+          subtitle={t("homeStatsSubtitle")}
+          title={t("homeStatsTitle")}
+          description={t("homeStatsDesc")}
           className="[&_h2]:text-white [&_p]:text-white/70 [&_span]:text-secondary"
         />
 
@@ -36,7 +40,7 @@ export function StatsSection() {
                 suffix={stat.suffix}
                 className="text-4xl lg:text-5xl font-bold text-white block mb-2"
               />
-              <p className="text-sm text-white/70 font-medium">{stat.label}</p>
+              <p className="text-sm text-white/70 font-medium">{t(STAT_KEYS[index])}</p>
             </motion.div>
           ))}
         </div>

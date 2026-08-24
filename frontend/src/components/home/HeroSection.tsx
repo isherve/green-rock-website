@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { PropertySearchBar } from "@/components/shared/PropertySearchBar";
 import { FloatingOrbs } from "@/components/motion/FloatingOrbs";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useLocale } from "@/hooks/useLocale";
 import { useRef } from "react";
 
 const HeroScene3D = dynamic(
@@ -16,6 +17,7 @@ const HeroScene3D = dynamic(
 );
 
 export function HeroSection() {
+  const { t } = useLocale();
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
@@ -39,7 +41,7 @@ export function HeroSection() {
             className="text-secondary font-semibold text-sm uppercase tracking-[0.25em] mb-4"
             style={{ transformStyle: "preserve-3d" }}
           >
-            Rwanda · Real Estate · Construction · Supply
+            {t("heroEyebrow")}
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 40, rotateX: 25 }}
@@ -48,7 +50,7 @@ export function HeroSection() {
             className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] mb-5 font-display"
             style={{ transformStyle: "preserve-3d", textShadow: "0 8px 32px rgba(0,0,0,0.35)" }}
           >
-            Buy, Build & Supply with{" "}
+            {t("heroTitle")}{" "}
             <span className="text-gradient-3d">{SITE_CONFIG.shortName}</span>
           </motion.h1>
           <motion.p
@@ -57,7 +59,7 @@ export function HeroSection() {
             transition={{ delay: 0.22, duration: 0.65 }}
             className="text-lg text-white/85 max-w-2xl leading-relaxed mb-6"
           >
-            {SITE_CONFIG.description} {SITE_CONFIG.architectureNote}
+            {t("siteDescription")} {t("architectureNote")}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -67,12 +69,12 @@ export function HeroSection() {
           >
             <Button asChild size="lg" className="rounded-lg shadow-lg shadow-primary/30 hover:scale-105 transition-transform">
               <Link href="/properties">
-                Browse Properties
+                {t("heroBrowseProperties")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-lg border-white/40 text-white bg-white/10 hover:bg-white hover:text-dark backdrop-blur-sm">
-              <Link href="/contact">List Your Property</Link>
+              <Link href="/contact">{t("heroListProperty")}</Link>
             </Button>
           </motion.div>
         </div>
@@ -84,7 +86,7 @@ export function HeroSection() {
           className="max-w-5xl glass-3d rounded-2xl p-1"
           style={{ transformStyle: "preserve-3d" }}
         >
-          <p className="text-white/90 font-medium mb-3 text-sm uppercase tracking-wider px-2">Search Property</p>
+          <p className="text-white/90 font-medium mb-3 text-sm uppercase tracking-wider px-2">{t("heroSearchLabel")}</p>
           <PropertySearchBar variant="hero" />
         </motion.div>
       </motion.div>
