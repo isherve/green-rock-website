@@ -40,6 +40,7 @@ export function LoadingScreen({ duration = 2000 }: LoadingScreenProps) {
                 height={864}
                 className="h-24 w-auto max-w-[220px] object-contain"
                 priority
+                unoptimized
               />
             </div>
             <div className="text-center">

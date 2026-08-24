@@ -56,7 +56,7 @@ export default function AdminLoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-dark px-4">
       <div className="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-2xl">
         <div className="text-center mb-8">
-          <Image src={SITE_CONFIG.logo} alt="Logo" width={864} height={864} className="h-16 w-auto max-w-[180px] object-contain mx-auto mb-4" />
+          <Image src={SITE_CONFIG.logo} alt="Logo" width={864} height={864} unoptimized className="h-16 w-auto max-w-[180px] object-contain mx-auto mb-4" />
           <Lock className="w-8 h-8 text-primary mx-auto mb-2" />
           <h1 className="text-2xl font-bold text-white">Admin Login</h1>
           <p className="text-white/60 text-sm mt-2">{SITE_CONFIG.shortName} Dashboard</p>

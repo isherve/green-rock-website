@@ -45,6 +45,7 @@ export function BrandLogo({
           width={864}
           height={864}
           priority
+          unoptimized
           className={cn(dims.className, "w-auto object-contain object-center")}
         />
       </span>
