@@ -42,7 +42,7 @@ export function Header() {
 
   return (
     <>
-      <div className="hidden lg:block bg-dark text-white text-sm">
+      <div className="hidden xl:block bg-dark text-white text-sm">
         <div className="container mx-auto flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-6">
             <a
@@ -115,6 +115,8 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <LanguageSwitcher variant="icon" />
+
             <Button variant="ghost" size="icon" className="hidden sm:flex" asChild>
               <Link href="/search" aria-label="Search site">
                 <Search className="h-4 w-4" />
@@ -172,7 +174,6 @@ export function Header() {
                   onNavigate={() => setMobileOpen(false)}
                 />
                 <div className="pt-4 px-4 space-y-3 border-t border-border mt-3">
-                  <LanguageSwitcher variant="pills" surface="light" className="lg:hidden" />
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Portals</p>
                   <div className="grid grid-cols-1 gap-2">
                     <Button asChild variant="outline" className="w-full rounded-lg justify-start">
