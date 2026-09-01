@@ -21,7 +21,7 @@ export function ProjectsSection() {
   );
 
   return (
-    <section className="py-20 lg:py-28 section-padding">
+    <section className="page-section bg-white dark:bg-slate-950">
       <div className="container mx-auto px-4">
         <SectionHeading subtitle={t("homeProjectsSubtitle")} title={t("homeProjectsTitle")} align="center" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">

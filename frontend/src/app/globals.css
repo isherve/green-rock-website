@@ -72,18 +72,39 @@ h1, h2, .font-display {
   letter-spacing: -0.02em;
 }
 
-/* Professional card — clean Kwanda-style */
+/* Professional card — clean, Events Solution Group style */
 .pro-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-  transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  transform-style: preserve-3d;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
 }
 
 .pro-card:hover {
-  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+  border-color: color-mix(in srgb, var(--primary) 18%, var(--border));
+}
+
+.clean-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.clean-card:hover {
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.07);
+}
+
+.page-section {
+  @apply py-16 lg:py-24;
+}
+
+.quote-block {
+  @apply text-center max-w-3xl mx-auto px-6 py-14 lg:py-16;
 }
 
 /* 3D motion system */
@@ -225,7 +246,7 @@ h1, h2, .font-display {
 }
 
 .section-label {
-  @apply inline-block text-primary font-semibold text-xs uppercase tracking-[0.2em] mb-3;
+  @apply inline-block text-muted-foreground font-medium text-xs uppercase tracking-[0.18em] mb-3;
 }
 
 .container {

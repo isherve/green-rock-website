@@ -20,18 +20,18 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.45 }}
+      transition={{ duration: 0.4 }}
       className={cn(
-        "mb-10 lg:mb-14",
+        "mb-10 lg:mb-12",
         align === "center" && "text-center mx-auto max-w-2xl",
         className
       )}
     >
       {subtitle && <span className="section-label">{subtitle}</span>}
-      <h2 className="text-3xl lg:text-[2.25rem] font-bold text-foreground mb-3 leading-tight font-display motion-3d">
+      <h2 className="text-3xl lg:text-[2.35rem] font-bold text-foreground mb-3 leading-[1.15] font-display tracking-tight">
         {title}
       </h2>
       {description && (
@@ -39,12 +39,6 @@ export function SectionHeading({
           {description}
         </p>
       )}
-      <div
-        className={cn(
-          "mt-5 h-0.5 w-14 bg-secondary",
-          align === "center" && "mx-auto"
-        )}
-      />
     </motion.div>
   );
 }

@@ -21,7 +21,7 @@ export function MaterialsSection() {
   );
 
   return (
-    <section className="py-20 lg:py-28 section-padding bg-accent/50">
+    <section className="page-section bg-[#f8faf9] dark:bg-slate-900/40">
       <div className="container mx-auto px-4">
         <SectionHeading subtitle={t("homeMaterialsSubtitle")} title={t("homeMaterialsTitle")} align="center" />
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">

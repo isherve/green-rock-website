@@ -1,98 +1,121 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertySearchBar } from "@/components/shared/PropertySearchBar";
-import { FloatingOrbs } from "@/components/motion/FloatingOrbs";
-import { SITE_CONFIG } from "@/lib/constants";
+import { AnimatedCounter } from "@/components/shared/AnimatedCounter";
+import { SITE_CONFIG, COMPANY_STATS } from "@/lib/constants";
 import { useLocale } from "@/hooks/useLocale";
 import { useResolvedSiteConfig, useSiteSettings } from "@/hooks/useSiteSettings";
-import { useRef } from "react";
+import { STAT_KEYS } from "@/lib/i18n/translations";
 
-const HeroScene3D = dynamic(
-  () => import("@/components/3d/HeroScene3D").then((m) => m.HeroScene3D),
-  { ssr: false, loading: () => null }
-);
+const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
+  "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80",
+  "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80",
+];
 
 export function HeroSection() {
   const { t } = useLocale();
   const { data: settings } = useSiteSettings();
   const site = useResolvedSiteConfig(settings);
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   return (
-    <section ref={ref} className="relative min-h-[92vh] flex items-end pb-12 lg:pb-16 overflow-hidden bg-dark perspective-[1200px]">
-      <div className="absolute inset-0">
-        <HeroScene3D />
-      </div>
+    <section className="relative overflow-hidden bg-[#f8faf9] dark:bg-slate-950 border-b border-border/60">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(10,92,69,0.08),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.06),transparent_50%)]" />
 
-      <FloatingOrbs />
-      <div className="absolute inset-0 bg-gradient-to-b from-dark/25 via-dark/45 to-dark/80 pointer-events-none" />
-
-      <motion.div style={{ y, opacity }} className="container relative z-10 mx-auto px-4 w-full pt-32">
-        <div className="max-w-4xl mb-10 lg:mb-14 motion-3d">
-          <motion.p
-            initial={{ opacity: 0, z: -40, rotateX: 20 }}
-            animate={{ opacity: 1, z: 0, rotateX: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-secondary font-semibold text-sm uppercase tracking-[0.25em] mb-4"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            {t("heroEyebrow")}
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 40, rotateX: 25 }}
-            animate={{ opacity: 1, y: 0, rotateX: 0 }}
-            transition={{ delay: 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.05] mb-5 font-display"
-            style={{ transformStyle: "preserve-3d", textShadow: "0 8px 32px rgba(0,0,0,0.35)" }}
-          >
-            {t("heroTitle")}{" "}
-            <span className="text-gradient-3d">{SITE_CONFIG.shortName}</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.22, duration: 0.65 }}
-            className="text-lg text-white/85 max-w-2xl leading-relaxed mb-6"
-          >
-            {site.description} {site.architectureNote}
-          </motion.p>
+      <div className="container relative mx-auto px-4 pt-12 pb-16 lg:pt-16 lg:pb-20">
+        <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.32 }}
-            className="flex flex-wrap gap-3"
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Button asChild size="lg" className="rounded-lg shadow-lg shadow-primary/30 hover:scale-105 transition-transform">
-              <Link href="/properties">
-                {t("heroBrowseProperties")}
-                <ArrowRight className="h-4 w-4" />
+            <p className="text-sm font-medium text-primary mb-4 tracking-wide">
+              {SITE_CONFIG.shortName} · {site.address}
+            </p>
+            <h1 className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold text-foreground leading-[1.08] mb-5 font-display">
+              {t("heroTitle")}{" "}
+              <span className="text-primary italic font-display">care</span>{" "}
+              in Kigali.
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
+              {site.description} {site.architectureNote}
+            </p>
+
+            <div className="flex flex-wrap gap-3 mb-10">
+              <Button asChild size="lg" className="rounded-full px-7 shadow-sm">
+                <Link href="/contact">
+                  Request a quote
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="rounded-full px-7 bg-white/80 dark:bg-slate-900/80">
+                <Link href="/properties">{t("heroBrowseProperties")}</Link>
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 border-t border-border/70 max-w-2xl">
+              {COMPANY_STATS.map((stat, index) => (
+                <div key={stat.label}>
+                  <AnimatedCounter
+                    value={stat.value}
+                    suffix={stat.suffix}
+                    className="text-2xl lg:text-3xl font-bold text-foreground block"
+                  />
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">{t(STAT_KEYS[index])}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.1 }}
+            className="hidden lg:grid grid-cols-2 gap-4"
+          >
+            {HERO_IMAGES.map((src, index) => (
+              <Link
+                key={src}
+                href={index === 0 ? "/properties" : index === 1 ? "/services" : "/materials"}
+                className={`clean-card relative overflow-hidden group ${index === 0 ? "col-span-2 aspect-[2/1]" : "aspect-square"}`}
+              >
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  unoptimized
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 1024px) 50vw, 400px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+                <span className="absolute bottom-4 left-4 text-white text-sm font-medium">
+                  {index === 0 ? "Properties" : index === 1 ? "Construction" : "Materials"}
+                </span>
               </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="rounded-lg border-white/40 text-white bg-white/10 hover:bg-white hover:text-dark backdrop-blur-sm">
-              <Link href="/contact">{t("heroListProperty")}</Link>
-            </Button>
+            ))}
+            <p className="col-span-2 text-center text-xs text-muted-foreground pt-1">
+              Tap a frame to explore our services
+            </p>
           </motion.div>
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 48, rotateX: 12 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{ delay: 0.42, duration: 0.7 }}
-          className="max-w-5xl glass-3d rounded-2xl p-1"
-          style={{ transformStyle: "preserve-3d" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.2 }}
+          className="mt-12 max-w-4xl"
         >
-          <p className="text-white/90 font-medium mb-3 text-sm uppercase tracking-wider px-2">{t("heroSearchLabel")}</p>
-          <PropertySearchBar variant="hero" />
+          <p className="text-sm font-medium text-muted-foreground mb-3">{t("heroSearchLabel")}</p>
+          <div className="clean-card p-2 sm:p-3 bg-white dark:bg-slate-900">
+            <PropertySearchBar variant="compact" />
+          </div>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 }

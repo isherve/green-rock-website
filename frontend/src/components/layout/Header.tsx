@@ -5,23 +5,12 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { BrandLogo } from "@/components/shared/BrandLogo";
-import {
-  Menu,
-  X,
-  ChevronDown,
-  Sun,
-  Moon,
-  Phone,
-  Mail,
-  Search,
-} from "lucide-react";
+import { Menu, X, ChevronDown, Sun, Moon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavMegaMenu } from "@/components/layout/NavMegaMenu";
 import { MobileNavAccordion } from "@/components/layout/MobileNavAccordion";
-import { SITE_CONFIG } from "@/lib/constants";
 import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
 import { useLocale } from "@/hooks/useLocale";
-import { useResolvedSiteConfig, useSiteSettings } from "@/hooks/useSiteSettings";
 import { getLocalizedNav } from "@/lib/i18n/nav";
 import { cn } from "@/lib/utils";
 
@@ -31,63 +20,29 @@ export function Header() {
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const { locale, t } = useLocale();
-  const { data: settings } = useSiteSettings();
-  const site = useResolvedSiteConfig(settings);
   const navLinks = useMemo(() => getLocalizedNav(locale), [locale]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    const onScroll = () => setIsScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <>
-      <div className="hidden xl:block bg-dark text-white text-sm">
-        <div className="container mx-auto flex items-center justify-between px-4 py-2">
-          <div className="flex items-center gap-6">
-            <a
-              href={`tel:${site.phone}`}
-              className="flex items-center gap-2 hover:text-secondary transition-colors"
-            >
-              <Phone className="h-3.5 w-3.5" />
-              {site.phone}
-            </a>
-            <a
-              href={`mailto:${site.email}`}
-              className="flex items-center gap-2 hover:text-secondary transition-colors"
-            >
-              <Mail className="h-3.5 w-3.5" />
-              {site.email}
-            </a>
-          </div>
-          <div className="flex items-center gap-4 text-white/70 flex-wrap justify-end">
-            <Link href="/portal/login" className="hover:text-secondary transition-colors">
-              {t("customerPortal")}
-            </Link>
-            <Link href="/admin/login" className="hover:text-secondary transition-colors">
-              {t("adminPortal")}
-            </Link>
-            <span className="text-white/40">|</span>
-            <span>{site.address}</span>
-          </div>
-        </div>
-      </div>
-
       <header
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300 border-b",
-          "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700",
-          isScrolled && "shadow-md"
+          "sticky top-0 z-50 w-full transition-all duration-300 border-b bg-white/95 dark:bg-slate-950/95 backdrop-blur-md",
+          isScrolled ? "border-border shadow-sm" : "border-transparent"
         )}
         onMouseLeave={() => setActiveMega(null)}
       >
-        <div className="container mx-auto flex h-18 items-center justify-between px-4 lg:px-6 relative">
+        <div className="container mx-auto flex h-16 lg:h-[4.25rem] items-center justify-between px-4 lg:px-6 relative">
           <BrandLogo />
 
-          <nav className="hidden lg:flex items-center gap-0.5 relative">
+          <nav className="hidden lg:flex items-center gap-1 relative">
             {navLinks.map((item) => {
               const hasMega = Boolean(item.mega && item.sections?.length);
               return (
@@ -96,16 +51,16 @@ export function Header() {
                     href={item.href}
                     onMouseEnter={() => hasMega && setActiveMega(item.labelKey)}
                     className={cn(
-                      "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap",
-                      "text-slate-800 dark:text-slate-100 hover:text-primary",
-                      activeMega === item.labelKey && "text-primary"
+                      "flex items-center gap-1 px-3 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap",
+                      "text-foreground/80 hover:text-primary hover:bg-primary/5",
+                      activeMega === item.labelKey && "text-primary bg-primary/5"
                     )}
                   >
                     {item.label}
                     {hasMega && (
                       <ChevronDown
                         className={cn(
-                          "h-3.5 w-3.5 opacity-60 transition-transform",
+                          "h-3.5 w-3.5 opacity-50 transition-transform",
                           activeMega === item.labelKey && "rotate-180"
                         )}
                       />
@@ -114,13 +69,12 @@ export function Header() {
                 </div>
               );
             })}
-
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <LanguageSwitcher variant="icon" />
 
-            <Button variant="ghost" size="icon" className="hidden sm:flex" asChild>
+            <Button variant="ghost" size="icon" className="hidden sm:flex rounded-full" asChild>
               <Link href="/search" aria-label="Search site">
                 <Search className="h-4 w-4" />
               </Link>
@@ -130,25 +84,22 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="icon"
+                className="rounded-full"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 aria-label="Toggle theme"
               >
-                {theme === "dark" ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
+                {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
               </Button>
             )}
 
-            <Button asChild className="hidden md:inline-flex rounded-lg">
-              <Link href="/properties">{t("searchProperty")}</Link>
+            <Button asChild className="hidden md:inline-flex rounded-full px-5">
+              <Link href="/contact">Get Started</Link>
             </Button>
 
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden rounded-full"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
@@ -169,37 +120,22 @@ export function Header() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-border overflow-hidden max-h-[80vh] overflow-y-auto"
+              className="lg:hidden border-t border-border overflow-hidden max-h-[80vh] overflow-y-auto bg-white dark:bg-slate-950"
             >
               <div className="container mx-auto px-2 py-4">
-                <MobileNavAccordion
-                  items={navLinks}
-                  onNavigate={() => setMobileOpen(false)}
-                />
+                <MobileNavAccordion items={navLinks} onNavigate={() => setMobileOpen(false)} />
                 <div className="pt-4 px-4 space-y-3 border-t border-border mt-3">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("footerPortals")}</p>
+                  <Button asChild className="w-full rounded-full">
+                    <Link href="/contact" onClick={() => setMobileOpen(false)}>Get Started</Link>
+                  </Button>
                   <div className="grid grid-cols-1 gap-2">
-                    <Button asChild variant="outline" className="w-full rounded-lg justify-start">
-                      <Link href="/search" onClick={() => setMobileOpen(false)}>
-                        <Search className="w-4 h-4 mr-2" /> {t("searchSite")}
-                      </Link>
+                    <Button asChild variant="outline" className="w-full rounded-full justify-start">
+                      <Link href="/portal/login" onClick={() => setMobileOpen(false)}>{t("customerPortal")}</Link>
                     </Button>
-                    <Button asChild variant="outline" className="w-full rounded-lg justify-start">
-                      <Link href="/portal/login" onClick={() => setMobileOpen(false)}>
-                        {t("customerPortal")}
-                      </Link>
-                    </Button>
-                    <Button asChild variant="outline" className="w-full rounded-lg justify-start">
-                      <Link href="/admin/login" onClick={() => setMobileOpen(false)}>
-                        {t("adminPortal")}
-                      </Link>
+                    <Button asChild variant="outline" className="w-full rounded-full justify-start">
+                      <Link href="/admin/login" onClick={() => setMobileOpen(false)}>{t("adminPortal")}</Link>
                     </Button>
                   </div>
-                  <Button asChild className="w-full rounded-lg">
-                    <Link href="/properties" onClick={() => setMobileOpen(false)}>
-                      {t("searchProperty")}
-                    </Link>
-                  </Button>
                 </div>
               </div>
             </motion.div>

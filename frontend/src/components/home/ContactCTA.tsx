@@ -5,63 +5,52 @@ import { motion } from "framer-motion";
 import { Phone, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/shared/ContactForm";
-import { SITE_CONFIG } from "@/lib/constants";
+import { useResolvedSiteConfig, useSiteSettings } from "@/hooks/useSiteSettings";
 import { useLocale } from "@/hooks/useLocale";
 
 export function ContactCTA() {
   const { t } = useLocale();
+  const { data: settings } = useSiteSettings();
+  const site = useResolvedSiteConfig(settings);
 
   return (
-    <section className="py-20 lg:py-28 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
-
-      <div className="container relative mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <section className="page-section bg-[#f8faf9] dark:bg-slate-900/40 border-t border-border/60">
+      <div className="container mx-auto px-4">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
           >
-            <span className="inline-block text-secondary font-semibold text-sm uppercase tracking-widest mb-3">
-              {t("homeContactEyebrow")}
-            </span>
+            <span className="section-label">{t("homeContactEyebrow")}</span>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4 leading-tight font-display">
               {t("homeContactTitle")}{" "}
               <span className="text-primary">{t("homeContactTitleHighlight")}</span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
-              {t("homeContactDesc")}
-            </p>
+            <p className="text-muted-foreground text-lg mb-8 leading-relaxed">{t("homeContactDesc")}</p>
 
-            <div className="space-y-4 mb-8">
-              <a
-                href={`tel:${SITE_CONFIG.phone}`}
-                className="flex items-center gap-4 pro-card p-4 hover:-translate-y-0.5 transition-transform group"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+            <div className="space-y-3 mb-8">
+              <a href={`tel:${site.phone}`} className="flex items-center gap-4 clean-card p-4 group">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Phone className="h-5 w-5" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">{t("homeCallUs")}</p>
-                  <p className="font-semibold">{SITE_CONFIG.phone}</p>
+                  <p className="font-medium">{site.phone}</p>
                 </div>
               </a>
-              <a
-                href={`mailto:${SITE_CONFIG.email}`}
-                className="flex items-center gap-4 pro-card p-4 hover:-translate-y-0.5 transition-transform group"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+              <a href={`mailto:${site.email}`} className="flex items-center gap-4 clean-card p-4 group">
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Mail className="h-5 w-5" />
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">{t("homeEmailUs")}</p>
-                  <p className="font-semibold">{SITE_CONFIG.email}</p>
+                  <p className="font-medium">{site.email}</p>
                 </div>
               </a>
             </div>
 
-            <Button asChild variant="outline" size="lg">
+            <Button asChild variant="outline" size="lg" className="rounded-full">
               <Link href="/contact">
                 {t("homeVisitContact")}
                 <ArrowRight className="h-4 w-4" />
@@ -70,10 +59,10 @@ export function ContactCTA() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ delay: 0.1 }}
           >
             <ContactForm />
           </motion.div>

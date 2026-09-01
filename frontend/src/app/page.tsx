@@ -1,13 +1,12 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { PropertyCategoriesSection } from "@/components/home/PropertyCategoriesSection";
-import { PropertiesSection } from "@/components/home/PropertiesSection";
-import { StatsSection } from "@/components/home/StatsSection";
+import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { ServicesSection } from "@/components/home/ServicesSection";
+import { PropertiesSection } from "@/components/home/PropertiesSection";
 import { ProjectsSection } from "@/components/home/ProjectsSection";
 import { MaterialsSection } from "@/components/home/MaterialsSection";
-import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { PartnersSection } from "@/components/home/PartnersSection";
+import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 import { ContactCTA } from "@/components/home/ContactCTA";
 import { PortalsSection } from "@/components/home/PortalsSection";
 
@@ -16,16 +15,15 @@ export default function HomePage() {
     <>
       <HeroSection />
       <PropertyCategoriesSection />
-      <PropertiesSection />
-      <StatsSection />
+      <WhyChooseUs />
       <ServicesSection />
+      <PropertiesSection />
       <ProjectsSection />
       <MaterialsSection />
-      <WhyChooseUs />
       <TestimonialsSection />
-      <PartnersSection />
-      <PortalsSection />
+      <HomeFaqSection />
       <ContactCTA />
+      <PortalsSection />
     </>
   );
 }

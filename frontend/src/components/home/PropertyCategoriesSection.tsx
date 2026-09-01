@@ -12,46 +12,44 @@ export function PropertyCategoriesSection() {
   const { t } = useLocale();
 
   return (
-    <section className="py-16 lg:py-24 bg-white dark:bg-slate-950">
+    <section className="page-section bg-white dark:bg-slate-950">
       <div className="container mx-auto px-4">
         <SectionHeading
-          subtitle={t("homeCatSubtitle")}
-          title={t("homeCatTitle")}
+          subtitle="Browse by category"
+          title="Find the right property or supply"
           description={t("homeCatDesc")}
           align="center"
         />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
           {HOME_CATEGORY_KEYS.map((cat, index) => (
             <motion.div
               key={cat.titleKey}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.05 }}
+              transition={{ delay: index * 0.04 }}
             >
-              <Link
-                href={cat.href}
-                className="group pro-card overflow-hidden block h-full hover:-translate-y-1 transition-transform bg-white dark:bg-slate-900"
-              >
-                <div className="relative h-40 overflow-hidden bg-slate-800">
+              <Link href={cat.href} className="group clean-card overflow-hidden block h-full">
+                <div className="relative h-44 overflow-hidden">
                   <Image
                     src={cat.image}
                     alt={t(cat.titleKey)}
                     fill
                     unoptimized
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent" />
-                  <h3 className="absolute bottom-3 left-3 right-3 text-white text-sm font-semibold font-display leading-snug uppercase tracking-wide">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+                  <span className="absolute top-3 left-3 text-[11px] font-medium uppercase tracking-wider text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                    Featured
+                  </span>
+                  <h3 className="absolute bottom-3 left-3 right-3 text-white font-semibold leading-snug">
                     {t(cat.titleKey)}
                   </h3>
                 </div>
                 <div className="p-4 flex items-center justify-between gap-2">
-                  <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">{t(cat.descKey)}</p>
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </span>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{t(cat.descKey)}</p>
+                  <ArrowRight className="w-4 h-4 text-primary shrink-0 group-hover:translate-x-0.5 transition-transform" />
                 </div>
               </Link>
             </motion.div>

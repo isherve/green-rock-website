@@ -22,16 +22,16 @@ export function ServicesSection() {
   const featured = services.filter((s) => s.featured).slice(0, 6).length ? services.filter((s) => s.featured).slice(0, 6) : services.slice(0, 6);
 
   return (
-    <section className="py-20 lg:py-28 section-padding">
+    <section className="page-section bg-white dark:bg-slate-950">
       <div className="container mx-auto px-4">
-        <SectionHeading subtitle={t("homeServicesSubtitle")} title={t("homeServicesTitle")} description={t("homeServicesDesc")} align="center" />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <SectionHeading subtitle="What we offer" title="A selection of exceptional services" description={t("homeServicesDesc")} align="center" />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {featured.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
         <div className="text-center mt-12">
-          <Button asChild size="lg">
+          <Button asChild size="lg" className="rounded-full">
             <Link href="/services">{t("homeExploreServices")} <ArrowRight className="ml-2 h-4 w-4" /></Link>
           </Button>
         </div>

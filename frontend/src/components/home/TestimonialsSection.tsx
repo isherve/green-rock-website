@@ -12,10 +12,10 @@ export function TestimonialsSection() {
   const { data: testimonials = [] } = usePublicList<Testimonial>("/testimonials", { limit: "6", featured: "true" }, MOCK_TESTIMONIALS);
 
   return (
-    <section className="py-20 lg:py-28 section-padding bg-dark text-white">
+    <section className="page-section bg-white dark:bg-slate-950">
       <div className="container mx-auto px-4">
-        <SectionHeading subtitle={t("homeTestimonialsSubtitle")} title={t("homeTestimonialsTitle")} align="center" className="[&_h2]:text-white [&_p]:text-white/70" />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <SectionHeading subtitle={t("homeTestimonialsSubtitle")} title={t("homeTestimonialsTitle")} align="center" />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {testimonials.slice(0, 3).map((testimonial, index) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} index={index} />
           ))}
