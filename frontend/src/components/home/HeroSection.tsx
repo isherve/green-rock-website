@@ -25,7 +25,6 @@ export function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-[#f8faf9] dark:bg-slate-950 border-b border-border/60">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(10,92,69,0.08),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(201,162,39,0.06),transparent_50%)]" />
 
       <div className="container relative mx-auto px-4 pt-12 pb-16 lg:pt-16 lg:pb-20">
         <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
@@ -35,7 +34,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="text-sm font-medium text-primary mb-4 tracking-wide">
-              {SITE_CONFIG.shortName} · {site.address}
+              {SITE_CONFIG.shortName}, {site.address}
             </p>
             <h1 className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold text-foreground leading-[1.08] mb-5 font-display">
               {t("heroTitle")}{" "}
@@ -92,7 +91,7 @@ export function HeroSection() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 1024px) 50vw, 400px"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-black/40" />
                 <span className="absolute bottom-4 left-4 text-white text-sm font-medium">
                   {index === 0 ? "Properties" : index === 1 ? "Construction" : "Materials"}
                 </span>

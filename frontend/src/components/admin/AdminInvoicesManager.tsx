@@ -240,7 +240,7 @@ export function AdminInvoicesManager() {
               ) : invoices.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
-                    No invoices yet — generate one for a customer purchase or transaction.
+                    No invoices yet. Generate one for a customer purchase or transaction.
                   </td>
                 </tr>
               ) : (
@@ -248,7 +248,7 @@ export function AdminInvoicesManager() {
                   <tr key={invoice.id}>
                     <td className="px-4 py-3 font-medium">{invoice.invoiceNumber}</td>
                     <td className="px-4 py-3">
-                      <div>{invoice.user?.name ?? "—"}</div>
+                      <div>{invoice.user?.name ?? "N/A"}</div>
                       <div className="text-xs text-muted-foreground">{invoice.user?.email}</div>
                     </td>
                     <td className="px-4 py-3">{invoice.title}</td>
@@ -265,7 +265,7 @@ export function AdminInvoicesManager() {
                         </SelectContent>
                       </Select>
                     </td>
-                    <td className="px-4 py-3">{invoice.dueDate ? formatDate(invoice.dueDate) : "—"}</td>
+                    <td className="px-4 py-3">{invoice.dueDate ? formatDate(invoice.dueDate) : "N/A"}</td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
                         {invoice.status !== "PAID" && invoice.status !== "CANCELLED" && (
@@ -319,7 +319,7 @@ export function AdminInvoicesManager() {
               <Input
                 value={form.title}
                 onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
-                placeholder="e.g. Building materials order — March 2026"
+                placeholder="e.g. Building materials order, March 2026"
               />
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -403,7 +403,7 @@ export function AdminInvoicesManager() {
           {paymentInvoice && (
             <div className="grid gap-4 py-2">
               <p className="text-sm text-muted-foreground">
-                {paymentInvoice.invoiceNumber} — {paymentInvoice.title} ({formatPrice(paymentInvoice.amount, paymentInvoice.currency)})
+                {paymentInvoice.invoiceNumber}, {paymentInvoice.title} ({formatPrice(paymentInvoice.amount, paymentInvoice.currency)})
               </p>
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Amount (RWF) *</label>

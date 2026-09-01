@@ -39,7 +39,7 @@ export function PropertyCategoriesSection() {
                     className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+                  <div className="absolute inset-0 bg-black/40" />
                   <span className="absolute top-3 left-3 text-[11px] font-medium uppercase tracking-wider text-white/90 bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
                     Featured
                   </span>

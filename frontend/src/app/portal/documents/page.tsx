@@ -18,7 +18,7 @@ export default function DocumentsPage() {
         <a key={d.id} href={d.fileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 hover:bg-accent/50 transition-colors">
           <div>
             <p className="font-medium">{d.title}</p>
-            <p className="text-xs text-muted-foreground">{d.category} · {formatDate(d.createdAt)}</p>
+            <p className="text-xs text-muted-foreground">{d.category}, {formatDate(d.createdAt)}</p>
           </div>
           <ExternalLink className="h-4 w-4 text-primary shrink-0" />
         </a>

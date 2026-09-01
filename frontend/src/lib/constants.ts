@@ -5,7 +5,7 @@ export const SITE_CONFIG = {
   description:
     "Premier construction, real estate, and building materials supplier in Rwanda. We help with house drawings, architectural plans, and detailed quotations for your building project.",
   architectureNote:
-    "We help in drawing, making quotations, and architecture of the house to be built — from concept to construction-ready plans.",
+    "We help in drawing, making quotations, and architecture of the house to be built, from concept to construction-ready plans.",
   email: "ishimwehervin10@gmail.com",
   phone: "+250 785 652 011",
   whatsapp: "+250785652011",
@@ -60,9 +60,9 @@ export const COMPANY_STATS = [
 ] as const;
 
 export const LOCALES = [
-  { code: "en", label: "English", flag: "🇬🇧" },
-  { code: "fr", label: "Français", flag: "🇫🇷" },
-  { code: "rw", label: "Kinyarwanda", flag: "🇷🇼" },
+  { code: "en", label: "English" },
+  { code: "fr", label: "Français" },
+  { code: "rw", label: "Kinyarwanda" },
 ] as const;
 
 export type LocaleCode = (typeof LOCALES)[number]["code"];

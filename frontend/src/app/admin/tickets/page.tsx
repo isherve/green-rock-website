@@ -99,7 +99,7 @@ export default function AdminTicketsPage() {
                   <Badge variant="outline">{t.status}</Badge>
                 </div>
                 <p className="text-sm font-medium truncate">{t.subject}</p>
-                <p className="text-xs text-muted-foreground">{t.user?.name} · {formatDate(t.createdAt)}</p>
+                <p className="text-xs text-muted-foreground">{t.user?.name}, {formatDate(t.createdAt)}</p>
               </button>
             ))
           )}
@@ -113,7 +113,7 @@ export default function AdminTicketsPage() {
               <div className="flex flex-wrap justify-between gap-2 mb-4">
                 <div>
                   <h3 className="font-semibold">{selected.subject}</h3>
-                  <p className="text-xs text-muted-foreground">{selected.user?.name} · {selected.user?.email}</p>
+                  <p className="text-xs text-muted-foreground">{selected.user?.name}, {selected.user?.email}</p>
                 </div>
                 <Select value={selected.status} onValueChange={(v) => updateStatus(selected.id, v)}>
                   <SelectTrigger className="h-8 w-[130px]">

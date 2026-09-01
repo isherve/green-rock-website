@@ -63,7 +63,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             <Truck className="h-3.5 w-3.5 text-primary" />
             Delivery available
             {product.deliveryCharge != null &&
-              ` · ${formatPrice(product.deliveryCharge, product.currency)}`}
+              `, ${formatPrice(product.deliveryCharge, product.currency)}`}
           </div>
         )}
 

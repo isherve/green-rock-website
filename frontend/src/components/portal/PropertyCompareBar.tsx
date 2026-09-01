@@ -65,9 +65,9 @@ export function PropertyCompareBar({ properties }: PropertyCompareProps) {
                 { label: "Location", get: (p: Property) => p.location },
                 { label: "Type", get: (p: Property) => p.propertyType },
                 { label: "Purpose", get: (p: Property) => p.purpose },
-                { label: "Bedrooms", get: (p: Property) => String(p.bedrooms ?? "—") },
-                { label: "Bathrooms", get: (p: Property) => String(p.bathrooms ?? "—") },
-                { label: "Area", get: (p: Property) => (p.area ? `${p.area} ${p.areaUnit}` : "—") },
+                { label: "Bedrooms", get: (p: Property) => String(p.bedrooms ?? "N/A") },
+                { label: "Bathrooms", get: (p: Property) => String(p.bathrooms ?? "N/A") },
+                { label: "Area", get: (p: Property) => (p.area ? `${p.area} ${p.areaUnit}` : "N/A") },
               ].map((row) => (
                 <tr key={row.label} className="border-t">
                   <td className="px-4 py-3 font-medium">{row.label}</td>

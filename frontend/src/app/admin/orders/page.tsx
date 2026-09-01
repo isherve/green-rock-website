@@ -54,7 +54,7 @@ export default function AdminOrdersPage() {
   return (
     <div>
       <p className="text-muted-foreground text-sm mb-6">
-        Customer material orders from the portal — update status as you confirm, process, and deliver.
+        Customer material orders from the portal. Update status as you confirm, process, and deliver.
       </p>
       {loading ? (
         <p className="text-muted-foreground text-sm">Loading…</p>
@@ -67,7 +67,7 @@ export default function AdminOrdersPage() {
               <div className="flex flex-wrap justify-between items-start gap-3 mb-3">
                 <div>
                   <p className="font-semibold">{order.orderNumber}</p>
-                  <p className="text-sm">{order.user?.name} · {order.user?.email}</p>
+                  <p className="text-sm">{order.user?.name}, {order.user?.email}</p>
                   {order.user?.phone && <p className="text-xs text-muted-foreground">{order.user.phone}</p>}
                 </div>
                 <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export default function AdminOrdersPage() {
               <ul className="text-sm text-muted-foreground space-y-1 mb-2">
                 {(Array.isArray(order.items) ? order.items : []).map((item, i) => (
                   <li key={i}>
-                    · {(item.name ?? item.description ?? "Item")} × {item.quantity} @ {formatPrice(item.unitPrice, order.currency)}
+                    , {(item.name ?? item.description ?? "Item")} × {item.quantity} @ {formatPrice(item.unitPrice, order.currency)}
                   </li>
                 ))}
               </ul>

@@ -52,10 +52,10 @@ export default function AdminDashboardPage() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-8">
         {[
-          { label: "Properties", value: overview?.totalProperties ?? "—" },
-          { label: "Projects", value: overview?.totalProjects ?? "—" },
-          { label: "New Inquiries", value: overview?.newInquiries ?? "—" },
-          { label: "Subscribers", value: overview?.newsletterSubscribers ?? "—" },
+          { label: "Properties", value: overview?.totalProperties ?? "N/A" },
+          { label: "Projects", value: overview?.totalProjects ?? "N/A" },
+          { label: "New Inquiries", value: overview?.newInquiries ?? "N/A" },
+          { label: "Subscribers", value: overview?.newsletterSubscribers ?? "N/A" },
         ].map((s) => (
           <div key={s.label} className="clean-card p-6">
             <p className="text-sm text-muted-foreground">{s.label}</p>
@@ -88,9 +88,9 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader><CardTitle>Quick Stats</CardTitle></CardHeader>
           <CardContent className="space-y-3 text-sm">
-            <div className="flex justify-between py-1"><span className="text-muted-foreground">Total Users</span><strong>{overview?.totalUsers ?? "—"}</strong></div>
-            <div className="flex justify-between py-1"><span className="text-muted-foreground">Products</span><strong>{overview?.totalProducts ?? "—"}</strong></div>
-            <div className="flex justify-between py-1"><span className="text-muted-foreground">Unread Messages</span><strong>{overview?.unreadMessages ?? "—"}</strong></div>
+            <div className="flex justify-between py-1"><span className="text-muted-foreground">Total Users</span><strong>{overview?.totalUsers ?? "N/A"}</strong></div>
+            <div className="flex justify-between py-1"><span className="text-muted-foreground">Products</span><strong>{overview?.totalProducts ?? "N/A"}</strong></div>
+            <div className="flex justify-between py-1"><span className="text-muted-foreground">Unread Messages</span><strong>{overview?.unreadMessages ?? "N/A"}</strong></div>
             <div className="flex justify-between py-1"><span className="text-muted-foreground">Inquiry Growth</span><strong className="text-green-600">+{stats?.trends.inquiryGrowthPercent ?? 0}%</strong></div>
           </CardContent>
         </Card>

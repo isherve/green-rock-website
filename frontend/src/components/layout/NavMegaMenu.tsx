@@ -95,7 +95,7 @@ export function NavMegaMenu({ item, isOpen, onClose }: NavMegaMenuProps) {
                       className="object-cover opacity-40"
                       sizes="260px"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/85 to-dark/50 p-6 flex flex-col justify-end">
+                    <div className="absolute inset-0 bg-dark/80 p-6 flex flex-col justify-end">
                       <p className="text-secondary text-[10px] font-bold uppercase tracking-[0.2em] mb-2">
                         Green Rock
                       </p>

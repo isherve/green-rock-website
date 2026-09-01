@@ -44,9 +44,9 @@ export default function AdminAuditLogsPage() {
                 <span className="text-muted-foreground text-xs">{formatDate(log.createdAt)}</span>
               </div>
               <p className="text-muted-foreground mt-1">
-                {log.entity}{log.entityId ? ` · ${log.entityId.slice(0, 8)}…` : ""}
-                {log.user ? ` · ${log.user.name}` : ""}
-                {log.ipAddress ? ` · ${log.ipAddress}` : ""}
+                {log.entity}{log.entityId ? `, ${log.entityId.slice(0, 8)}…` : ""}
+                {log.user ? `, ${log.user.name}` : ""}
+                {log.ipAddress ? `, ${log.ipAddress}` : ""}
               </p>
             </div>
           ))}

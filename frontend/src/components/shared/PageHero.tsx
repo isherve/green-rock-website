@@ -13,7 +13,7 @@ interface PageHeroProps {
 export function PageHero({
   title,
   subtitle,
-  eyebrow = "Green Rock · Kigali",
+  eyebrow = "Green Rock, Kigali",
   breadcrumb,
   className,
 }: PageHeroProps) {
@@ -24,7 +24,6 @@ export function PageHero({
         className
       )}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(10,92,69,0.07),transparent_55%)]" />
       <div className="container relative mx-auto px-4 py-12 md:py-16 lg:py-20">
         {breadcrumb && breadcrumb.length > 0 && (
           <nav className="flex items-center gap-1 text-sm text-muted-foreground mb-5 flex-wrap">

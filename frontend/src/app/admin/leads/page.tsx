@@ -118,7 +118,7 @@ export default function AdminLeadsPage() {
 
   const openConvert = (inq: Inquiry) => {
     setConvertInquiry(inq);
-    setConvertTitle(inq.property?.title ? `Quote — ${inq.property.title}` : `Quote for ${inq.name}`);
+    setConvertTitle(inq.property?.title ? `Quote for ${inq.property.title}` : `Quote for ${inq.name}`);
     setConvertAmount("");
     setConvertOpen(true);
   };
@@ -178,7 +178,7 @@ export default function AdminLeadsPage() {
           Quotes & Leads ({quoteCount})
         </Button>
         <Button variant={tab === "contact" ? "default" : "outline"} size="sm" className="rounded-full" onClick={() => setTab("contact")}>
-          Contact Messages ({contacts.length}{newContacts ? ` · ${newContacts} new` : ""})
+          Contact Messages ({contacts.length}{newContacts ? `, ${newContacts} new` : ""})
         </Button>
         <Button variant="ghost" size="sm" onClick={load} className="ml-auto rounded-full">
           Refresh
@@ -196,7 +196,7 @@ export default function AdminLeadsPage() {
               <div key={msg.id} className="clean-card p-5">
                 <div className="flex justify-between items-start gap-4 mb-2">
                   <div>
-                    <p className="font-medium">{msg.name} · {msg.email}</p>
+                    <p className="font-medium">{msg.name}, {msg.email}</p>
                     {msg.subject && <p className="text-sm">{msg.subject}</p>}
                   </div>
                   <div className="flex items-center gap-2">
@@ -223,7 +223,7 @@ export default function AdminLeadsPage() {
               <div key={inq.id} className="clean-card p-5">
                 <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
                   <div>
-                    <p className="font-medium">{inq.name} · {inq.email}</p>
+                    <p className="font-medium">{inq.name}, {inq.email}</p>
                     {inq.phone && <p className="text-xs text-muted-foreground">{inq.phone}</p>}
                     {(inq.property || inq.product) && (
                       <p className="text-xs text-primary mt-1">

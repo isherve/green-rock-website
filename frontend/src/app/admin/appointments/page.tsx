@@ -18,7 +18,7 @@ export default function AdminAppointmentsPage() {
         { key: "email", label: "Email" },
         { key: "date", label: "Date", render: (r) => formatDate(r.date) },
         { key: "time", label: "Time" },
-        { key: "service", label: "Service", render: (r) => r.service ?? "—" },
+        { key: "service", label: "Service", render: (r) => r.service ?? "N/A" },
         { key: "isConfirmed", label: "Status", render: (r) => (
           <Badge variant={r.isConfirmed ? "default" : "secondary"}>{r.isConfirmed ? "Confirmed" : "Pending"}</Badge>
         ) },

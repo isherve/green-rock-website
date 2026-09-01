@@ -68,7 +68,7 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
         msg = "Cannot reach the server. If this persists, the site database may not be configured on Vercel yet.";
       }
       if (msg.includes("DATABASE_URL") || msg.includes("Environment variable not found")) {
-        msg = "Database not connected. In Vercel: Storage → Create Postgres → Redeploy → run seed.";
+        msg = "Database not connected. In Vercel: Storage, Create Postgres, Redeploy, then run seed.";
       }
       setError(msg);
     }
@@ -100,7 +100,7 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
         msg = "Cannot reach the server. If this persists, the site database may not be configured on Vercel yet.";
       }
       if (msg.includes("DATABASE_URL") || msg.includes("Environment variable not found")) {
-        msg = "Database not connected. In Vercel: Storage → Create Postgres → Redeploy → run seed.";
+        msg = "Database not connected. In Vercel: Storage, Create Postgres, Redeploy, then run seed.";
       }
       setError(msg);
     }
@@ -120,7 +120,7 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
             {isRegister ? "Create Account" : "Sign In"}
           </h1>
           <p className="text-muted-foreground text-sm mt-2">
-            Customer Portal · {SITE_CONFIG.shortName}
+            Customer Portal, {SITE_CONFIG.shortName}
           </p>
         </div>
 
@@ -181,7 +181,7 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
           )}
         </p>
         <p className="text-center text-xs text-muted-foreground mt-4">
-          <Link href="/" className="hover:text-foreground">← Back to website</Link>
+          <Link href="/" className="hover:text-foreground">Back to website</Link>
         </p>
       </div>
     </div>

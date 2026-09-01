@@ -16,7 +16,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Do you deliver building materials?",
-    a: "Yes — cement, steel, tiles, and more with bulk ordering and site delivery anywhere in Rwanda.",
+    a: "Yes. Cement, steel, tiles, and more with bulk ordering and site delivery anywhere in Rwanda.",
   },
   {
     q: "How do I list my property for sale or rent?",
@@ -35,7 +35,7 @@ export function HomeFaqSection() {
         <SectionHeading
           subtitle="Questions"
           title="Frequently asked questions"
-          description="Services, pricing, and how booking works. Still unsure? Message the team — we reply quickly."
+          description="Services, pricing, and how booking works. Still unsure? Message the team and we reply quickly."
           align="center"
         />
         <div className="space-y-3 mt-10">

@@ -122,7 +122,7 @@ function InvoicesContent() {
               <p className="text-sm text-muted-foreground">{invoice.title}</p>
               <p className="text-sm mt-1">
                 {formatPrice(invoice.amount, invoice.currency)}
-                {invoice.dueDate ? ` · Due ${formatDate(invoice.dueDate)}` : ""}
+                {invoice.dueDate ? `, Due ${formatDate(invoice.dueDate)}` : ""}
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -158,7 +158,7 @@ function InvoicesContent() {
           {payInvoice && (
             <div className="space-y-4 py-2">
               <p className="text-sm">
-                {payInvoice.invoiceNumber} — {formatPrice(payInvoice.amount, payInvoice.currency)}
+                {payInvoice.invoiceNumber}, {formatPrice(payInvoice.amount, payInvoice.currency)}
               </p>
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Payment method</label>
@@ -203,7 +203,7 @@ function PaymentStatusBanner() {
   if (status !== "complete") return null;
   return (
     <div className="mb-4 rounded-lg bg-green-50 border border-green-200 text-green-800 px-4 py-3 text-sm">
-      Payment submitted — we will confirm once processed.
+      Payment submitted. We will confirm once processed.
     </div>
   );
 }

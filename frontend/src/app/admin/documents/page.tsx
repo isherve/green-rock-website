@@ -109,7 +109,7 @@ export default function AdminDocumentsPage() {
         </div>
         <div className="space-y-1.5">
           <label className="text-sm font-medium">Title *</label>
-          <Input value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} placeholder="e.g. Sales agreement — Kimihurura plot" />
+          <Input value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} placeholder="e.g. Sales agreement for Kimihurura plot" />
         </div>
         <SingleImageUpload
           label="File URL (upload image or paste PDF link)"
@@ -147,7 +147,7 @@ export default function AdminDocumentsPage() {
                       {doc.title}
                     </a>
                   </td>
-                  <td className="px-4 py-3">{doc.user?.name ?? "—"}</td>
+                  <td className="px-4 py-3">{doc.user?.name ?? "N/A"}</td>
                   <td className="px-4 py-3 capitalize">{doc.category}</td>
                   <td className="px-4 py-3">{formatDate(doc.createdAt)}</td>
                   <td className="px-4 py-3">

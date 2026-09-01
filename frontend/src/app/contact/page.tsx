@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Contact Us", description: "Get in to
 export default function ContactPage() {
   return (
     <>
-      <PageHero title="Contact Us" subtitle="We'd love to hear from you — request a quote, book a visit, or ask a question." />
+      <PageHero title="Contact Us" subtitle="We'd love to hear from you. Request a quote, book a visit, or ask a question." />
       <PageSection>
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           <div>

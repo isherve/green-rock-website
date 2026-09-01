@@ -67,7 +67,7 @@ export default function AdminApplicationsPage() {
               <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
                 <div>
                   <p className="font-semibold">{app.name}</p>
-                  <p className="text-sm text-muted-foreground">{app.email} · {app.phone}</p>
+                  <p className="text-sm text-muted-foreground">{app.email}, {app.phone}</p>
                   {app.career && (
                     <p className="text-sm text-primary mt-1">
                       Applied for: {app.career.title} ({app.career.department})

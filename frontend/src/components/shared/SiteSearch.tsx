@@ -78,22 +78,22 @@ export function SiteSearch({ compact = false }: { compact?: boolean }) {
         <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-xl shadow-xl z-50 p-3 max-h-80 overflow-y-auto">
           {results.properties.map((p) => (
             <Link key={p.slug} href={`/properties/${p.slug}`} className="block px-3 py-2 text-sm hover:bg-accent rounded-lg" onClick={() => setOpen(false)}>
-              <span className="text-xs text-primary font-medium">Property</span> — {p.title}
+              <span className="text-xs text-primary font-medium">Property</span> {p.title}
             </Link>
           ))}
           {results.projects.map((p) => (
             <Link key={p.slug} href={`/projects/${p.slug}`} className="block px-3 py-2 text-sm hover:bg-accent rounded-lg" onClick={() => setOpen(false)}>
-              <span className="text-xs text-primary font-medium">Project</span> — {p.title}
+              <span className="text-xs text-primary font-medium">Project</span> {p.title}
             </Link>
           ))}
           {results.products.map((p) => (
             <Link key={p.slug} href={`/materials/${p.slug}`} className="block px-3 py-2 text-sm hover:bg-accent rounded-lg" onClick={() => setOpen(false)}>
-              <span className="text-xs text-primary font-medium">Material</span> — {p.name}
+              <span className="text-xs text-primary font-medium">Material</span> {p.name}
             </Link>
           ))}
           {results.blogPosts.map((p) => (
             <Link key={p.slug} href={`/blog/${p.slug}`} className="block px-3 py-2 text-sm hover:bg-accent rounded-lg" onClick={() => setOpen(false)}>
-              <span className="text-xs text-primary font-medium">Blog</span> — {p.title}
+              <span className="text-xs text-primary font-medium">Blog</span> {p.title}
             </Link>
           ))}
           <Link href={`/search?q=${encodeURIComponent(query)}`} className="block text-center text-xs text-primary pt-2" onClick={() => setOpen(false)}>

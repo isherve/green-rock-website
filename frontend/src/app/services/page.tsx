@@ -21,7 +21,7 @@ export default async function ServicesPage() {
     <>
       <PageHero
         title="Our Services"
-        subtitle="Architecture, construction, real estate, and building materials — professional solutions across Rwanda."
+        subtitle="Architecture, construction, real estate, and building materials. Professional solutions across Rwanda."
       />
       <section className="page-section container mx-auto px-4">
         <SectionHeading title="What We Offer" subtitle="Full-Service Solutions" />

@@ -23,7 +23,7 @@ export function WhyChooseUs() {
               <SectionHeading
                 subtitle="Our philosophy"
                 title="The journey of perfect builds"
-                description="Every project tells a story. At Green Rock, we combine Rwandan expertise with professional standards — from property listings and construction to materials delivered on site."
+                description="Every project tells a story. At Green Rock, we combine Rwandan expertise with professional standards, from property listings and construction to materials delivered on site."
                 align="left"
                 className="mb-0"
               />

@@ -179,7 +179,7 @@ export default function AdminSettingsPage() {
                 {emailStatus.configured && emailStatus.provider && (
                   <p className="mt-1 text-xs opacity-80">
                     Provider: <strong>{emailStatus.provider === "resend" ? "Resend" : "Gmail SMTP"}</strong>
-                    {emailStatus.from && <> · From: <strong>{emailStatus.from}</strong></>}
+                    {emailStatus.from && <>, From: <strong>{emailStatus.from}</strong></>}
                   </p>
                 )}
                 <p className="mt-2 text-xs opacity-80">
@@ -190,15 +190,15 @@ export default function AdminSettingsPage() {
                     <li>
                       RESEND_API_KEY:{" "}
                       {emailStatus.hasResendKey ? (
-                        <span className="text-green-700 dark:text-green-400">✓ set</span>
+                        <span className="text-green-700 dark:text-green-400">Set</span>
                       ) : (
-                        <span className="text-red-600 dark:text-red-400">✗ missing — recommended</span>
+                        <span className="text-red-600 dark:text-red-400">Missing (recommended)</span>
                       )}
                     </li>
                     <li>
                       SMTP (fallback):{" "}
                       {emailStatus.smtpUser && emailStatus.hasSmtpPass ? (
-                        <span className="text-green-700 dark:text-green-400">✓ configured</span>
+                        <span className="text-green-700 dark:text-green-400">Configured</span>
                       ) : (
                         <span className="text-muted-foreground">optional Gmail App Password</span>
                       )}
@@ -238,7 +238,7 @@ export default function AdminSettingsPage() {
                     {configuringEmail ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
                     Save & Send Test Email
                   </Button>
-                  <p className="text-xs text-muted-foreground">No Vercel redeploy needed — key is saved securely in your database.</p>
+                  <p className="text-xs text-muted-foreground">No Vercel redeploy needed. Key is saved securely in your database.</p>
                 </div>
               )}
 
@@ -265,7 +265,7 @@ export default function AdminSettingsPage() {
                     {emailStatus.events.map((e) => (
                       <li key={e.event} className="flex items-start gap-2">
                         <span className="text-primary mt-1">•</span>
-                        <span>{e.event} <span className="text-xs">→ {e.recipient}</span></span>
+                        <span>{e.event} <span className="text-xs">to {e.recipient}</span></span>
                       </li>
                     ))}
                   </ul>

@@ -88,7 +88,7 @@ function MobileNavItem({
           onClick={onNavigate}
           className="block mx-3 mt-2 mb-1 text-center text-sm font-semibold text-primary py-2"
         >
-          {t("viewAll")} {item.label?.toLowerCase()} →
+          {t("viewAll")} {item.label?.toLowerCase()}
         </Link>
       </div>
     </details>

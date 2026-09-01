@@ -274,12 +274,12 @@ export function AdminCRUD<T extends AdminRow = AdminRow>({
               {loading ? (
                 <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto" /></td></tr>
               ) : items.length === 0 ? (
-                <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-muted-foreground">No records — click Add New to create one</td></tr>
+                <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-muted-foreground">No records. Click Add New to create one.</td></tr>
               ) : items.map((item) => (
                 <tr key={item.id}>
                   {columns.map((col) => (
                     <td key={col.key} className="px-4 py-3">
-                      {col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? "—")}
+                      {col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? "N/A")}
                     </td>
                   ))}
                   <td className="px-4 py-3">

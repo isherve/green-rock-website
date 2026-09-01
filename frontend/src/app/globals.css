@@ -149,11 +149,11 @@ h1, h2, .font-display {
 }
 
 .text-gradient-3d {
-  background: linear-gradient(135deg, #10b981 0%, var(--secondary) 50%, #34d399 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 2px 8px rgba(201, 162, 39, 0.35));
+  color: var(--primary);
+}
+
+.shimmer-border {
+  background: rgba(201, 162, 39, 0.25);
 }
 
 .perspective-\[1200px\] {
@@ -169,41 +169,17 @@ h1, h2, .font-display {
   animation: float-y 5s ease-in-out infinite;
 }
 
-@keyframes shimmer-3d {
-  0% { background-position: 200% center; }
-  100% { background-position: -200% center; }
-}
-
-.shimmer-border {
-  background: linear-gradient(90deg, transparent, rgba(201, 162, 39, 0.4), transparent);
-  background-size: 200% 100%;
-  animation: shimmer-3d 4s linear infinite;
-}
-
 /* CSS 3D fallback when WebGL unavailable */
 .hero-3d-fallback {
-  background: radial-gradient(ellipse at 30% 20%, rgba(16, 185, 129, 0.15), transparent 50%),
-    radial-gradient(ellipse at 70% 60%, rgba(201, 162, 39, 0.12), transparent 45%),
-    #0c1829;
+  background: #0c1829;
   overflow: hidden;
 }
 
 .hero-grid-floor {
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(16, 185, 129, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(16, 185, 129, 0.12) 1px, transparent 1px);
-  background-size: 48px 48px;
-  transform: perspective(500px) rotateX(62deg) scale(2.2);
-  transform-origin: center 80%;
-  animation: grid-drift 20s linear infinite;
+  background-color: rgba(16, 185, 129, 0.04);
   opacity: 0.5;
-}
-
-@keyframes grid-drift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 0 48px, 48px 0; }
 }
 
 .hero-glow-orb {
@@ -265,10 +241,7 @@ h1, h2, .font-display {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--primary);
 }
 
 .section-label {

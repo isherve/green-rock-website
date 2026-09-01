@@ -14,7 +14,7 @@ const CUSTOMER_TITLES: Record<string, { title: string; subtitle?: string }> = {
   "/portal/construction-requests": { title: "Construction Requests", subtitle: "Building and renovation inquiries" },
   "/portal/material-orders": { title: "Material Orders", subtitle: "Building materials order history" },
   "/portal/appointments": { title: "Appointments", subtitle: "Scheduled site visits and consultations" },
-  "/portal/invoices": { title: "Invoices", subtitle: "Billing documents — view and download PDFs" },
+  "/portal/invoices": { title: "Invoices", subtitle: "Billing documents. View and download PDFs" },
   "/portal/payments": { title: "Payments", subtitle: "Payment history and receipts" },
   "/portal/support": { title: "Support Tickets", subtitle: "Get help from our support team" },
   "/portal/documents": { title: "Documents", subtitle: "Contracts, plans, and shared files" },

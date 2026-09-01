@@ -100,7 +100,7 @@ export function AdminList<T extends { id: string }>({
                 <tr key={item.id}>
                   {columns.map((col) => (
                     <td key={col.key} className="px-4 py-3">
-                      {col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? "—")}
+                      {col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? "N/A")}
                     </td>
                   ))}
                   <td className="px-4 py-3">

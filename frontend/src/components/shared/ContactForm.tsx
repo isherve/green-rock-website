@@ -65,7 +65,7 @@ const TYPE_HINTS: Record<ContactFormData["type"], string> = {
   PROPERTY: "Share the property you are interested in or your requirements.",
   MATERIAL: "List materials, quantities, and delivery location.",
   CONSTRUCTION: "Describe your construction project scope and timeline.",
-  APPOINTMENT: "Pick a date and time — we will confirm your visit.",
+  APPOINTMENT: "Pick a date and time. We will confirm your visit.",
   GENERAL: "How can we help you today?",
 };
 

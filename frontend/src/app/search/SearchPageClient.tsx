@@ -63,7 +63,7 @@ export default function SearchPageClient() {
                       <Link href={`/properties/${p.slug}`} className="text-primary hover:underline">
                         {p.title}
                       </Link>
-                      <span className="text-sm text-muted-foreground"> — {p.location}</span>
+                      <span className="text-sm text-muted-foreground">, {p.location}</span>
                     </li>
                   ))}
                 </ul>
@@ -79,7 +79,7 @@ export default function SearchPageClient() {
                       <Link href={`/projects/${p.slug}`} className="text-primary hover:underline">
                         {p.title}
                       </Link>
-                      <span className="text-sm text-muted-foreground"> — {p.location}</span>
+                      <span className="text-sm text-muted-foreground">, {p.location}</span>
                     </li>
                   ))}
                 </ul>

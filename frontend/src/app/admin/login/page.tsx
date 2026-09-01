@@ -70,7 +70,7 @@ export default function AdminLoginPage() {
           </Button>
         </form>
         <p className="text-center text-muted-foreground text-xs mt-6">
-          <Link href="/" className="hover:text-primary">← Back to website</Link>
+          <Link href="/" className="hover:text-primary">Back to website</Link>
         </p>
       </div>
     </div>

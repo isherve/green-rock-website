@@ -24,21 +24,21 @@ export default function CustomerDashboardPage() {
   }, []);
 
   const cards = [
-    { label: "Saved Properties", value: stats?.savedProperties ?? "—", icon: Heart, href: "/portal/saved-properties" },
-    { label: "Quote Requests", value: stats?.quotes ?? "—", icon: FileText, href: "/portal/quotes" },
-    { label: "Construction", value: stats?.constructionRequests ?? "—", icon: HardHat, href: "/portal/construction-requests" },
-    { label: "Material Orders", value: stats?.materialOrders ?? "—", icon: Package, href: "/portal/material-orders" },
-    { label: "Appointments", value: stats?.appointments ?? "—", icon: Calendar, href: "/portal/appointments" },
-    { label: "Open Tickets", value: stats?.openTickets ?? "—", icon: LifeBuoy, href: "/portal/support" },
-    { label: "Notifications", value: stats?.unreadNotifications ?? "—", icon: Bell, href: "/portal/notifications" },
+    { label: "Saved Properties", value: stats?.savedProperties ?? "N/A", icon: Heart, href: "/portal/saved-properties" },
+    { label: "Quote Requests", value: stats?.quotes ?? "N/A", icon: FileText, href: "/portal/quotes" },
+    { label: "Construction", value: stats?.constructionRequests ?? "N/A", icon: HardHat, href: "/portal/construction-requests" },
+    { label: "Material Orders", value: stats?.materialOrders ?? "N/A", icon: Package, href: "/portal/material-orders" },
+    { label: "Appointments", value: stats?.appointments ?? "N/A", icon: Calendar, href: "/portal/appointments" },
+    { label: "Open Tickets", value: stats?.openTickets ?? "N/A", icon: LifeBuoy, href: "/portal/support" },
+    { label: "Notifications", value: stats?.unreadNotifications ?? "N/A", icon: Bell, href: "/portal/notifications" },
   ];
 
   return (
     <div className="space-y-8">
-      <div className="clean-card p-6 bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
+      <div className="clean-card p-6 border-primary/20">
         <h2 className="text-lg font-semibold font-display mb-2">Welcome to your customer portal</h2>
         <p className="text-sm text-muted-foreground max-w-2xl">
-          Manage property searches, construction quotes, material orders, appointments, invoices, and support — all in one place.
+          Manage property searches, construction quotes, material orders, appointments, invoices, and support in one place.
         </p>
         <div className="flex flex-wrap gap-3 mt-4">
           <Button asChild size="sm">

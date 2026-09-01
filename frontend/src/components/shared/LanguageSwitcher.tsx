@@ -68,14 +68,12 @@ export function LanguageSwitcher({
                     : "text-foreground/80 hover:bg-muted"
                 )}
               >
-                <span>
-                  {loc.flag} {loc.label}
-                </span>
+                <span>{loc.label}</span>
                 {locale === loc.code && <Check className="h-4 w-4 shrink-0" />}
               </button>
             ))}
             <p className="px-3 py-1 text-[10px] text-muted-foreground border-t border-border mt-1 pt-2">
-              {current.flag} {current.label}
+              {current.label}
             </p>
           </div>
         )}
@@ -111,7 +109,7 @@ export function LanguageSwitcher({
                     : "bg-white/5 text-white/70 border-white/15 hover:bg-white/10 hover:text-white"
               )}
             >
-              {loc.flag} {loc.label}
+              {loc.label}
             </button>
           ))}
         </div>
@@ -132,7 +130,7 @@ export function LanguageSwitcher({
       >
         {LOCALES.map((loc) => (
           <option key={loc.code} value={loc.code}>
-            {loc.flag} {loc.label}
+            {loc.label}
           </option>
         ))}
       </select>
@@ -149,7 +147,7 @@ export function LanguageSwitcher({
       >
         {LOCALES.map((loc) => (
           <option key={loc.code} value={loc.code}>
-            {loc.flag} {loc.label}
+            {loc.label}
           </option>
         ))}
       </select>

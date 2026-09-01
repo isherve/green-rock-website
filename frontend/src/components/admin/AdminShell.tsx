@@ -138,7 +138,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <LogOut className="w-4 h-4 mr-2" /> Sign out
           </Button>
           <Link href="/" className="block text-xs text-center text-muted-foreground hover:text-primary mt-3">
-            ← Back to website
+            Back to website
           </Link>
         </div>
       </aside>
