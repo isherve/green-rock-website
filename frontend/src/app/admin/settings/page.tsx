@@ -277,7 +277,10 @@ export default function AdminSettingsPage() {
       </Card>
 
       <Card>
-        <CardHeader><CardTitle>Company Information</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Company Information</CardTitle>
+          <p className="text-sm text-muted-foreground">These details appear on the public landing page at the homepage.</p>
+        </CardHeader>
         <CardContent className="space-y-4">
           <div>
             <label className="text-sm font-medium mb-1 block">Company Name</label>

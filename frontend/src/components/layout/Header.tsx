@@ -21,6 +21,7 @@ import { MobileNavAccordion } from "@/components/layout/MobileNavAccordion";
 import { SITE_CONFIG } from "@/lib/constants";
 import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
 import { useLocale } from "@/hooks/useLocale";
+import { useResolvedSiteConfig, useSiteSettings } from "@/hooks/useSiteSettings";
 import { getLocalizedNav } from "@/lib/i18n/nav";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +31,8 @@ export function Header() {
   const [activeMega, setActiveMega] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const { locale, t } = useLocale();
+  const { data: settings } = useSiteSettings();
+  const site = useResolvedSiteConfig(settings);
   const navLinks = useMemo(() => getLocalizedNav(locale), [locale]);
   const [mounted, setMounted] = useState(false);
 
@@ -46,18 +49,18 @@ export function Header() {
         <div className="container mx-auto flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-6">
             <a
-              href={`tel:${SITE_CONFIG.phone}`}
+              href={`tel:${site.phone}`}
               className="flex items-center gap-2 hover:text-secondary transition-colors"
             >
               <Phone className="h-3.5 w-3.5" />
-              {SITE_CONFIG.phone}
+              {site.phone}
             </a>
             <a
-              href={`mailto:${SITE_CONFIG.email}`}
+              href={`mailto:${site.email}`}
               className="flex items-center gap-2 hover:text-secondary transition-colors"
             >
               <Mail className="h-3.5 w-3.5" />
-              {SITE_CONFIG.email}
+              {site.email}
             </a>
           </div>
           <div className="flex items-center gap-4 text-white/70 flex-wrap justify-end">
@@ -68,7 +71,7 @@ export function Header() {
               {t("adminPortal")}
             </Link>
             <span className="text-white/40">|</span>
-            <span>{SITE_CONFIG.address}</span>
+            <span>{site.address}</span>
           </div>
         </div>
       </div>

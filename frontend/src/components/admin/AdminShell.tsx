@@ -5,7 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  LogOut, Menu,
+  LogOut, Menu, ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -140,6 +140,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             <Menu className="w-6 h-6" />
           </button>
           <h1 className="text-xl font-bold flex-1">{title}</h1>
+          <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex">
+            <Link href="/" target="_blank" rel="noopener noreferrer">
+              View Landing Page
+              <ExternalLink className="ml-2 h-3.5 w-3.5" />
+            </Link>
+          </Button>
         </header>
         <main className="flex-1 p-4 lg:p-8">
           {checkingAuth && !user ? (

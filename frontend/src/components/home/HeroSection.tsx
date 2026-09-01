@@ -9,6 +9,7 @@ import { PropertySearchBar } from "@/components/shared/PropertySearchBar";
 import { FloatingOrbs } from "@/components/motion/FloatingOrbs";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useLocale } from "@/hooks/useLocale";
+import { useResolvedSiteConfig, useSiteSettings } from "@/hooks/useSiteSettings";
 import { useRef } from "react";
 
 const HeroScene3D = dynamic(
@@ -18,6 +19,8 @@ const HeroScene3D = dynamic(
 
 export function HeroSection() {
   const { t } = useLocale();
+  const { data: settings } = useSiteSettings();
+  const site = useResolvedSiteConfig(settings);
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
@@ -59,7 +62,7 @@ export function HeroSection() {
             transition={{ delay: 0.22, duration: 0.65 }}
             className="text-lg text-white/85 max-w-2xl leading-relaxed mb-6"
           >
-            {t("siteDescription")} {t("architectureNote")}
+            {site.description} {site.architectureNote}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
