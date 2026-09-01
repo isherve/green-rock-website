@@ -80,10 +80,10 @@ export function AdminList<T extends { id: string }>({
 
       {error && <p className="text-red-500 mb-4 text-sm">{error}</p>}
 
-      <div className="bg-white dark:bg-gray-900 rounded-xl border overflow-hidden">
+      <div className="admin-table-wrap">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 dark:bg-gray-800 border-b">
+            <thead>
               <tr>
                 {columns.map((col) => (
                   <th key={col.key} className="text-left px-4 py-3 font-medium text-muted-foreground">{col.label}</th>
@@ -97,7 +97,7 @@ export function AdminList<T extends { id: string }>({
               ) : items.length === 0 ? (
                 <tr><td colSpan={columns.length + 1} className="px-4 py-8 text-center text-muted-foreground">No records found</td></tr>
               ) : items.map((item) => (
-                <tr key={item.id} className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                <tr key={item.id}>
                   {columns.map((col) => (
                     <td key={col.key} className="px-4 py-3">
                       {col.render ? col.render(item) : String((item as Record<string, unknown>)[col.key] ?? "—")}

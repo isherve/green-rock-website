@@ -63,7 +63,7 @@ export default function AdminOrdersPage() {
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
-            <div key={order.id} className="bg-white border rounded-xl p-4">
+            <div key={order.id} className="clean-card p-5">
               <div className="flex flex-wrap justify-between items-start gap-3 mb-3">
                 <div>
                   <p className="font-semibold">{order.orderNumber}</p>

@@ -92,7 +92,7 @@ export default function AdminTicketsPage() {
                 key={t.id}
                 type="button"
                 onClick={() => openTicket(t.id)}
-                className={`w-full text-left bg-white border rounded-xl p-4 hover:border-primary/40 transition-colors ${selected?.id === t.id ? "border-primary ring-1 ring-primary/20" : ""}`}
+                className={`w-full text-left clean-card p-5 hover:border-primary/40 transition-colors ${selected?.id === t.id ? "border-primary ring-1 ring-primary/20" : ""}`}
               >
                 <div className="flex justify-between gap-2 mb-1">
                   <span className="font-medium text-sm">{t.ticketNumber}</span>
@@ -105,7 +105,7 @@ export default function AdminTicketsPage() {
           )}
         </div>
 
-        <div className="bg-white border rounded-xl p-4 min-h-[320px]">
+        <div className="clean-card p-5 min-h-[320px]">
           {!selected ? (
             <p className="text-muted-foreground text-sm">Select a ticket to view and reply.</p>
           ) : (

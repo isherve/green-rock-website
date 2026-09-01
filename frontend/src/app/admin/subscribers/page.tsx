@@ -61,9 +61,9 @@ export default function AdminSubscribersPage() {
       ) : subscribers.length === 0 ? (
         <p className="text-muted-foreground text-sm">No subscribers yet.</p>
       ) : (
-        <div className="bg-white border rounded-xl overflow-hidden">
+        <div className="admin-table-wrap">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
+            <thead>
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Email</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Status</th>
@@ -72,7 +72,7 @@ export default function AdminSubscribersPage() {
             </thead>
             <tbody>
               {subscribers.map((s) => (
-                <tr key={s.id} className="border-b last:border-0">
+                <tr key={s.id}>
                   <td className="px-4 py-3">{s.email}</td>
                   <td className="px-4 py-3">
                     <Badge variant={s.isActive ? "default" : "outline"}>

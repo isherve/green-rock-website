@@ -216,10 +216,10 @@ export function AdminInvoicesManager() {
 
       {error && <p className="text-red-500 mb-4 text-sm">{error}</p>}
 
-      <div className="bg-white rounded-xl border overflow-hidden">
+      <div className="admin-table-wrap">
         <div className="overflow-x-auto min-h-[280px]">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
+            <thead>
               <tr>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Invoice #</th>
                 <th className="text-left px-4 py-3 font-medium text-muted-foreground">Customer</th>
@@ -245,7 +245,7 @@ export function AdminInvoicesManager() {
                 </tr>
               ) : (
                 invoices.map((invoice) => (
-                  <tr key={invoice.id} className="border-b last:border-0 hover:bg-gray-50">
+                  <tr key={invoice.id}>
                     <td className="px-4 py-3 font-medium">{invoice.invoiceNumber}</td>
                     <td className="px-4 py-3">
                       <div>{invoice.user?.name ?? "—"}</div>

@@ -171,16 +171,16 @@ export default function AdminLeadsPage() {
       </p>
 
       <div className="flex flex-wrap gap-2 mb-6">
-        <Button variant={tab === "all" ? "default" : "outline"} size="sm" onClick={() => setTab("all")}>
+        <Button variant={tab === "all" ? "default" : "outline"} size="sm" className="rounded-full" onClick={() => setTab("all")}>
           All Inquiries ({inquiries.length})
         </Button>
-        <Button variant={tab === "quotes" ? "default" : "outline"} size="sm" onClick={() => setTab("quotes")}>
+        <Button variant={tab === "quotes" ? "default" : "outline"} size="sm" className="rounded-full" onClick={() => setTab("quotes")}>
           Quotes & Leads ({quoteCount})
         </Button>
-        <Button variant={tab === "contact" ? "default" : "outline"} size="sm" onClick={() => setTab("contact")}>
+        <Button variant={tab === "contact" ? "default" : "outline"} size="sm" className="rounded-full" onClick={() => setTab("contact")}>
           Contact Messages ({contacts.length}{newContacts ? ` · ${newContacts} new` : ""})
         </Button>
-        <Button variant="ghost" size="sm" onClick={load} className="ml-auto">
+        <Button variant="ghost" size="sm" onClick={load} className="ml-auto rounded-full">
           Refresh
         </Button>
       </div>
@@ -193,7 +193,7 @@ export default function AdminLeadsPage() {
             <p className="text-muted-foreground text-sm">No contact messages yet.</p>
           ) : (
             contacts.map((msg) => (
-              <div key={msg.id} className="bg-white border rounded-xl p-4">
+              <div key={msg.id} className="clean-card p-5">
                 <div className="flex justify-between items-start gap-4 mb-2">
                   <div>
                     <p className="font-medium">{msg.name} · {msg.email}</p>
@@ -220,7 +220,7 @@ export default function AdminLeadsPage() {
             <p className="text-muted-foreground text-sm">No inquiries yet.</p>
           ) : (
             filteredInquiries.map((inq) => (
-              <div key={inq.id} className="bg-white border rounded-xl p-4">
+              <div key={inq.id} className="clean-card p-5">
                 <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
                   <div>
                     <p className="font-medium">{inq.name} · {inq.email}</p>

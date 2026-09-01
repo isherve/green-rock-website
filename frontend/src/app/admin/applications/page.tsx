@@ -63,7 +63,7 @@ export default function AdminApplicationsPage() {
       ) : (
         <div className="space-y-4">
           {applications.map((app) => (
-            <div key={app.id} className="bg-white border rounded-xl p-4">
+            <div key={app.id} className="clean-card p-5">
               <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
                 <div>
                   <p className="font-semibold">{app.name}</p>

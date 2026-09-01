@@ -80,7 +80,7 @@ export default function AdminDocumentsPage() {
         Share contracts, plans, and receipts with customers in their portal.
       </p>
 
-      <div className="bg-white border rounded-xl p-6 mb-8 space-y-4">
+      <div className="clean-card p-6 mb-8 space-y-4">
         <h3 className="font-semibold">Share Document</h3>
         <div className="grid sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
@@ -128,20 +128,20 @@ export default function AdminDocumentsPage() {
       ) : documents.length === 0 ? (
         <p className="text-muted-foreground text-sm">No documents shared yet.</p>
       ) : (
-        <div className="bg-white border rounded-xl overflow-hidden">
+        <div className="admin-table-wrap">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
+            <thead>
               <tr>
-                <th className="text-left px-4 py-3">Title</th>
-                <th className="text-left px-4 py-3">Customer</th>
-                <th className="text-left px-4 py-3">Category</th>
-                <th className="text-left px-4 py-3">Date</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Title</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Customer</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Category</th>
+                <th className="text-left px-4 py-3 font-medium text-muted-foreground">Date</th>
                 <th className="px-4 py-3 w-16" />
               </tr>
             </thead>
             <tbody>
               {documents.map((doc) => (
-                <tr key={doc.id} className="border-b last:border-0">
+                <tr key={doc.id}>
                   <td className="px-4 py-3">
                     <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                       {doc.title}
