@@ -77,7 +77,7 @@ export default async function PropertyDetailPage({ params }: Props) {
 
       <PageHero title={property.title} subtitle={property.location} />
 
-      <section className="py-16 container mx-auto px-4">
+      <section className="page-section container mx-auto px-4">
 
         <Button variant="ghost" asChild className="mb-8">
 
@@ -200,7 +200,7 @@ export default async function PropertyDetailPage({ params }: Props) {
 
 
           <div className="space-y-6 sticky top-24 h-fit">
-            <div className="pro-card p-8 rounded-2xl">
+            <div className="clean-card p-8 rounded-2xl">
               <h3 className="text-xl font-semibold mb-6">Schedule a Viewing</h3>
             <ContactForm
               defaultType="PROPERTY"

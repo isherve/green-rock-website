@@ -11,8 +11,8 @@ export default async function MaterialsPage() {
 
   return (
     <>
-      <PageHero title="Construction Materials" subtitle="Quality supplies delivered to your site" image="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1920&q=80" />
-      <section className="py-12 container mx-auto px-4">
+      <PageHero title="Construction Materials" subtitle="Quality supplies delivered to your site" />
+      <section className="page-section container mx-auto px-4">
         <div className="flex flex-wrap gap-3 mb-10">
           {["All", "Cement", "Steel", "Tiles", "Paint", "Roofing", "Plumbing", "Electrical"].map((c) => (
             <span key={c} className="px-4 py-2 rounded-full border text-sm">{c}</span>

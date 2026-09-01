@@ -35,7 +35,7 @@ export default function CustomerDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="pro-card p-6 bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
+      <div className="clean-card p-6 bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
         <h2 className="text-lg font-semibold font-display mb-2">Welcome to your customer portal</h2>
         <p className="text-sm text-muted-foreground max-w-2xl">
           Manage property searches, construction quotes, material orders, appointments, invoices, and support — all in one place.
@@ -59,7 +59,7 @@ export default function CustomerDashboardPage() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="pro-card p-6">
+        <div className="clean-card p-6">
           <h3 className="font-semibold mb-4">Quick actions</h3>
           <ul className="space-y-2 text-sm">
             {[
@@ -76,7 +76,7 @@ export default function CustomerDashboardPage() {
             ))}
           </ul>
         </div>
-        <div className="pro-card p-6">
+        <div className="clean-card p-6">
           <h3 className="font-semibold mb-4">Need help?</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Our team supports property buyers, construction clients, and material customers across Rwanda.

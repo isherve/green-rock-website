@@ -40,7 +40,7 @@ export default function SavedPropertiesPage() {
       <PropertyCompareBar properties={data} />
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.map((p) => (
-          <Link key={p.id} href={`/properties/${p.slug}`} className="pro-card overflow-hidden hover:-translate-y-1 transition-transform block">
+          <Link key={p.id} href={`/properties/${p.slug}`} className="clean-card overflow-hidden hover:-translate-y-1 transition-transform block">
             <div className="relative aspect-[4/3]">
               <Image
                 src={p.images?.[0]?.url ?? "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80"}

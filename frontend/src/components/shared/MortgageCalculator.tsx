@@ -26,7 +26,7 @@ export function MortgageCalculator({ defaultPrice = 50000000 }: { defaultPrice?:
       : loanAmount / (months || 1);
 
   return (
-    <div className="pro-card p-6 rounded-2xl space-y-4">
+    <div className="clean-card p-6 rounded-2xl space-y-4">
       <h3 className="text-lg font-semibold">Mortgage Estimator</h3>
       <p className="text-sm text-muted-foreground">
         Estimate monthly payments for property financing in Rwanda (indicative only).

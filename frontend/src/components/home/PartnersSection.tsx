@@ -15,23 +15,22 @@ export function PartnersSection() {
   if (partners.length === 0) return null;
 
   return (
-    <section className="py-16 lg:py-20 section-padding" id="partners">
+    <section className="page-section bg-white dark:bg-slate-950" id="partners">
       <div className="container mx-auto px-4">
         <SectionHeading
           subtitle={t("homePartnersSubtitle")}
           title={t("homePartnersTitle")}
           description={t("homePartnersDesc")}
         />
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-center">
           {partners.map((partner, index) => (
             <motion.div
               key={partner.id}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="pro-card p-4 flex items-center justify-center h-24 grayscale hover:grayscale-0 transition-all duration-300"
+              transition={{ duration: 0.35, delay: index * 0.04 }}
+              className="clean-card p-4 flex items-center justify-center h-24 grayscale hover:grayscale-0 transition-all duration-300"
             >
               {partner.website ? (
                 <a href={partner.website} target="_blank" rel="noopener noreferrer" className="relative w-full h-12">

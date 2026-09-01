@@ -85,23 +85,23 @@ export function PortalShell({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-[#f8faf9] dark:bg-slate-950 text-foreground">
       {sidebarOpen && (
         <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-72 bg-dark text-white flex flex-col transition-transform duration-200",
+          "fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-slate-900 border-r border-border flex flex-col transition-transform duration-200 shadow-sm",
           sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
-        <div className="p-5 border-b border-white/10 shrink-0">
+        <div className="p-5 border-b border-border shrink-0">
           <Link href={nav[0]?.href ?? "/"} className="flex items-center gap-3">
             <Image src={SITE_CONFIG.logo} alt="Logo" width={864} height={864} unoptimized className="h-9 w-auto max-w-[120px] object-contain" />
             <div>
               <p className="font-bold text-sm font-display">Green Rock</p>
-              <p className="text-xs text-white/60">{portalLabel}</p>
+              <p className="text-xs text-muted-foreground">{portalLabel}</p>
             </div>
           </Link>
         </div>
@@ -112,10 +112,10 @@ export function PortalShell({
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
+                "flex items-center gap-3 px-3 py-2.5 rounded-full text-sm transition-colors",
                 pathname === item.href
-                  ? `${accentClass} text-white`
-                  : "hover:bg-white/10 text-white/80"
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-primary/5 text-foreground/80"
               )}
             >
               <item.icon className="w-4 h-4 shrink-0" />
@@ -124,28 +124,24 @@ export function PortalShell({
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10 shrink-0">
+        <div className="p-4 border-t border-border shrink-0">
           {user && (
             <div className="mb-3 px-1">
               <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-xs text-white/50 truncate">{user.email}</p>
+              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
             </div>
           )}
-          <Button
-            variant="ghost"
-            onClick={logout}
-            className="w-full justify-start text-white/70 hover:text-white hover:bg-white/10"
-          >
+          <Button variant="ghost" onClick={logout} className="w-full justify-start rounded-full">
             <LogOut className="w-4 h-4 mr-2" /> Sign out
           </Button>
-          <Link href="/" className="block text-xs text-center text-white/40 hover:text-white/70 mt-3">
+          <Link href="/" className="block text-xs text-center text-muted-foreground hover:text-primary mt-3">
             ← Back to website
           </Link>
         </div>
       </aside>
 
       <div className="lg:pl-72 min-h-screen flex flex-col">
-        <header className="sticky top-0 z-30 bg-white border-b px-4 lg:px-8 py-4 shrink-0">
+        <header className="sticky top-0 z-30 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-b px-4 lg:px-8 py-4 shrink-0">
           <div className="flex items-start gap-4">
             <button type="button" className="lg:hidden mt-1" onClick={() => setSidebarOpen(true)}>
               <Menu className="w-6 h-6" />

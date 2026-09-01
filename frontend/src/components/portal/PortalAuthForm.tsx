@@ -107,8 +107,8 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-dark px-4 py-12">
-      <div className="w-full max-w-md pro-card p-8 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-[#f8faf9] dark:bg-slate-950 px-4 py-12">
+      <div className="w-full max-w-md clean-card p-8">
         <div className="text-center mb-8">
           <Image src={SITE_CONFIG.logo} alt="Logo" width={864} height={864} unoptimized className="h-14 w-auto max-w-[160px] object-contain mx-auto mb-4" />
           {isRegister ? (
@@ -148,7 +148,7 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
               )}
             </div>
             {error && <p className="text-destructive text-sm">{error}</p>}
-            <Button type="submit" className="w-full" disabled={registerForm.formState.isSubmitting}>
+            <Button type="submit" className="w-full rounded-full" disabled={registerForm.formState.isSubmitting}>
               {registerForm.formState.isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Register"}
             </Button>
           </form>
@@ -157,7 +157,7 @@ export function PortalAuthForm({ mode, redirectPath }: AuthFormProps) {
             <Input type="email" placeholder="Email address" {...loginForm.register("email")} />
             <Input type="password" placeholder="Password" {...loginForm.register("password")} />
             {error && <p className="text-destructive text-sm">{error}</p>}
-            <Button type="submit" className="w-full" disabled={loginForm.formState.isSubmitting}>
+            <Button type="submit" className="w-full rounded-full" disabled={loginForm.formState.isSubmitting}>
               {loginForm.formState.isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
             </Button>
           </form>

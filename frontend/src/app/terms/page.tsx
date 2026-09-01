@@ -8,7 +8,7 @@ export default function TermsPage() {
   return (
     <>
       <PageHero title="Terms & Conditions" />
-      <section className="py-16 container mx-auto px-4 max-w-3xl prose prose-lg">
+      <section className="page-section container mx-auto px-4 max-w-3xl prose prose-lg">
         <p>Last updated: July 2026</p>
         <h2>Acceptance of Terms</h2>
         <p>By accessing {SITE_CONFIG.name}&apos;s website, you agree to these terms and conditions.</p>

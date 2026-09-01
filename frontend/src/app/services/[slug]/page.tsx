@@ -43,8 +43,8 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <>
-      <PageHero title={service.title} subtitle={service.description} image={getServiceImage(service)} />
-      <section className="py-20 container mx-auto px-4">
+      <PageHero title={service.title} subtitle={service.description} />
+      <section className="page-section container mx-auto px-4">
         <Button variant="ghost" asChild className="mb-8">
           <Link href="/services"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Services</Link>
         </Button>
@@ -58,7 +58,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               ))}
             </ul>
           </div>
-          <div className="pro-card p-8 rounded-2xl">
+          <div className="clean-card p-8 rounded-2xl">
             <h3 className="text-xl font-semibold mb-6">Request a Quote</h3>
             <ContactForm defaultType="QUOTE" />
           </div>

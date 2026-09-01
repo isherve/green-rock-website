@@ -18,7 +18,7 @@ export default async function CareerApplyPage({ params }: Props) {
   return (
     <>
       <PageHero title={job.title} subtitle={`${job.department} · ${job.location}`} />
-      <section className="py-16 container mx-auto px-4 max-w-2xl">
+      <section className="page-section container mx-auto px-4 max-w-2xl">
         <Button variant="ghost" asChild className="mb-6">
           <Link href="/careers"><ArrowLeft className="w-4 h-4 mr-2" /> Back to Careers</Link>
         </Button>

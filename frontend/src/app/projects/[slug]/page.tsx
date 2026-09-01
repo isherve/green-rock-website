@@ -61,7 +61,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
       <PageHero title={project.title} subtitle={project.location} />
 
-      <section className="py-16 container mx-auto px-4">
+      <section className="page-section container mx-auto px-4">
 
         <Button variant="ghost" asChild className="mb-8">
 
@@ -154,7 +154,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
 
 
-          <div className="pro-card p-8 rounded-2xl h-fit sticky top-24">
+          <div className="clean-card p-8 rounded-2xl h-fit sticky top-24">
 
             <h3 className="text-xl font-semibold mb-6">Start a Similar Project</h3>
 

@@ -64,7 +64,7 @@ export default function MessagesPage() {
       {data.length === 0 ? (
         <PortalEmptyState title="No messages" description="Your conversation history with Green Rock will appear here." />
       ) : (
-        <div className="pro-card divide-y divide-border">
+        <div className="clean-card divide-y divide-border">
           {data.map((m) => (
             <div key={m.id} className={`p-4 ${!m.isRead ? "bg-primary/5" : ""}`}>
               <p className="font-medium">{m.subject ?? "Message"}</p>

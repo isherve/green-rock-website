@@ -30,7 +30,7 @@ export default function NotificationsPage() {
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={markAllRead}>Mark all read</Button>
       </div>
-      <div className="pro-card divide-y divide-border">
+      <div className="clean-card divide-y divide-border">
         {data.map((n) => (
           <div key={n.id} className={`p-4 ${!n.isRead ? "bg-primary/5" : ""}`}>
             <div className="flex items-start justify-between gap-2">

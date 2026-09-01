@@ -39,7 +39,7 @@ export function CookieConsent() {
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
           className="fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-6 md:max-w-md"
         >
-          <div className="pro-card p-5 shadow-2xl">
+          <div className="clean-card p-5 shadow-2xl">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                 <Cookie className="h-5 w-5" />

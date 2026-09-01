@@ -14,10 +14,10 @@ export default async function CareersPage() {
   return (
     <>
       <PageHero title="Careers" subtitle="Build your future with us" />
-      <section className="py-16 container mx-auto px-4 max-w-4xl">
+      <section className="page-section container mx-auto px-4 max-w-4xl">
         <div className="space-y-6">
           {jobs.map((job) => (
-            <div key={job.id} className="pro-card p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div key={job.id} className="clean-card p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-semibold">{job.title}</h3>
                 <div className="flex flex-wrap gap-4 mt-2 text-sm text-muted-foreground">

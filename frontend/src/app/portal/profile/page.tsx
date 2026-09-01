@@ -42,7 +42,7 @@ export default function ProfilePage() {
   if (loading) return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
 
   return (
-    <form onSubmit={save} className="pro-card p-6 max-w-lg space-y-4">
+    <form onSubmit={save} className="clean-card p-6 max-w-lg space-y-4">
       <div>
         <label className="text-sm font-medium">Email</label>
         <Input value={profile?.email ?? ""} disabled className="mt-1 bg-muted" />

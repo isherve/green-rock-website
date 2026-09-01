@@ -26,7 +26,7 @@ export function NavMegaMenu({ item, isOpen, onClose }: NavMegaMenuProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 top-[calc(4.5rem+2.5rem)] bg-dark/20 z-40 lg:block hidden"
+            className="fixed inset-0 top-[4.25rem] bg-black/10 z-40 lg:block hidden"
             onClick={onClose}
           />
           <motion.div

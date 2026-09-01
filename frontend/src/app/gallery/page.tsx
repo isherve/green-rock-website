@@ -18,7 +18,7 @@ export default async function GalleryPage() {
   return (
     <>
       <PageHero title="Gallery" subtitle="Our work in pictures" />
-      <section className="py-16 container mx-auto px-4">
+      <section className="page-section container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {images.map((item) => (
             <div key={item.id} className="relative aspect-square rounded-xl overflow-hidden group">

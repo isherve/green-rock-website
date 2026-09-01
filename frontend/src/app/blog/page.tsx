@@ -18,7 +18,7 @@ export default async function BlogPage() {
   return (
     <>
       <PageHero title="Blog & News" subtitle="Insights from the industry" />
-      <section className="py-16 container mx-auto px-4">
+      <section className="page-section container mx-auto px-4">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((b) => (
             <Link key={b.id} href={`/blog/${b.slug}`}><BlogCard post={b} /></Link>

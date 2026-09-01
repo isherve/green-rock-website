@@ -1,52 +1,57 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PageHeroProps {
   title: string;
   subtitle?: string;
-  image?: string;
+  eyebrow?: string;
   breadcrumb?: { label: string; href?: string }[];
+  className?: string;
 }
 
 export function PageHero({
   title,
   subtitle,
-  image = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=85",
+  eyebrow = "Green Rock · Kigali",
   breadcrumb,
+  className,
 }: PageHeroProps) {
   return (
-    <section className="relative bg-dark min-h-[220px] md:min-h-[280px] overflow-hidden">
-      <Image
-        src={image}
-        alt=""
-        fill
-        priority
-        unoptimized
-        className="object-cover object-center opacity-60"
-        sizes="100vw"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-dark/95 via-dark/75 to-dark/55" />
-      <div className="absolute inset-y-0 right-0 w-1 bg-primary/80" aria-hidden />
-
-      <div className="container relative mx-auto px-4 py-14 md:py-20">
+    <section
+      className={cn(
+        "relative overflow-hidden border-b border-border/60 bg-[#f8faf9] dark:bg-slate-950",
+        className
+      )}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(10,92,69,0.07),transparent_55%)]" />
+      <div className="container relative mx-auto px-4 py-12 md:py-16 lg:py-20">
         {breadcrumb && breadcrumb.length > 0 && (
-          <nav className="flex items-center gap-1 text-sm text-white/60 mb-4 flex-wrap">
-            <Link href="/" className="hover:text-secondary transition-colors">Home</Link>
+          <nav className="flex items-center gap-1 text-sm text-muted-foreground mb-5 flex-wrap">
+            <Link href="/" className="hover:text-primary transition-colors">
+              Home
+            </Link>
             {breadcrumb.map((item, i) => (
               <span key={i} className="flex items-center gap-1">
-                <ChevronRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-3.5 h-3.5 opacity-50" />
                 {item.href ? (
-                  <Link href={item.href} className="hover:text-secondary transition-colors">{item.label}</Link>
+                  <Link href={item.href} className="hover:text-primary transition-colors">
+                    {item.label}
+                  </Link>
                 ) : (
-                  <span className="text-white/90">{item.label}</span>
+                  <span className="text-foreground/80">{item.label}</span>
                 )}
               </span>
             ))}
           </nav>
         )}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 font-display">{title}</h1>
-        {subtitle && <p className="text-white/80 text-lg max-w-2xl leading-relaxed">{subtitle}</p>}
+        <p className="text-sm font-medium text-primary mb-3 tracking-wide">{eyebrow}</p>
+        <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold text-foreground mb-4 font-display leading-[1.1] max-w-3xl">
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">{subtitle}</p>
+        )}
       </div>
     </section>
   );

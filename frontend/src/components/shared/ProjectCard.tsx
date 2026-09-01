@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { MapPin, Calendar, ArrowUpRight } from "lucide-react";
+import { MapPin, Calendar, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import type { Project } from "@/types";
@@ -13,10 +13,7 @@ interface ProjectCardProps {
   index?: number;
 }
 
-const statusVariant: Record<
-  Project["status"],
-  "success" | "warning" | "default"
-> = {
+const statusVariant: Record<Project["status"], "success" | "warning" | "default"> = {
   COMPLETED: "success",
   ONGOING: "warning",
   UPCOMING: "default",
@@ -29,36 +26,32 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group pro-card overflow-hidden hover:-translate-y-1 transition-transform aspect-[4/5]"
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, delay: index * 0.06 }}
     >
-      <Link href={`/projects/${project.slug}`} className="block h-full">
-        <Image
-          src={imageUrl}
-          alt={project.title}
-          fill
-          unoptimized
-          className="object-cover group-hover:scale-105 transition-transform duration-700"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/40 to-transparent" />
-
-        <div className="absolute inset-0 p-6 flex flex-col justify-end">
-          <div className="flex items-center gap-2 mb-3">
+      <Link href={`/projects/${project.slug}`} className="group clean-card overflow-hidden block">
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={imageUrl}
+            alt={project.title}
+            fill
+            unoptimized
+            className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <div className="absolute top-3 left-3 flex gap-2">
             <Badge variant={statusVariant[project.status]}>
               {project.status.charAt(0) + project.status.slice(1).toLowerCase()}
             </Badge>
             {project.featured && <Badge variant="secondary">Featured</Badge>}
           </div>
+        </div>
 
-          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-secondary transition-colors">
-            {project.title}
-          </h3>
-
-          <div className="flex items-center gap-4 text-sm text-white/70">
+        <div className="p-5">
+          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">{project.title}</h3>
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mt-2">
             <span className="flex items-center gap-1">
               <MapPin className="h-3.5 w-3.5" />
               {project.location}
@@ -70,10 +63,9 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
               </span>
             )}
           </div>
-
-          <div className="absolute top-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity">
-            <ArrowUpRight className="h-5 w-5 text-white" />
-          </div>
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-primary mt-4 group-hover:gap-3 transition-all">
+            View project <ArrowRight className="h-4 w-4" />
+          </span>
         </div>
       </Link>
     </motion.article>

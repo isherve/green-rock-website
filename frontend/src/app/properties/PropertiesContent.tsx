@@ -56,10 +56,9 @@ export default function PropertiesContent() {
       <PageHero
         title="Properties"
         subtitle="Buy, rent, and invest in premium real estate across Rwanda"
-        image="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&q=80"
         breadcrumb={[{ label: "Properties" }]}
       />
-      <section className="py-12 lg:py-16 container mx-auto px-4">
+      <section className="page-section container mx-auto px-4">
         <div className="mb-10">
           <PropertySearchBar
             variant="compact"
@@ -88,7 +87,7 @@ export default function PropertiesContent() {
         </div>
 
         {filtered.length === 0 && !isLoading ? (
-          <div className="pro-card p-12 text-center">
+          <div className="clean-card p-12 text-center">
             <p className="text-lg font-medium mb-2">No properties found</p>
             <p className="text-muted-foreground">
               Try adjusting your search filters or browse all listings.

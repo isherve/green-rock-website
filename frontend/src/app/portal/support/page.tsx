@@ -42,7 +42,7 @@ export default function SupportPage() {
       </div>
 
       {showForm && (
-        <form onSubmit={submitTicket} className="pro-card p-6 space-y-4">
+        <form onSubmit={submitTicket} className="clean-card p-6 space-y-4">
           <Input placeholder="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} required />
           <Textarea placeholder="Describe your issue..." value={message} onChange={(e) => setMessage(e.target.value)} rows={4} required />
           <Button type="submit" disabled={submitting}>

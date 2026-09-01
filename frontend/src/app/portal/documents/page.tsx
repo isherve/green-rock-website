@@ -13,7 +13,7 @@ export default function DocumentsPage() {
   if (data.length === 0) return <PortalEmptyState title="No documents" description="Shared contracts, plans, and files from Green Rock will appear here." />;
 
   return (
-    <div className="pro-card divide-y divide-border">
+    <div className="clean-card divide-y divide-border">
       {data.map((d) => (
         <a key={d.id} href={d.fileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-4 hover:bg-accent/50 transition-colors">
           <div>

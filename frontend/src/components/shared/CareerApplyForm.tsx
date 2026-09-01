@@ -50,7 +50,7 @@ export function CareerApplyForm({ careerId, jobTitle }: CareerApplyFormProps) {
 
   if (status === "success") {
     return (
-      <div className="pro-card p-8 rounded-2xl text-center">
+      <div className="clean-card p-8 rounded-2xl text-center">
         <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
         <h3 className="text-xl font-semibold mb-2">Application Submitted!</h3>
         <p className="text-muted-foreground mb-4">
@@ -62,7 +62,7 @@ export function CareerApplyForm({ careerId, jobTitle }: CareerApplyFormProps) {
   }
 
   return (
-    <form className="pro-card p-8 rounded-2xl space-y-4" onSubmit={handleSubmit}>
+    <form className="clean-card p-8 rounded-2xl space-y-4" onSubmit={handleSubmit}>
       <Input name="name" placeholder="Full Name" required disabled={status === "loading"} />
       <Input name="email" type="email" placeholder="Email" required disabled={status === "loading"} />
       <Input name="phone" placeholder="Phone" required disabled={status === "loading"} />

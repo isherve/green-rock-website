@@ -8,7 +8,7 @@ export default function PrivacyPage() {
   return (
     <>
       <PageHero title="Privacy Policy" />
-      <section className="py-16 container mx-auto px-4 max-w-3xl prose prose-lg">
+      <section className="page-section container mx-auto px-4 max-w-3xl prose prose-lg">
         <p>Last updated: July 2026</p>
         <h2>Information We Collect</h2>
         <p>{SITE_CONFIG.name} collects information you provide through contact forms, property inquiries, job applications, and newsletter subscriptions.</p>

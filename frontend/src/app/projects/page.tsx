@@ -23,7 +23,7 @@ export default async function ProjectsPage() {
     <>
       <PageHero title="Our Projects" subtitle="Excellence in every build" />
       {sections.map((section) => section.items.length > 0 && (
-        <section key={section.title} className="py-16 container mx-auto px-4">
+        <section key={section.title} className="page-section container mx-auto px-4">
           <SectionHeading title={section.title} />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
             {section.items.map((p) => <ProjectCard key={p.id} project={p} />)}

@@ -113,7 +113,7 @@ function InvoicesContent() {
     <>
       <div className="space-y-4">
         {data.map((invoice) => (
-          <div key={invoice.id} className="pro-card p-5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <div key={invoice.id} className="clean-card p-5 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
             <div>
               <div className="flex items-center gap-2 flex-wrap mb-1">
                 <h3 className="font-semibold">{invoice.invoiceNumber}</h3>

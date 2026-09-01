@@ -2,10 +2,9 @@ import Link from "next/link";
 import { PageHero } from "@/components/shared/PageHero";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ServiceCard } from "@/components/shared/ServiceCard";
-import { fetchPublic, fetchPublicOne } from "@/lib/server-api";
+import { fetchPublic } from "@/lib/server-api";
 import { getServerLocale } from "@/lib/server-locale";
 import { localizeService } from "@/lib/i18n/content";
-import { PAGE_HERO_IMAGES } from "@/lib/page-images";
 import { MOCK_SERVICES } from "@/lib/mock-data";
 import type { Service } from "@/types";
 import { ArrowRight } from "lucide-react";
@@ -23,15 +22,12 @@ export default async function ServicesPage() {
       <PageHero
         title="Our Services"
         subtitle="Architecture, construction, real estate, and building materials — professional solutions across Rwanda."
-        image={PAGE_HERO_IMAGES.services}
       />
-      <section className="py-20 container mx-auto px-4">
+      <section className="page-section container mx-auto px-4">
         <SectionHeading title="What We Offer" subtitle="Full-Service Solutions" />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {services.map((s) => (
-            <Link key={s.id} href={`/services/${s.slug}`}>
-              <ServiceCard service={s} />
-            </Link>
+            <ServiceCard key={s.id} service={s} />
           ))}
         </div>
         <div className="mt-16 text-center">

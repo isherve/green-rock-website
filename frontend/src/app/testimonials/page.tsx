@@ -12,7 +12,7 @@ export default async function TestimonialsPage() {
   return (
     <>
       <PageHero title="Testimonials" subtitle="Trusted by hundreds of clients" />
-      <section className="py-16 container mx-auto px-4">
+      <section className="page-section container mx-auto px-4">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((t) => <TestimonialCard key={t.id} testimonial={t} />)}
         </div>

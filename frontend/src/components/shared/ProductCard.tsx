@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ShoppingCart, Truck } from "lucide-react";
+import { ShoppingCart, Truck, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
@@ -21,22 +21,22 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group pro-card overflow-hidden hover:-translate-y-1 transition-transform"
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, delay: index * 0.06 }}
+      className="group clean-card overflow-hidden h-full flex flex-col"
     >
       <div className="relative aspect-square overflow-hidden bg-muted">
         <Image
           src={imageUrl}
           alt={product.name}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
           sizes="(max-width: 768px) 50vw, 25vw"
         />
         {!product.availability && (
-          <div className="absolute inset-0 bg-dark/60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-background/70 flex items-center justify-center">
             <Badge variant="muted">Out of Stock</Badge>
           </div>
         )}
@@ -47,8 +47,8 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         )}
       </div>
 
-      <div className="p-5">
-        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+      <div className="p-5 flex flex-col flex-1">
+        <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
           {product.category?.name ?? "Materials"}
         </p>
         <h3 className="font-semibold text-base mb-2 line-clamp-2 group-hover:text-primary transition-colors">
@@ -67,15 +67,11 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
           </div>
         )}
 
-        <Button
-          asChild
-          variant="outline"
-          className="w-full group/btn"
-          disabled={!product.availability}
-        >
+        <Button asChild variant="outline" className="w-full rounded-full mt-auto" disabled={!product.availability}>
           <Link href={`/materials/${product.slug}`}>
-            <ShoppingCart className="h-4 w-4 group-hover/btn:scale-110 transition-transform" />
-            View Product
+            <ShoppingCart className="h-4 w-4" />
+            View product
+            <ArrowRight className="h-4 w-4 ml-auto" />
           </Link>
         </Button>
       </div>

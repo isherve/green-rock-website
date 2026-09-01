@@ -20,55 +20,51 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group pro-card overflow-hidden hover:-translate-y-1 transition-transform"
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.4, delay: index * 0.06 }}
     >
-      <div className="relative aspect-[16/10] overflow-hidden">
-        <Image
-          src={imageUrl}
-          alt={post.title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
-        <Badge className="absolute top-3 left-3" variant="secondary">
-          {post.category}
-        </Badge>
-      </div>
-
-      <div className="p-6">
-        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
-          {post.publishedAt && (
-            <span className="flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5" />
-              {formatDate(post.publishedAt)}
-            </span>
-          )}
-          {post.author && (
-            <span className="flex items-center gap-1">
-              <User className="h-3.5 w-3.5" />
-              {post.author.name}
-            </span>
-          )}
+      <Link href={`/blog/${post.slug}`} className="group clean-card overflow-hidden block h-full">
+        <div className="relative aspect-[16/10] overflow-hidden">
+          <Image
+            src={imageUrl}
+            alt={post.title}
+            fill
+            className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <Badge className="absolute top-3 left-3" variant="secondary">
+            {post.category}
+          </Badge>
         </div>
 
-        <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-        </h3>
-        <p className="text-sm text-muted-foreground line-clamp-3 mb-4 leading-relaxed">
-          {post.excerpt}
-        </p>
+        <div className="p-5">
+          <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
+            {post.publishedAt && (
+              <span className="flex items-center gap-1">
+                <Calendar className="h-3.5 w-3.5" />
+                {formatDate(post.publishedAt)}
+              </span>
+            )}
+            {post.author && (
+              <span className="flex items-center gap-1">
+                <User className="h-3.5 w-3.5" />
+                {post.author.name}
+              </span>
+            )}
+          </div>
 
-        <Link
-          href={`/blog/${post.slug}`}
-          className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:gap-3 transition-all"
-        >
-          Read More <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+          <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            {post.title}
+          </h3>
+          <p className="text-sm text-muted-foreground line-clamp-3 mb-4 leading-relaxed">{post.excerpt}</p>
+
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all">
+            Read more <ArrowRight className="h-4 w-4" />
+          </span>
+        </div>
+      </Link>
     </motion.article>
   );
 }

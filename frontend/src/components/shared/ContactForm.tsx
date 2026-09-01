@@ -140,7 +140,7 @@ export function ContactForm({
 
   if (status === "success") {
     return (
-      <div className={cn("pro-card p-8 text-center", className)}>
+      <div className={cn("clean-card p-8 text-center", className)}>
         <CheckCircle className="h-12 w-12 text-primary mx-auto mb-4" />
         <h3 className="text-xl font-semibold mb-2">{successTitle}</h3>
         <p className="text-muted-foreground mb-4">
@@ -156,7 +156,7 @@ export function ContactForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className={cn("pro-card p-6 lg:p-8 space-y-5", className)}
+      className={cn("clean-card p-6 lg:p-8 space-y-5", className)}
     >
       <div className="rounded-xl bg-primary/5 border border-primary/10 px-4 py-3 flex gap-3 items-start">
         {isBooking ? (
@@ -269,7 +269,7 @@ export function ContactForm({
 
       {status === "error" && <p className="text-sm text-red-500">{errorMessage}</p>}
 
-      <Button type="submit" className="w-full" disabled={status === "loading"}>
+      <Button type="submit" className="w-full rounded-full" disabled={status === "loading"}>
         {status === "loading" ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />

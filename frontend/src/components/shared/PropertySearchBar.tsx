@@ -78,7 +78,7 @@ export function PropertySearchBar({
     <form
       onSubmit={handleSearch}
       className={cn(
-        "pro-card overflow-hidden",
+        "clean-card overflow-hidden",
         variant === "hero" && "shadow-2xl border-white/20 bg-white",
         className
       )}

@@ -3,8 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Bed, Bath, Maximize, MapPin } from "lucide-react";
-import { TiltCard3D } from "@/components/motion/TiltCard3D";
+import { Bed, Bath, Maximize, MapPin, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
 import type { Property } from "@/types";
@@ -21,21 +20,19 @@ export function PropertyCard({ property, index = 0 }: PropertyCardProps) {
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24, rotateX: 6 }}
-      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      className="motion-3d"
+      transition={{ duration: 0.4, delay: index * 0.05 }}
     >
-      <TiltCard3D className="group pro-card overflow-hidden h-full">
-      <Link href={`/properties/${property.slug}`} className="block">
+      <Link href={`/properties/${property.slug}`} className="group clean-card overflow-hidden block h-full">
         <div className="relative aspect-[4/3] overflow-hidden">
           <Image
             src={imageUrl}
             alt={property.title}
             fill
             unoptimized
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
           <div className="absolute top-3 left-3 flex gap-2">
@@ -44,17 +41,15 @@ export function PropertyCard({ property, index = 0 }: PropertyCardProps) {
             </Badge>
             {property.featured && <Badge variant="warning">Featured</Badge>}
           </div>
-          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-dark/90 to-transparent p-4 pt-12">
-            <p className="text-xl font-bold text-white font-display">
-              {formatPrice(property.price, property.currency)}
-              {property.purpose === "RENT" && (
-                <span className="text-sm font-normal text-white/70">/mo</span>
-              )}
-            </p>
-          </div>
         </div>
 
         <div className="p-5">
+          <p className="text-xl font-bold text-primary mb-2">
+            {formatPrice(property.price, property.currency)}
+            {property.purpose === "RENT" && (
+              <span className="text-sm font-normal text-muted-foreground">/mo</span>
+            )}
+          </p>
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground mb-2">
             <MapPin className="h-3.5 w-3.5 text-primary shrink-0" />
             <span className="line-clamp-1">{property.location}</span>
@@ -79,9 +74,11 @@ export function PropertyCard({ property, index = 0 }: PropertyCardProps) {
               </span>
             )}
           </div>
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-primary mt-4 group-hover:gap-3 transition-all">
+            View property <ArrowRight className="h-4 w-4" />
+          </span>
         </div>
       </Link>
-      </TiltCard3D>
     </motion.article>
   );
 }

@@ -12,7 +12,7 @@ interface StatCardProps {
 
 export function PortalStatCard({ label, value, icon: Icon, className }: StatCardProps) {
   return (
-    <div className={cn("pro-card p-5", className)}>
+    <div className={cn("clean-card p-5", className)}>
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
@@ -34,7 +34,7 @@ interface EmptyStateProps {
 
 export function PortalEmptyState({ title, description, action }: EmptyStateProps) {
   return (
-    <div className="pro-card p-12 text-center">
+    <div className="clean-card p-12 text-center">
       <p className="text-lg font-semibold mb-2">{title}</p>
       <p className="text-muted-foreground text-sm max-w-md mx-auto mb-6">{description}</p>
       {action}
@@ -54,7 +54,7 @@ export function PortalDataList({ items, emptyTitle, emptyDescription }: DataList
   }
 
   return (
-    <div className="pro-card divide-y divide-border overflow-hidden">
+    <div className="clean-card divide-y divide-border overflow-hidden">
       {items.map((item) => (
         <div key={item.id} className="p-4 lg:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-accent/50 transition-colors">
           <div className="min-w-0">

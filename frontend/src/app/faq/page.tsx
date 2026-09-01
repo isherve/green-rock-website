@@ -45,7 +45,7 @@ export default function FAQPage() {
         subtitle="Answers about our services, portals, and how to work with Green Rock"
         breadcrumb={[{ label: "FAQ" }]}
       />
-      <section className="py-16 container mx-auto px-4 max-w-3xl">
+      <section className="page-section container mx-auto px-4 max-w-3xl">
         <SectionHeading
           subtitle="Help Center"
           title="Common Questions"
@@ -53,7 +53,7 @@ export default function FAQPage() {
         />
         <div className="space-y-4 mt-10">
           {FAQ_ITEMS.map((item) => (
-            <details key={item.q} className="pro-card group">
+            <details key={item.q} className="clean-card group">
               <summary className="cursor-pointer p-5 font-semibold list-none flex items-center justify-between [&::-webkit-details-marker]:hidden">
                 {item.q}
                 <span className="text-primary text-xl leading-none group-open:rotate-45 transition-transform">+</span>

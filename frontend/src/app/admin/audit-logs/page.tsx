@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
@@ -36,7 +36,7 @@ export default function AdminAuditLogsPage() {
       {logs.length === 0 ? (
         <p className="text-muted-foreground text-sm">No audit entries yet. Actions will be logged as staff use the system.</p>
       ) : (
-        <div className="pro-card divide-y divide-border overflow-hidden">
+        <div className="clean-card divide-y divide-border overflow-hidden">
           {logs.map((log) => (
             <div key={log.id} className="p-4 text-sm">
               <div className="flex flex-wrap justify-between gap-2">
